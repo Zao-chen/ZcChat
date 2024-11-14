@@ -28,6 +28,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         galgamedialog.h galgamedialog.cpp galgamedialog.ui
         tachie.h tachie.cpp tachie.ui
         include/ElaWidgetTools.qrc
+        res.qrc
 
     )
 # Define target properties for Android with Qt 6 as:
