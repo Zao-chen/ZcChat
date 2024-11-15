@@ -1,11 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 #include "galgamedialog.h"
 #include "tachie.h"
-#include "ElaWindow.h"
+#include "ElaWidget.h"
 #include <QSystemTrayIcon>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -13,7 +13,7 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-class MainWindow : public ElaWindow
+class MainWindow : public ElaWidget
 {
     Q_OBJECT
 
@@ -44,6 +44,10 @@ private slots:
 
     void on_lineEdit_vits_url_textChanged(const QString &arg1);
 
+    void on_lineEdit_tachie_name_textChanged(const QString &arg1);
+
+    void on_lineEdit_vits_id_textChanged(const QString &arg1);
+
 signals:
     void init_to_tachie();
 private:
@@ -53,7 +57,6 @@ private:
     QAction *m_showMainAction;      //动作
     QAction *m_exitAppAction;       //动作
     void createActions();
-protected:
-    void closeEvent (QCloseEvent *event) override;
+    void closeEvent(QCloseEvent * event);
 };
 #endif // MAINWINDOW_H

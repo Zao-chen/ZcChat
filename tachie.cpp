@@ -12,25 +12,28 @@ tachie::tachie(QWidget *parent) :
 {
     ui->setupUi(this);
     /*无边框设置*/
+    this->setWindowFlags(Qt::Tool);		//当前窗口的构造函数下调用
+    this->setWindowFlags(Qt::ToolTip); 	//同时隐藏任务栏图标和标题栏图标
     setWindowFlag(Qt::FramelessWindowHint);
     setWindowFlags (windowFlags () | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground);
 
     settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    QPixmap pixmap(qApp->applicationDirPath()+"/Murasame/正常.png");
+    QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
     ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0)));
 }
 //初始化
 void tachie::init_from_main()
 {
-    QPixmap pixmap(qApp->applicationDirPath()+"/Murasame/正常.png");
+    QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
     ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0)));
 }
 //立绘修改
 void tachie::changetachie_from_galdialog(QString name)
 {
     qDebug()<<"【接收】对话框 --- 修改立绘"+name+" ---> 立绘";
-    QPixmap pixmap(qApp->applicationDirPath()+"/Murasame/"+name+".png");
+    qDebug()<<qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png";
+    QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png");
     ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0)));
 }
 

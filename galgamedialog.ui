@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>641</width>
-    <height>186</height>
+    <height>204</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Microsoft YaHei</family>
+    <pointsize>12</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -16,7 +22,6 @@
   <property name="styleSheet">
    <string notr="true">* {
     background-color: #F0F3F4;
-    font-size: 15px;
     font-family: Microsoft YaHei;
 }
 
@@ -43,11 +48,17 @@ QPushButton:pressed {
   <widget class="QLabel" name="label_name">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>5</y>
-     <width>80</width>
+     <x>20</x>
+     <y>10</y>
+     <width>291</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei</family>
+     <pointsize>14</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -62,6 +73,12 @@ QPushButton:pressed {
      <height>120</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
    <property name="frameShape">
     <enum>QFrame::Shape::NoFrame</enum>
    </property>
@@ -74,9 +91,15 @@ QPushButton:pressed {
     <rect>
      <x>20</x>
      <y>40</y>
-     <width>570</width>
-     <height>120</height>
+     <width>601</width>
+     <height>141</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei</family>
+     <pointsize>30</pointsize>
+    </font>
    </property>
    <property name="toolTip">
     <string/>

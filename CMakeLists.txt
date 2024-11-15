@@ -29,7 +29,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         tachie.h tachie.cpp tachie.ui
         include/ElaWidgetTools.qrc
         res.qrc
-
+        logo.rc
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ZcChat APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

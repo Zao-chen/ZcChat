@@ -65,7 +65,7 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
                     if(settings->value("/vits/enable").toBool())
                     {
                         QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-                        QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/vits?text="+message.split("|")[2]+"&id=4&format=mp3&lang=zh&length=1")));
+                        QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/vits?text="+message.split("|")[2]+"&id="+settings->value("/vits/id").toString()+"&format=mp3&lang=zh&length=1")));
                         connect(reply, &QNetworkReply::finished, this, [=]() {
                             if (reply->error() == QNetworkReply::NoError) {
                                 if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200) {
@@ -140,6 +140,7 @@ QString galgamedialog::Urlpost()
     loop.exec();
     QString read;
     read = reply->readAll();
+    read = read.replace(" ","");
     reply->deleteLater();       //记得释放内存
     return read;
 }

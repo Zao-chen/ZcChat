@@ -3,9 +3,10 @@
 
 #include <QStandardItemModel>
 #include <QSettings>
+#include <QMenu>
 
 MainWindow::MainWindow(QWidget *parent)
-    : ElaWindow(parent)
+    : ElaWidget(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -16,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_llm_agent->setText(settings->value("/llm/agent").toString());
     ui->checkBox_4->setChecked(settings->value("/vits/enable").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
+    ui->lineEdit_tachie_name->setText(settings->value("/tachie/name").toString());
     //托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
     QIcon icon = QIcon(":/img/img/logo.png"); //资源文件添加的图标
@@ -146,6 +148,19 @@ void MainWindow::on_lineEdit_vits_url_textChanged(const QString &arg1)
     settings->setValue("/vits/url",arg1);
     delete settings;
 }
+void MainWindow::on_lineEdit_tachie_name_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/tachie/name",arg1);
+    delete settings;
+    emit init_to_tachie();
+}
+void MainWindow::on_lineEdit_vits_id_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/vits/id",arg1);
+    delete settings;
+}
 /*托盘*/
 //托盘动作
 void MainWindow::createActions()
@@ -179,6 +194,7 @@ void MainWindow::on_exitAppAction()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     //忽略窗口关闭事件
+    qDebug()<<"1";
     QApplication::setQuitOnLastWindowClosed( true );
     this->hide();
 }
@@ -187,11 +203,5 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
-
-
-
-
-
-
 
 
