@@ -25,9 +25,9 @@ private:
     QPoint m_movePoint; //鼠标的位置
     bool isLeftPressDown; // 判断左键是否按下
 
-
 private slots:
     void changetachie_from_galdialog(QString name);
+    void init_from_main();
 };
 
 #endif // TACHIE_H

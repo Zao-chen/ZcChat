@@ -35,6 +35,17 @@ private slots:
     void on_exitAppAction();    void createMenu();
     void hideWindow();
 
+    void on_spinBox_valueChanged(int arg1);
+    void on_lineEdit_llm_url_textChanged(const QString &arg1);
+
+    void on_lineEdit_llm_agent_textChanged(const QString &arg1);
+
+    void on_checkBox_4_clicked(bool checked);
+
+    void on_lineEdit_vits_url_textChanged(const QString &arg1);
+
+signals:
+    void init_to_tachie();
 private:
     Ui::MainWindow *ui;
     QSystemTrayIcon *m_sysTrayIcon; //系统托盘

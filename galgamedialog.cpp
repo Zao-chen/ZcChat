@@ -10,6 +10,7 @@
 #include <QAudioOutput>
 #include <QBuffer>
 #include <QFile>
+#include <QSettings>
 
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
@@ -59,34 +60,43 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
                     qDebug() << "Extracted Message:" << message;
                     emit change_tachie_to_tachie(message.split("|")[0]);
                     qDebug()<<"【发送】对话框 --- 修改立绘"+message.split("|")[0]+" ---> 立绘";
-                    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
 
-                    QNetworkReply* reply = manager->get(QNetworkRequest(QUrl("http://127.0.0.1:23456/voice/vits?text="+message.split("|")[2]+"&id=4&format=mp3&lang=zh&length=1")));
-                    connect(reply, &QNetworkReply::finished, this, [=]() {
-                        if (reply->error() == QNetworkReply::NoError) {
-                            if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200) {
-                                QFile outputFile(qApp->applicationDirPath()+"/temp.mp3");
-                                if (outputFile.open(QIODevice::WriteOnly)) {
-                                    outputFile.write(reply->readAll());
-                                    outputFile.close();
+                    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+                    if(settings->value("/vits/enable").toBool())
+                    {
+                        QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+                        QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/vits?text="+message.split("|")[2]+"&id=4&format=mp3&lang=zh&length=1")));
+                        connect(reply, &QNetworkReply::finished, this, [=]() {
+                            if (reply->error() == QNetworkReply::NoError) {
+                                if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200) {
+                                    QFile outputFile(qApp->applicationDirPath()+"/temp.mp3");
+                                    if (outputFile.open(QIODevice::WriteOnly)) {
+                                        outputFile.write(reply->readAll());
+                                        outputFile.close();
+                                    }
+                                    // 创建 QMediaPlayer 对象
+                                    QMediaPlayer *player = new QMediaPlayer;
+                                    // 创建 QAudioOutput 对象来控制音量
+                                    QAudioOutput *audioOutput = new QAudioOutput;
+                                    // 将 QAudioOutput 连接到 QMediaPlayer
+                                    player->setAudioOutput(audioOutput);
+                                    // 设置媒体源文件
+                                    player->setSource(QUrl::fromLocalFile(qApp->applicationDirPath()+"/temp.mp3"));
+                                    // 设置音量（0 - 100）
+                                    audioOutput->setVolume(1);  // 0.0 为最小音量，1.0 为最大音量
+                                    // 播放音频
+                                    player->play();
+                                    ui->textEdit->setText(message.split("|")[1]);
+                                    ui->pushButton->show();
                                 }
-                                // 创建 QMediaPlayer 对象
-                                QMediaPlayer *player = new QMediaPlayer;
-                                // 创建 QAudioOutput 对象来控制音量
-                                QAudioOutput *audioOutput = new QAudioOutput;
-                                // 将 QAudioOutput 连接到 QMediaPlayer
-                                player->setAudioOutput(audioOutput);
-                                // 设置媒体源文件
-                                player->setSource(QUrl::fromLocalFile(qApp->applicationDirPath()+"/temp.mp3"));
-                                // 设置音量（0 - 100）
-                                audioOutput->setVolume(1);  // 0.0 为最小音量，1.0 为最大音量
-                                // 播放音频
-                                player->play();
-                                ui->textEdit->setText(message.split("|")[1]);
-                                ui->pushButton->show();
                             }
-                        }
-                    });
+                        });
+                    }
+                    else
+                    {
+                        ui->textEdit->setText(message.split("|")[1]);
+                        ui->pushButton->show();
+                    }
 
                 }
             }
@@ -101,7 +111,8 @@ QString galgamedialog::Urlpost()
     qDebug()<<"post!";
     QNetworkRequest request;
     //头设置
-    request.setUrl(QUrl("http://localhost:8283/v1/agents/agent-6ea1e011-4d4a-4ddd-9890-5714c8c3a6fb/messages"));
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    request.setUrl(QUrl(settings->value("/llm/url").toString()+"/v1/agents/"+settings->value("/llm/agent").toString()+"/messages"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
     QNetworkAccessManager* naManager = new QNetworkAccessManager(this);
     // 创建根对象

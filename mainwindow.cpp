@@ -2,12 +2,20 @@
 #include "./ui_mainwindow.h"
 
 #include <QStandardItemModel>
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //配置项
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    ui->spinBox->setValue(settings->value("/tachie/size").toInt());
+    ui->lineEdit_llm_url->setText(settings->value("/llm/url").toString());
+    ui->lineEdit_llm_agent->setText(settings->value("/llm/agent").toString());
+    ui->checkBox_4->setChecked(settings->value("/vits/enable").toBool());
+    ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
     //托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
     QIcon icon = QIcon(":/img/img/logo.png"); //资源文件添加的图标
@@ -49,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent)
     tachie_win->show();
     connect(tachie_win, SIGNAL(show_dialogwin_to_main()), this, SLOT(show_dialogwin_from_tachie()));
     connect(dialog_win, SIGNAL(change_tachie_to_tachie(QString)), tachie_win, SLOT(changetachie_from_galdialog(QString)));
-
+    connect(this, SIGNAL(init_to_tachie()), tachie_win, SLOT(init_from_main()));
 }
 
 MainWindow::~MainWindow()
@@ -106,7 +114,40 @@ void MainWindow::on_treeView_up_clicked(const QModelIndex &index)
         break;
     }
 }
-/*托盘动作*/
+/*配置项修改*/
+void MainWindow::on_spinBox_valueChanged(int arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/tachie/size",arg1);
+    delete settings;
+    emit init_to_tachie();
+}
+void MainWindow::on_lineEdit_llm_url_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/llm/url",arg1);
+    delete settings;
+}
+void MainWindow::on_lineEdit_llm_agent_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/llm/agent",arg1);
+    delete settings;
+}
+void MainWindow::on_checkBox_4_clicked(bool checked)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/vits/enable",checked);
+    delete settings;
+}
+void MainWindow::on_lineEdit_vits_url_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/vits/url",arg1);
+    delete settings;
+}
+/*托盘*/
+//托盘动作
 void MainWindow::createActions()
 {
     m_showMainAction = new QAction("主界面", this);
@@ -114,7 +155,7 @@ void MainWindow::createActions()
     m_exitAppAction = new QAction("退出", this);
     connect(m_exitAppAction,SIGNAL(triggered()),this,SLOT(on_exitAppAction()));
 }
-/*创建托盘菜单*/
+//创建托盘菜单
 void MainWindow::createMenu()
 {
     m_menu = new QMenu(this);
@@ -123,27 +164,34 @@ void MainWindow::createMenu()
     m_menu->addAction(m_exitAppAction); //新增菜单项---退出程序
     m_sysTrayIcon->setContextMenu(m_menu); //把QMenu赋给QSystemTrayIcon对象
 }
-/*托盘主界面*/
+//托盘主界面
 void MainWindow::on_showMainAction()
 {
     this->show();
 
 }
-/*托盘推出*/
+//托盘推出
 void MainWindow::on_exitAppAction()
 {
     qApp->exit();
 }
-
-/*窗口关闭*/
+//窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     //忽略窗口关闭事件
     QApplication::setQuitOnLastWindowClosed( true );
     this->hide();
 }
-/*隐藏窗口*/
+//隐藏窗口
 void MainWindow::hideWindow()
 {
     this->hide();
 }
+
+
+
+
+
+
+
+

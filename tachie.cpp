@@ -2,6 +2,9 @@
 #include "ui_tachie.h"
 
 #include <QMouseEvent>
+#include <QSettings>
+
+QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
 
 tachie::tachie(QWidget *parent) :
     QWidget(parent),
@@ -13,15 +16,29 @@ tachie::tachie(QWidget *parent) :
     setWindowFlags (windowFlags () | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground);
 
+    settings = new QSettings("Setting.ini",QSettings::IniFormat);
     QPixmap pixmap(qApp->applicationDirPath()+"/Murasame/正常.png");
-    ui->label->setPixmap(pixmap.scaled(pixmap.width()*0.5,pixmap.height()*0.5));
+    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0)));
+}
+//初始化
+void tachie::init_from_main()
+{
+    QPixmap pixmap(qApp->applicationDirPath()+"/Murasame/正常.png");
+    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0)));
+}
+//立绘修改
+void tachie::changetachie_from_galdialog(QString name)
+{
+    qDebug()<<"【接收】对话框 --- 修改立绘"+name+" ---> 立绘";
+    QPixmap pixmap(qApp->applicationDirPath()+"/Murasame/"+name+".png");
+    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0)));
 }
 
 tachie::~tachie()
 {
     delete ui;
 }
-//三个鼠标事件的重写
+/*鼠标事件*/
 //鼠标按下事件
 void tachie::mousePressEvent(QMouseEvent *event)
 {
@@ -58,10 +75,4 @@ void tachie::mouseReleaseEvent(QMouseEvent *event)
         this->releaseMouse(); //释放鼠标抓取
         this->setCursor(QCursor(Qt::ArrowCursor));
     }
-}
-void tachie::changetachie_from_galdialog(QString name)
-{
-    qDebug()<<"【接收】对话框 --- 修改立绘"+name+" ---> 立绘";
-    QPixmap pixmap(qApp->applicationDirPath()+"/Murasame/"+name+".png");
-    ui->label->setPixmap(pixmap.scaled(pixmap.width()*0.5,pixmap.height()*0.5));
 }

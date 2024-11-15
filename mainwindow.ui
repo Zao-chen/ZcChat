@@ -90,7 +90,7 @@ border:none;
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
@@ -113,7 +113,7 @@ border:none;
               <number>15</number>
              </property>
              <item>
-              <widget class="QLabel" name="label_3">
+              <widget class="ElaText" name="label_3">
                <property name="font">
                 <font>
                  <pointsize>12</pointsize>
@@ -153,7 +153,7 @@ border:none;
               <number>15</number>
              </property>
              <item>
-              <widget class="QLabel" name="label">
+              <widget class="ElaText" name="label">
                <property name="font">
                 <font>
                  <pointsize>12</pointsize>
@@ -178,26 +178,12 @@ border:none;
               </spacer>
              </item>
              <item>
-              <widget class="ElaLineEdit" name="lineEdit">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
+              <widget class="ElaSpinBox" name="spinBox">
+               <property name="maximum">
+                <number>1000</number>
                </property>
-               <property name="sizeIncrement">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <pointsize>10</pointsize>
-                </font>
-               </property>
-               <property name="text">
-                <string>50</string>
+               <property name="value">
+                <number>50</number>
                </property>
               </widget>
              </item>
@@ -247,7 +233,7 @@ border:none;
               <number>15</number>
              </property>
              <item>
-              <widget class="QLabel" name="label_4">
+              <widget class="ElaText" name="label_4">
                <property name="font">
                 <font>
                  <pointsize>12</pointsize>
@@ -292,8 +278,218 @@ border:none;
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="page_3"/>
-        <widget class="QWidget" name="page_4"/>
+        <widget class="QWidget" name="page_3">
+         <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,1">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>12</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="ElaScrollPageArea" name="widget_4" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,2">
+             <property name="leftMargin">
+              <number>15</number>
+             </property>
+             <property name="rightMargin">
+              <number>15</number>
+             </property>
+             <item>
+              <widget class="ElaText" name="label_5">
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Letta地址</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ElaLineEdit" name="lineEdit_llm_url">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>http://localhost:8283/v1/agents/</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="ElaScrollPageArea" name="widget_5" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="2,2">
+             <property name="leftMargin">
+              <number>15</number>
+             </property>
+             <property name="rightMargin">
+              <number>15</number>
+             </property>
+             <item>
+              <widget class="ElaText" name="label_6">
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>agentID</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ElaLineEdit" name="lineEdit_llm_agent">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page_4">
+         <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0,1">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>12</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="ElaScrollPageArea" name="widget_7" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <property name="leftMargin">
+              <number>15</number>
+             </property>
+             <property name="rightMargin">
+              <number>15</number>
+             </property>
+             <item>
+              <widget class="ElaText" name="label_8">
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Vits开关</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ElaCheckBox" name="checkBox_4">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="ElaScrollPageArea" name="widget_6" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="2,2">
+             <property name="leftMargin">
+              <number>15</number>
+             </property>
+             <property name="rightMargin">
+              <number>15</number>
+             </property>
+             <item>
+              <widget class="ElaText" name="label_7">
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Vits地址</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ElaLineEdit" name="lineEdit_vits_url">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>http://127.0.0.1:23456</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
      </layout>
@@ -338,6 +534,11 @@ border:none;
    <class>ElaLineEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">elalineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header location="global">elaspinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
