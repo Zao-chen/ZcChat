@@ -190,14 +190,6 @@ void MainWindow::on_exitAppAction()
 {
     qApp->exit();
 }
-//窗口关闭
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    //忽略窗口关闭事件
-    qDebug()<<"1";
-    QApplication::setQuitOnLastWindowClosed( true );
-    this->hide();
-}
 //隐藏窗口
 void MainWindow::hideWindow()
 {

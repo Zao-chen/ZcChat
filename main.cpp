@@ -9,5 +9,6 @@ int main(int argc, char *argv[])
     MainWindow w;
     //w.show();
     eApp->init(); //初始化
+    QApplication::setQuitOnLastWindowClosed(false);
     return a.exec();
 }

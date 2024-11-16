@@ -57,6 +57,6 @@ private:
     QAction *m_showMainAction;      //动作
     QAction *m_exitAppAction;       //动作
     void createActions();
-    void closeEvent(QCloseEvent * event);
+
 };
 #endif // MAINWINDOW_H
