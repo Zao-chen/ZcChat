@@ -52,6 +52,12 @@ Agent名称、LLM模型、嵌入配置 根据自己的需求配置。
 
 Url和Id填入ZcChat设置即可。
 
+## F&Q
+
+### 如何使用其他LLM，如GPT-4
+
+[Letta使用LLM文档](https://docs.letta.com/models/openai)
+
 ## 相关链接
 
 [LogChat](https://github.com/log159/LogChat)
