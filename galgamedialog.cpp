@@ -48,59 +48,76 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
             if(cursor.hasSelection()) cursor.clearSelection();
             cursor.deletePreviousChar();//删除前一个字符
             QJsonDocument jsonDoc = QJsonDocument::fromJson(Urlpost().toUtf8());
-            QJsonObject jsonObj = jsonDoc.object();
-            QJsonArray messagesArray = jsonObj["messages"].toArray();
-            for (const QJsonValue &messageValue : messagesArray) {
-                QJsonObject messageObj = messageValue.toObject();
-                if (messageObj["message_type"].toString() == "function_call") {
-                    QJsonObject functionCallObj = messageObj["function_call"].toObject();
-                    QString arguments = functionCallObj["arguments"].toString();
-                    QJsonObject argumentsObj = QJsonDocument::fromJson(arguments.toUtf8()).object();
-                    QString message = argumentsObj["message"].toString();
-                    qDebug() << "Extracted Message:" << message;
-                    emit change_tachie_to_tachie(message.split("|")[0]);
-                    qDebug()<<"【发送】对话框 --- 修改立绘"+message.split("|")[0]+" ---> 立绘";
 
-                    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-                    if(settings->value("/vits/enable").toBool())
-                    {
-                        QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-                        QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/vits?text="+message.split("|")[2]+"&id="+settings->value("/vits/id").toString()+"&format=mp3&lang=zh&length=1")));
-                        connect(reply, &QNetworkReply::finished, this, [=]() {
-                            if (reply->error() == QNetworkReply::NoError) {
-                                if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200) {
-                                    QFile outputFile(qApp->applicationDirPath()+"/temp.mp3");
-                                    if (outputFile.open(QIODevice::WriteOnly)) {
-                                        outputFile.write(reply->readAll());
-                                        outputFile.close();
-                                    }
-                                    // 创建 QMediaPlayer 对象
-                                    QMediaPlayer *player = new QMediaPlayer;
-                                    // 创建 QAudioOutput 对象来控制音量
-                                    QAudioOutput *audioOutput = new QAudioOutput;
-                                    // 将 QAudioOutput 连接到 QMediaPlayer
-                                    player->setAudioOutput(audioOutput);
-                                    // 设置媒体源文件
-                                    player->setSource(QUrl::fromLocalFile(qApp->applicationDirPath()+"/temp.mp3"));
-                                    // 设置音量（0 - 100）
-                                    audioOutput->setVolume(1);  // 0.0 为最小音量，1.0 为最大音量
-                                    // 播放音频
-                                    player->play();
-                                    ui->textEdit->setText(message.split("|")[1]);
-                                    ui->pushButton->show();
-                                }
-                            }
-                        });
+
+            QString message;
+            // 获取顶层对象
+            QJsonObject rootObj = jsonDoc.object();
+
+            // 获取 messages 数组
+            QJsonArray messages = rootObj["messages"].toArray();
+
+            // 遍历 messages
+            for (const QJsonValue &messageVal : messages) {
+                QJsonObject messageObj = messageVal.toObject();
+                if (messageObj["message_type"].toString() == "function_call") {
+                    QJsonObject functionCall = messageObj["function_call"].toObject();
+
+                    // 判断 name 是否为 "send_message"
+                    if (functionCall["name"].toString() == "send_message") {
+                        QString arguments = functionCall["arguments"].toString();
+
+                        // 提取 "message" 内容
+                        QJsonDocument argumentsDoc = QJsonDocument::fromJson(arguments.toUtf8());
+                        if (!argumentsDoc.isNull() && argumentsDoc.isObject()) {
+                            message = argumentsDoc.object()["message"].toString();
+                            qDebug() << "Extracted message:" << message;
+                        }
                     }
-                    else
+                }
+            }
+
+
+            emit change_tachie_to_tachie(message.split("|")[0]);
+            qDebug()<<"【发送】对话框 --- 修改立绘"+message.split("|")[0]+" ---> 立绘";
+
+            QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+            if(settings->value("/vits/enable").toBool())
+            {
+                QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+                QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/vits?text="+message.split("|")[2]+"&id="+settings->value("/vits/id").toString()+"&format=mp3&lang=zh&length=1")));
+                connect(reply, &QNetworkReply::finished, this, [=]() {
+                    if (reply->error() == QNetworkReply::NoError) {
+                        if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200) {
+                            QFile outputFile(qApp->applicationDirPath()+"/temp.mp3");
+                            if (outputFile.open(QIODevice::WriteOnly)) {
+                                outputFile.write(reply->readAll());
+                                outputFile.close();
+                            }
+                            // 创建 QMediaPlayer 对象
+                            QMediaPlayer *player = new QMediaPlayer;
+                            // 创建 QAudioOutput 对象来控制音量
+                            QAudioOutput *audioOutput = new QAudioOutput;
+                            // 将 QAudioOutput 连接到 QMediaPlayer
+                            player->setAudioOutput(audioOutput);
+                            // 设置媒体源文件
+                            player->setSource(QUrl::fromLocalFile(qApp->applicationDirPath()+"/temp.mp3"));
+                            // 设置音量（0 - 100）
+                            audioOutput->setVolume(1);  // 0.0 为最小音量，1.0 为最大音量
+                            // 播放音频
+                            player->play();
+                            ui->textEdit->setText(message.split("|")[1]);
+                            ui->pushButton->show();
+                        }
+                    }
+                });
+            }
+            else
                     {
                         ui->textEdit->setText(message.split("|")[1]);
                         ui->pushButton->show();
                     }
-
-                }
-            }
-            }
+        }
     }
 
     keys.removeAll(event->key());
@@ -142,11 +159,11 @@ QString galgamedialog::Urlpost()
     read = reply->readAll();
     read = read.replace(" ","");
     reply->deleteLater();       //记得释放内存
+    qDebug()<<"POST:"<<read;
     return read;
 }
 QByteArray galgamedialog::getUrl(const QString &input)
 {
-    /*使用dandanplay进行刮刮乐*/
     m_manager = new QNetworkAccessManager(this);//新建QNetworkAccessManager对象
     QString read;
     QEventLoop loop;
