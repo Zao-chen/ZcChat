@@ -12,10 +12,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     //配置项
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    ui->spinBox->setValue(settings->value("/tachie/size").toInt());
+    ui->spinBox_tachie_size->setValue(settings->value("/tachie/size").toInt());
     ui->lineEdit_llm_url->setText(settings->value("/llm/url").toString());
     ui->lineEdit_llm_agent->setText(settings->value("/llm/agent").toString());
-    ui->checkBox_4->setChecked(settings->value("/vits/enable").toBool());
+    ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
     ui->lineEdit_tachie_name->setText(settings->value("/tachie/name").toString());
     //托盘
@@ -24,23 +24,23 @@ MainWindow::MainWindow(QWidget *parent)
     m_sysTrayIcon->setIcon(icon);
     m_sysTrayIcon->setToolTip("ZcChat"); //当鼠标移动到托盘上的图标时，会显示此处设置的内容
     connect(m_sysTrayIcon, &QSystemTrayIcon::activated, //给QSystemTrayIcon添加槽函数
-            [=](QSystemTrayIcon::ActivationReason reason)
+        [=](QSystemTrayIcon::ActivationReason reason)
+        {
+            switch(reason)
             {
-                switch(reason)
-                {
-                case QSystemTrayIcon::Trigger: //单击托盘图标
-                    this->show();
-                    break;
-                case QSystemTrayIcon::DoubleClick: //双击托盘图标
-                    m_sysTrayIcon->showMessage("ZcChat",
-                                               "左键打开主界面，右键打开菜单",
-                                               QSystemTrayIcon::Information,
-                                               1000);
-                    break;
-                default:
-                    break;
-                }
-            });
+            case QSystemTrayIcon::Trigger: //单击托盘图标
+                this->show();
+                break;
+            case QSystemTrayIcon::DoubleClick: //双击托盘图标
+                m_sysTrayIcon->showMessage("ZcChat",
+                                           "左键打开主界面，右键打开菜单",
+                                           QSystemTrayIcon::Information,
+                                           1000);
+                break;
+            default:
+                break;
+            }
+        });
     createActions(); //建立托盘操作的菜单
     createMenu();
     m_sysTrayIcon->show(); //在系统托盘显示此对象
@@ -57,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent)
     dialog_win = new galgamedialog;
     tachie_win = new tachie;
     tachie_win->show();
+    //信号槽连接
     connect(tachie_win, SIGNAL(show_dialogwin_to_main()), this, SLOT(show_dialogwin_from_tachie()));
     connect(dialog_win, SIGNAL(change_tachie_to_tachie(QString)), tachie_win, SLOT(changetachie_from_galdialog(QString)));
     connect(this, SIGNAL(init_to_tachie()), tachie_win, SLOT(init_from_main()));
@@ -67,34 +68,22 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_checkBox_2_clicked(bool checked)
-{
-    if(checked) tachie_win->show();
-    else tachie_win->hide();
-}
-
+//显示对话框
 void MainWindow::show_dialogwin_from_tachie()
 {
     qDebug()<<"【接收】立绘 --- 打开对话框 ---> 主窗口";
-    if(ui->checkBox_3->isChecked())
+    if(ui->checkBox_dialog_enable->isChecked())
     {
         dialog_win->hide();
-        ui->checkBox_3->setChecked(false);
+        ui->checkBox_dialog_enable->setChecked(false);
     }
     else
     {
         dialog_win->show();
-        ui->checkBox_3->setChecked(true);
+        ui->checkBox_dialog_enable->setChecked(true);
     }
 }
-
-void MainWindow::on_checkBox_3_clicked(bool checked)
-{
-    if(checked) dialog_win->show();
-    else dialog_win->hide();
-}
-
-
+//翻页
 void MainWindow::on_treeView_up_clicked(const QModelIndex &index)
 {
     qDebug()<<"主窗口 翻页到"+QString::number(index.row());
@@ -117,7 +106,17 @@ void MainWindow::on_treeView_up_clicked(const QModelIndex &index)
     }
 }
 /*配置项修改*/
-void MainWindow::on_spinBox_valueChanged(int arg1)
+void MainWindow::on_checkBox_dialog_enable_clicked(bool checked)
+{
+    if(checked) dialog_win->show();
+    else dialog_win->hide();
+}
+void MainWindow::on_checkBox_tachie_enable_clicked(bool checked)
+{
+    if(checked) tachie_win->show();
+    else tachie_win->hide();
+}
+void MainWindow::on_spinBox_tachie_size_valueChanged(int arg1)
 {
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     settings->setValue("/tachie/size",arg1);
@@ -136,7 +135,7 @@ void MainWindow::on_lineEdit_llm_agent_textChanged(const QString &arg1)
     settings->setValue("/llm/agent",arg1);
     delete settings;
 }
-void MainWindow::on_checkBox_4_clicked(bool checked)
+void MainWindow::on_checkBox_vits_enable_clicked(bool checked)
 {
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     settings->setValue("/vits/enable",checked);

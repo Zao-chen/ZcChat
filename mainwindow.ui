@@ -95,6 +95,15 @@ border:none;
          </property>
          <widget class="QWidget" name="page">
           <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,1">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>12</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="ElaScrollPageArea" name="widget_2" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -117,7 +126,7 @@ border:none;
                </widget>
               </item>
               <item>
-               <widget class="ElaCheckBox" name="checkBox_2">
+               <widget class="ElaCheckBox" name="checkBox_tachie_enable">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -170,7 +179,7 @@ border:none;
                </spacer>
               </item>
               <item>
-               <widget class="ElaSpinBox" name="spinBox">
+               <widget class="ElaSpinBox" name="spinBox_tachie_size">
                 <property name="maximum">
                  <number>1000</number>
                 </property>
@@ -277,7 +286,7 @@ border:none;
                </widget>
               </item>
               <item>
-               <widget class="ElaCheckBox" name="checkBox_3">
+               <widget class="ElaCheckBox" name="checkBox_dialog_enable">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -449,7 +458,7 @@ border:none;
                </widget>
               </item>
               <item>
-               <widget class="ElaCheckBox" name="checkBox_4">
+               <widget class="ElaCheckBox" name="checkBox_vits_enable">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
