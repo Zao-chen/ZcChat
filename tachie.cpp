@@ -74,6 +74,8 @@ void tachie::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
+        emit changeLocation_to_main(this->x(),this->y());
+        qDebug()<<"【发送】立绘 --- 保存位置 ---> 主窗口"<<this->x()<<" "<<this->y();
         isLeftPressDown = false;
         this->releaseMouse(); //释放鼠标抓取
         this->setCursor(QCursor(Qt::ArrowCursor));

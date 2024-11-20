@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
     ui->lineEdit_tachie_name->setText(settings->value("/tachie/name").toString());
+    ui->lineEdit_tachi_location_x->setText(settings->value("/tachie/location_x").toString());
+    ui->lineEdit_tachi_location_y->setText(settings->value("/tachie/location_y").toString());
     //托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
     QIcon icon = QIcon(":/img/img/logo.png"); //资源文件添加的图标
@@ -57,8 +59,10 @@ MainWindow::MainWindow(QWidget *parent)
     dialog_win = new galgamedialog;
     tachie_win = new tachie;
     tachie_win->show();
+    tachie_win->move(ui->lineEdit_tachi_location_x->text().toInt(),ui->lineEdit_tachi_location_y->text().toInt());
     //信号槽连接
     connect(tachie_win, SIGNAL(show_dialogwin_to_main()), this, SLOT(show_dialogwin_from_tachie()));
+    connect(tachie_win, SIGNAL(changeLocation_to_main(int,int)), this, SLOT(changeTachieLocation_from_tachie(int,int)));
     connect(dialog_win, SIGNAL(change_tachie_to_tachie(QString)), tachie_win, SLOT(changetachie_from_galdialog(QString)));
     connect(this, SIGNAL(init_to_tachie()), tachie_win, SLOT(init_from_main()));
 }
@@ -82,6 +86,16 @@ void MainWindow::show_dialogwin_from_tachie()
         dialog_win->show();
         ui->checkBox_dialog_enable->setChecked(true);
     }
+}
+//保存位置
+void MainWindow::changeTachieLocation_from_tachie(int x,int y)
+{
+    qDebug()<<"【接收】立绘 --- 保存位置 ---> 主窗口"<<this->x()<<" "<<this->y();
+    ui->lineEdit_tachi_location_x->setText(QString::number(x));
+    ui->lineEdit_tachi_location_y->setText(QString::number(y));
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/tachie/location_x",x);
+    settings->setValue("/tachie/location_y",y);
 }
 //翻页
 void MainWindow::on_treeView_up_clicked(const QModelIndex &index)

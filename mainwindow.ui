@@ -94,16 +94,7 @@ border:none;
           <number>0</number>
          </property>
          <widget class="QWidget" name="page">
-          <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,1">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>12</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
+          <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,1">
            <item>
             <widget class="ElaScrollPageArea" name="widget_2" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -229,6 +220,65 @@ border:none;
                 </property>
                 <property name="text">
                  <string>test</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="ElaScrollPageArea" name="widget_10" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="2,1,1">
+              <property name="leftMargin">
+               <number>15</number>
+              </property>
+              <property name="rightMargin">
+               <number>15</number>
+              </property>
+              <item>
+               <widget class="ElaText" name="label_11">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>立绘位置</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ElaLineEdit" name="lineEdit_tachi_location_x">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ElaLineEdit" name="lineEdit_tachi_location_y">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>0</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>

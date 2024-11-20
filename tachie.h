@@ -12,6 +12,7 @@ class tachie : public QWidget
     Q_OBJECT
 signals:
     void show_dialogwin_to_main();
+    void changeLocation_to_main(int x,int y);
 public:
     explicit tachie(QWidget *parent = nullptr);
     ~tachie();

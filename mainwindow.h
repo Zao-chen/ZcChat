@@ -27,6 +27,7 @@ private slots:
     //配置项修改
     void on_checkBox_tachie_enable_clicked(bool checked);
     void show_dialogwin_from_tachie();
+    void changeTachieLocation_from_tachie(int x,int y);
     void on_checkBox_dialog_enable_clicked(bool checked);
     void on_treeView_up_clicked(const QModelIndex &index);
     void on_spinBox_tachie_size_valueChanged(int arg1);
