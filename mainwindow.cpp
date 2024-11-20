@@ -57,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->treeView_up->setCurrentIndex(modelindex);
     //窗口设置
     dialog_win = new galgamedialog;
+    dialog_win->move(ui->lineEdit_tachi_location_x->text().toInt(),ui->lineEdit_tachi_location_y->text().toInt());
     tachie_win = new tachie;
     tachie_win->show();
     tachie_win->move(ui->lineEdit_tachi_location_x->text().toInt(),ui->lineEdit_tachi_location_y->text().toInt());
