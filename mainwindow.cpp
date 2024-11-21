@@ -4,6 +4,9 @@
 #include <QStandardItemModel>
 #include <QSettings>
 #include <QMenu>
+#include <QProcess>
+#include <QFile>
+#include <QDesktopServices>
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWidget(parent)
@@ -20,6 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_tachie_name->setText(settings->value("/tachie/name").toString());
     ui->lineEdit_tachi_location_x->setText(settings->value("/tachie/location_x").toString());
     ui->lineEdit_tachi_location_y->setText(settings->value("/tachie/location_y").toString());
+    ui->checkBox_llm_autoopen_enable->setChecked(settings->value("/llm/autoOpen").toBool());
+    ui->lineEdit_llm_location->setText(settings->value("/llm/location").toString());
+    ui->checkBox_vits_autoopen->setChecked(settings->value("/vits/autoOpen").toBool());
+    ui->lineEdit_vits_location->setText(settings->value("/vits/location").toString());
     //托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
     QIcon icon = QIcon(":/img/img/logo.png"); //资源文件添加的图标
@@ -66,6 +73,32 @@ MainWindow::MainWindow(QWidget *parent)
     connect(tachie_win, SIGNAL(changeLocation_to_main(int,int)), this, SLOT(changeTachieLocation_from_tachie(int,int)));
     connect(dialog_win, SIGNAL(change_tachie_to_tachie(QString)), tachie_win, SLOT(changetachie_from_galdialog(QString)));
     connect(this, SIGNAL(init_to_tachie()), tachie_win, SLOT(init_from_main()));
+    //自启动
+    if(ui->checkBox_llm_autoopen_enable->isChecked())
+    {
+        QFile file("steart_letta.cmd");
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&file);
+            out << "@echo off\n";
+            out << "cd /d "+ui->lineEdit_llm_location->text()+"\n";
+            out << "letta server\n";
+            out << "pause\n";
+            file.close();
+        }
+        QDesktopServices::openUrl(QUrl::fromLocalFile("steart_letta.cmd"));
+    }
+    if(ui->checkBox_vits_autoopen->isChecked())
+    {
+        QFile file("steart_vits.cmd");
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&file);
+            out << "@echo off\n";
+            out << "cd /d "+ui->lineEdit_vits_location->text()+"\n";
+            out << "start start.bat\n";
+            file.close();
+        }
+        QDesktopServices::openUrl(QUrl::fromLocalFile("steart_vits.cmd"));
+    }
 }
 
 MainWindow::~MainWindow()
@@ -175,6 +208,31 @@ void MainWindow::on_lineEdit_vits_id_textChanged(const QString &arg1)
     settings->setValue("/vits/id",arg1);
     delete settings;
 }
+void MainWindow::on_checkBox_llm_autoopen_enable_clicked(bool checked)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/llm/autoOpen",checked);
+    delete settings;
+}
+void MainWindow::on_lineEdit_llm_location_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/llm/location",arg1);
+    delete settings;
+}
+void MainWindow::on_checkBox_vits_autoopen_clicked(bool checked)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/vits/autoOpen",checked);
+    delete settings;
+}
+void MainWindow::on_lineEdit_vits_location_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/vits/location",arg1);
+    delete settings;
+}
+
 /*托盘*/
 //托盘动作
 void MainWindow::createActions()
@@ -209,5 +267,3 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
-
-

@@ -43,6 +43,14 @@ private slots:
     void createMenu();
     void hideWindow();
 
+    void on_checkBox_llm_autoopen_enable_clicked(bool checked);
+
+    void on_lineEdit_llm_location_textChanged(const QString &arg1);
+
+    void on_checkBox_vits_autoopen_clicked(bool checked);
+
+    void on_lineEdit_vits_location_textChanged(const QString &arg1);
+
 signals:
     void init_to_tachie(); //初始化立绘
 
