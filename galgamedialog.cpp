@@ -76,7 +76,14 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
                     }
                 }
             }
-
+            if(message.isNull())
+            {
+                message = "正常|[error] Letta返回了["+jsonDoc.toJson()+"]，可能是Letta未启动/agent配置错误";
+            }
+            else if(message.split("|").size()!=3)
+            {
+                message = "正常|[error] Letta正常返回，但是返回值格式错误，返回之未["+message+"]，正确格式应该是{心情}|{中文}|{日语}|error";
+            }
 
             emit change_tachie_to_tachie(message.split("|")[0]);
             qDebug()<<"【发送】对话框 --- 修改立绘"+message.split("|")[0]+" ---> 立绘";
@@ -88,7 +95,8 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
                 QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/vits?text="+message.split("|")[2]+"&id="+settings->value("/vits/id").toString()+"&format=mp3&lang=zh&length=1")));
                 connect(reply, &QNetworkReply::finished, this, [=]() {
                     if (reply->error() == QNetworkReply::NoError) {
-                        if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200) {
+                        if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200)
+                        {
                             QFile outputFile(qApp->applicationDirPath()+"/temp.mp3");
                             if (outputFile.open(QIODevice::WriteOnly)) {
                                 outputFile.write(reply->readAll());
@@ -110,13 +118,18 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
                             ui->pushButton->show();
                         }
                     }
+                    else
+                    {
+                        ui->textEdit->setText("[error] Vits错误，请检查Vits配置或者关闭语言输出");
+                        ui->pushButton->show();
+                    }
                 });
             }
             else
-                    {
-                        ui->textEdit->setText(message.split("|")[1]);
-                        ui->pushButton->show();
-                    }
+            {
+                ui->textEdit->setText(message.split("|")[1]);
+                ui->pushButton->show();
+            }
         }
     }
 
