@@ -30,11 +30,11 @@
 
 [Vits安装教程](https://github.com/Artrajz/vits-simple-api/blob/main/README_zh.md)
 
-### Steap 3 - 准备角色数据
+### Step 3 - 准备角色数据
 
 在[讨论区](https://github.com/Zao-chen/ZcChat/discussions)找到现成的角色数据，当然也可以自定义角色。
 
-### Steap 4 - 配置Letta
+### Step 4 - 配置Letta
 
 启动了LettaServer后，角色，并填入之前找的现成的角色数据的提示词（核心记忆）。
 
@@ -50,13 +50,13 @@ Agent名称、LLM模型、嵌入配置 根据自己的需求配置。
 
 ![QQ20241118-195112](https://github.com/user-attachments/assets/fab1e378-f009-4fbb-b442-ce9627e0c8fe)
 
-### Steap 5 - 配置立绘
+### Step 5 - 配置立绘
 
 将角色数据中的立绘放入"/tachie/{名称}"文件夹，并在ZcChat设置中填写{名称}。
 
 最后的项目结构应该是"/tachie/{名称}/开心.png..."
 
-### Steap 5 - （可选）配置Vits
+### Step 6 - （可选）配置Vits
 
 Url和Id填入ZcChat设置即可。
 
