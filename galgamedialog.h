@@ -18,6 +18,7 @@ public:
     ~galgamedialog();
 private slots:
     void on_pushButton_clicked();
+    void updateText(); //逐字显示-更新
 signals:
     void change_tachie_to_tachie(QString name);
 private:
@@ -35,6 +36,11 @@ private:
     QNetworkAccessManager *m_manager;
     QString Urlpost();
     QByteArray getUrl(const QString &input);
+    //逐字显示
+    QTimer *timer;
+    QString fullText;
+    int currentIndex;
+    void changetext(QString text);
 };
 
 #endif // GALGAMEDIALOG_H

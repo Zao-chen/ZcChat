@@ -11,6 +11,7 @@
 #include <QBuffer>
 #include <QFile>
 #include <QSettings>
+#include <QTimer>
 
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
@@ -23,6 +24,8 @@ galgamedialog::galgamedialog(QWidget *parent)
     /*内容初始化*/
     ui->pushButton->hide();
     ui->label_name->setText("你");
+    //
+
 }
 
 galgamedialog::~galgamedialog()
@@ -50,7 +53,7 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
             QJsonDocument jsonDoc = QJsonDocument::fromJson(Urlpost().toUtf8());
 
 
-            QString message;
+            QString message = "正常|[error]未知错误|错误error";
             // 获取顶层对象
             QJsonObject rootObj = jsonDoc.object();
 
@@ -78,11 +81,11 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
             }
             if(message.isNull())
             {
-                message = "正常|[error] Letta返回了["+jsonDoc.toJson()+"]，可能是Letta未启动/agent配置错误";
+                message = "正常|[error] Letta返回了["+jsonDoc.toJson()+"]，可能是Letta未启动/agent配置错误|错误error";
             }
             else if(message.split("|").size()!=3)
             {
-                message = "正常|[error] Letta正常返回，但是返回值格式错误，返回之未["+message+"]，正确格式应该是{心情}|{中文}|{日语}|error";
+                message = "正常|[error] Letta正常返回，但是返回值格式错误，返回值无["+message+"]|错误error";
             }
 
             emit change_tachie_to_tachie(message.split("|")[0]);
@@ -114,7 +117,7 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
                             audioOutput->setVolume(1);  // 0.0 为最小音量，1.0 为最大音量
                             // 播放音频
                             player->play();
-                            ui->textEdit->setText(message.split("|")[1]);
+                            changetext(message.split("|")[1]);
                             ui->pushButton->show();
                         }
                     }
@@ -127,7 +130,7 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
             }
             else
             {
-                ui->textEdit->setText(message.split("|")[1]);
+                changetext(message.split("|")[1]);
                 ui->pushButton->show();
             }
         }
@@ -184,6 +187,20 @@ QByteArray galgamedialog::getUrl(const QString &input)
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
     return reply->readAll();
+}
+void galgamedialog::changetext(QString text) //逐字显示
+{
+    fullText = text;
+    connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
+    timer->start(100);
+}
+//逐字显示-更新
+void galgamedialog::updateText() {
+    if (currentIndex < fullText.length()) {
+        ui->textEdit->setText(fullText.left(++currentIndex));
+    } else {
+        timer->stop();
+    }
 }
 //三个鼠标事件的重写
 //鼠标按下事件
