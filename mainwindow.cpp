@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowIcon(QIcon(":/img/img/logo.png"));
     //配置项
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     ui->spinBox_tachie_size->setValue(settings->value("/tachie/size").toInt());
