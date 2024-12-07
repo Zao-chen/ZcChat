@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_llm_agent->setText(settings->value("/llm/agent").toString());
     ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
+    ui->lineEdit_vits_id->setText(settings->value("/vits/id").toString());
     ui->lineEdit_tachie_name->setText(settings->value("/tachie/name").toString());
     ui->lineEdit_tachi_location_x->setText(settings->value("/tachie/location_x").toString());
     ui->lineEdit_tachi_location_y->setText(settings->value("/tachie/location_y").toString());
