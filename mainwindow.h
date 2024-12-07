@@ -35,7 +35,7 @@ private slots:
     void on_lineEdit_llm_agent_textChanged(const QString &arg1);
     void on_checkBox_vits_enable_clicked(bool checked);
     void on_lineEdit_vits_url_textChanged(const QString &arg1);
-    void on_lineEdit_tachie_name_textChanged(const QString &arg1);
+    //void on_lineEdit_tachie_name_textChanged(const QString &arg1);
     void on_lineEdit_vits_id_textChanged(const QString &arg1);
     //托盘slot
     void on_showMainAction();
@@ -52,6 +52,8 @@ private slots:
     void on_lineEdit_vits_location_textChanged(const QString &arg1);
 
     void on_spinBox_dialog_valueChanged(int arg1);
+
+    void on_comboBox_tachio_choose_currentTextChanged(const QString &arg1);
 
 signals:
     void init_to_tachie(); //初始化立绘

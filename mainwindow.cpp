@@ -7,6 +7,7 @@
 #include <QProcess>
 #include <QFile>
 #include <QDesktopServices>
+#include <Qdir>
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWidget(parent)
@@ -14,6 +15,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowIcon(QIcon(":/img/img/logo.png"));
+    //一些初始项
+    QDir dir(qApp->applicationDirPath()+"/tachie");
+    dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+    QStringList folderList = dir.entryList();
+    ui->comboBox_tachio_choose->addItems(folderList);
     //配置项
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     ui->spinBox_tachie_size->setValue(settings->value("/tachie/size").toInt());
@@ -22,7 +28,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
     ui->lineEdit_vits_id->setText(settings->value("/vits/id").toString());
-    ui->lineEdit_tachie_name->setText(settings->value("/tachie/name").toString());
+
+    ui->comboBox_tachio_choose->setCurrentIndex(folderList.indexOf(settings->value("/tachie/name").toString()));
+
     ui->lineEdit_tachi_location_x->setText(settings->value("/tachie/location_x").toString());
     ui->lineEdit_tachi_location_y->setText(settings->value("/tachie/location_y").toString());
     ui->checkBox_llm_autoopen_enable->setChecked(settings->value("/llm/autoOpen").toBool());
@@ -198,13 +206,13 @@ void MainWindow::on_lineEdit_vits_url_textChanged(const QString &arg1)
     settings->setValue("/vits/url",arg1);
     delete settings;
 }
-void MainWindow::on_lineEdit_tachie_name_textChanged(const QString &arg1)
-{
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/tachie/name",arg1);
-    delete settings;
-    emit init_to_tachie();
-}
+// void MainWindow::on_lineEdit_tachie_name_textChanged(const QString &arg1)
+// {
+//     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+//     settings->setValue("/tachie/name",arg1);
+//     delete settings;
+//     emit init_to_tachie();
+// }
 void MainWindow::on_lineEdit_vits_id_textChanged(const QString &arg1)
 {
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
@@ -241,7 +249,13 @@ void MainWindow::on_spinBox_dialog_valueChanged(int arg1)
     settings->setValue("/dialog/time",arg1);
     delete settings;
 }
-
+void MainWindow::on_comboBox_tachio_choose_currentTextChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/tachie/name",arg1);
+    delete settings;
+    emit init_to_tachie();
+}
 /*托盘*/
 //托盘动作
 void MainWindow::createActions()
@@ -276,5 +290,7 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
+
+
 
 

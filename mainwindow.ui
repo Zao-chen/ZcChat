@@ -91,7 +91,7 @@ border:none;
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>3</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,1">
@@ -212,7 +212,7 @@ border:none;
            </item>
            <item>
             <widget class="ElaScrollPageArea" name="widget_9" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="2,2">
+             <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="2,0">
               <property name="leftMargin">
                <number>15</number>
               </property>
@@ -227,25 +227,12 @@ border:none;
                  </font>
                 </property>
                 <property name="text">
-                 <string>立绘名称</string>
+                 <string>立绘选择</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="ElaLineEdit" name="lineEdit_tachie_name">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>30</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>test</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-                </property>
-               </widget>
+               <widget class="ElaComboBox" name="comboBox_tachio_choose"/>
               </item>
              </layout>
             </widget>
@@ -991,6 +978,11 @@ border:none;
    <class>ElaSpinBox</class>
    <extends>QSpinBox</extends>
    <header location="global">elaspinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">elacombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
