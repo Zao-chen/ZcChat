@@ -199,7 +199,7 @@ void galgamedialog::changetext(QString text) //逐字显示
 }
 //逐字显示-更新
 void galgamedialog::updateText() {
-    if (currentIndex < fullText.length()) {
+    if (currentIndex <= fullText.length()) {
         ui->textEdit->setText(fullText.left(++currentIndex));
         qDebug()<<"逐字输出中文:"<<fullText.left(++currentIndex);
     }
