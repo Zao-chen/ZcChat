@@ -22,19 +22,17 @@
 
 ## 快速入门
 
+### Step 0 - 准备角色数据
+
+在[讨论区](https://github.com/Zao-chen/ZcChat/discussions)找到现成的角色数据，当然也可以自定义角色。
+
+同时安装ZcChat。
+
 ### Step 1 - 安装Letta
 
 [Letta安装教程](https://github.com/letta-ai/letta?tab=readme-ov-file#-quickstart)
 
-### Step 2 - （可选）安装Vits
-
-[Vits安装教程](https://github.com/Artrajz/vits-simple-api/blob/main/README_zh.md)
-
-### Step 3 - 准备角色数据
-
-在[讨论区](https://github.com/Zao-chen/ZcChat/discussions)找到现成的角色数据，当然也可以自定义角色。
-
-### Step 4 - 配置Letta
+### Step 2 - 配置Letta
 
 启动了LettaServer后，角色，并填入之前找的现成的角色数据的提示词（核心记忆）。
 
@@ -46,19 +44,23 @@ Agent名称、LLM模型、嵌入配置 根据自己的需求配置。
 
 ![QQ20241118-194935](https://github.com/user-attachments/assets/cf7cca75-5a3f-4add-8b14-b2dc3c3ec268)
 
-之后，将Letta的Url和AgencyID（chat页面右上角可以找到）填入ZcCaht设置。
+### Step 3 - （可选）安装Vits
+
+[Vits安装教程](https://github.com/Artrajz/vits-simple-api/blob/main/README_zh.md)
+
+### Step 4 配置ZcChat
+
+Letta：Url和AgencyID（chat页面右上角可以找到）填入ZcCaht设置。
 
 ![QQ20241118-195112](https://github.com/user-attachments/assets/fab1e378-f009-4fbb-b442-ce9627e0c8fe)
+
+Vits：Url和Id填入ZcChat设置即可。
 
 ### Step 5 - 配置立绘
 
 将角色数据中的立绘放入"/tachie/{名称}"文件夹，并在ZcChat设置中填写{名称}。
 
 最后的项目结构应该是"/tachie/{名称}/开心.png..."
-
-### Step 6 - （可选）配置Vits
-
-Url和Id填入ZcChat设置即可。
 
 ## F&Q
 
