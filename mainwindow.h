@@ -51,6 +51,8 @@ private slots:
 
     void on_lineEdit_vits_location_textChanged(const QString &arg1);
 
+    void on_spinBox_dialog_valueChanged(int arg1);
+
 signals:
     void init_to_tachie(); //初始化立绘
 

@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_llm_location->setText(settings->value("/llm/location").toString());
     ui->checkBox_vits_autoopen->setChecked(settings->value("/vits/autoOpen").toBool());
     ui->lineEdit_vits_location->setText(settings->value("/vits/location").toString());
+    ui->spinBox_dialog->setValue(settings->value("/dialog/time").toInt());
     //托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
     QIcon icon = QIcon(":/img/img/logo.png"); //资源文件添加的图标
@@ -232,6 +233,12 @@ void MainWindow::on_lineEdit_vits_location_textChanged(const QString &arg1)
     settings->setValue("/vits/location",arg1);
     delete settings;
 }
+void MainWindow::on_spinBox_dialog_valueChanged(int arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/dialog/time",arg1);
+    delete settings;
+}
 
 /*托盘*/
 //托盘动作
@@ -267,3 +274,5 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
+
+

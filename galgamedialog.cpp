@@ -194,7 +194,8 @@ void galgamedialog::changetext(QString text) //逐字显示
     timer->stop();
     fullText = text;
     currentIndex = 0;
-    timer->start(100);
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    timer->start(settings->value("/dialog/time").toInt());
 }
 //逐字显示-更新
 void galgamedialog::updateText() {
