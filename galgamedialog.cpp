@@ -24,8 +24,8 @@ galgamedialog::galgamedialog(QWidget *parent)
     /*内容初始化*/
     ui->pushButton->hide();
     ui->label_name->setText("你");
-    //
-
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
 }
 
 galgamedialog::~galgamedialog()
@@ -190,17 +190,19 @@ QByteArray galgamedialog::getUrl(const QString &input)
 }
 void galgamedialog::changetext(QString text) //逐字显示
 {
+    qDebug()<<"输出中文:"<<text;
+    timer->stop();
     fullText = text;
-    connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
+    currentIndex = 0;
     timer->start(100);
 }
 //逐字显示-更新
 void galgamedialog::updateText() {
     if (currentIndex < fullText.length()) {
         ui->textEdit->setText(fullText.left(++currentIndex));
-    } else {
-        timer->stop();
+        qDebug()<<"逐字输出中文:"<<fullText.left(++currentIndex);
     }
+    return;
 }
 //三个鼠标事件的重写
 //鼠标按下事件
