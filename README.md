@@ -4,6 +4,8 @@
 
 ![QQ20241115-201211](https://github.com/user-attachments/assets/46a80ea9-35dc-4c2d-be6a-4f262a3f3a35)
 
+[视频演示](https://www.bilibili.com/video/BV1YUUaYgEgC/)
+
 ## 介绍
 
 ### 特色
@@ -21,6 +23,8 @@
 ![1](https://github.com/user-attachments/assets/dd9ef5b4-dbe4-4941-b075-0af233946f48)
 
 ## 快速入门
+
+[视频教程](https://www.bilibili.com/video/BV1nYiyYdE9G)
 
 ### Step 0 - 准备角色数据
 
