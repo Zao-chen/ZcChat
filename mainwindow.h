@@ -55,6 +55,8 @@ private slots:
 
     void on_comboBox_tachio_choose_currentTextChanged(const QString &arg1);
 
+    void on_checkBox_llm_errorfeedback_clicked(bool checked);
+
 signals:
     void init_to_tachie(); //初始化立绘
 

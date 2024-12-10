@@ -1,9 +1,9 @@
 #ifndef GALGAMEDIALOG_H
 #define GALGAMEDIALOG_H
 
-#include <QWidget>
 #include <QNetworkAccessManager>
 #include <QMediaPlayer>
+#include <QWidget>
 
 namespace Ui {
 class galgamedialog;

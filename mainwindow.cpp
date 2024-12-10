@@ -9,6 +9,7 @@
 #include <QDesktopServices>
 #include <Qdir>
 
+
 MainWindow::MainWindow(QWidget *parent)
     : ElaWidget(parent)
     , ui(new Ui::MainWindow)
@@ -28,14 +29,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
     ui->lineEdit_vits_id->setText(settings->value("/vits/id").toString());
-
     ui->comboBox_tachio_choose->setCurrentIndex(folderList.indexOf(settings->value("/tachie/name").toString()));
-
     ui->lineEdit_tachi_location_x->setText(settings->value("/tachie/location_x").toString());
     ui->lineEdit_tachi_location_y->setText(settings->value("/tachie/location_y").toString());
     ui->checkBox_llm_autoopen_enable->setChecked(settings->value("/llm/autoOpen").toBool());
     ui->lineEdit_llm_location->setText(settings->value("/llm/location").toString());
     ui->checkBox_vits_autoopen->setChecked(settings->value("/vits/autoOpen").toBool());
+    ui->checkBox_llm_errorfeedback->setChecked(settings->value("/llm/feedback").toBool());
     ui->lineEdit_vits_location->setText(settings->value("/vits/location").toString());
     ui->spinBox_dialog->setValue(settings->value("/dialog/time").toInt());
     //托盘
@@ -256,6 +256,13 @@ void MainWindow::on_comboBox_tachio_choose_currentTextChanged(const QString &arg
     delete settings;
     emit init_to_tachie();
 }
+void MainWindow::on_checkBox_llm_errorfeedback_clicked(bool checked)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/llm/feedback",checked);
+    delete settings;
+}
+
 /*托盘*/
 //托盘动作
 void MainWindow::createActions()
@@ -290,6 +297,8 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
+
+
 
 
 

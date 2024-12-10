@@ -79,19 +79,21 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
                     }
                 }
             }
+            QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
             if(message.isNull())
             {
                 message = "正常|[error] Letta返回了["+jsonDoc.toJson()+"]，可能是Letta未启动/agent配置错误|错误error";
             }
             else if(message.split("|").size()!=3)
             {
-                message = "正常|[error] Letta正常返回，但是返回值格式错误，返回值无["+message+"]|错误error";
+                if(!settings->value("/llm/feedback").toBool()) message = "正常|[error] Letta正常返回，但是返回值格式错误，返回值["+message+"]|错误error";
+                else message = "正常|"+message+"|";
             }
 
             emit change_tachie_to_tachie(message.split("|")[0]);
             qDebug()<<"【发送】对话框 --- 修改立绘"+message.split("|")[0]+" ---> 立绘";
 
-            QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+
             if(settings->value("/vits/enable").toBool())
             {
                 QNetworkAccessManager* manager = new QNetworkAccessManager(this);
