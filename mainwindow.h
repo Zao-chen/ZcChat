@@ -57,6 +57,8 @@ private slots:
 
     void on_checkBox_llm_errorfeedback_clicked(bool checked);
 
+    void on_comboBox_vits_model_currentTextChanged(const QString &arg1);
+
 signals:
     void init_to_tachie(); //初始化立绘
 
@@ -67,5 +69,6 @@ private:
     QAction *m_showMainAction; //托盘动作
     QAction *m_exitAppAction; //托盘动作
     void createActions();
+    bool already_init=false;
 };
 #endif // MAINWINDOW_H

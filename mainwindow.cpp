@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     QStringList folderList = dir.entryList();
     ui->comboBox_tachio_choose->addItems(folderList);
+    ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
     //配置项
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     ui->spinBox_tachie_size->setValue(settings->value("/tachie/size").toInt());
@@ -30,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
     ui->lineEdit_vits_id->setText(settings->value("/vits/id").toString());
     ui->comboBox_tachio_choose->setCurrentIndex(folderList.indexOf(settings->value("/tachie/name").toString()));
+    ui->comboBox_vits_model->setCurrentText(settings->value("/vits/vitsmodel").toString());
     ui->lineEdit_tachi_location_x->setText(settings->value("/tachie/location_x").toString());
     ui->lineEdit_tachi_location_y->setText(settings->value("/tachie/location_y").toString());
     ui->checkBox_llm_autoopen_enable->setChecked(settings->value("/llm/autoOpen").toBool());
@@ -110,6 +112,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
         QDesktopServices::openUrl(QUrl::fromLocalFile("steart_vits.cmd"));
     }
+    already_init = true;
 }
 
 MainWindow::~MainWindow()
@@ -262,7 +265,15 @@ void MainWindow::on_checkBox_llm_errorfeedback_clicked(bool checked)
     settings->setValue("/llm/feedback",checked);
     delete settings;
 }
-
+void MainWindow::on_comboBox_vits_model_currentTextChanged(const QString &arg1)
+{
+    if(already_init)
+    {
+        QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+        settings->setValue("/vits/vitsmodel",arg1);
+        delete settings;
+    }
+}
 /*托盘*/
 //托盘动作
 void MainWindow::createActions()
@@ -297,6 +308,9 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
+
+
+
 
 
 
