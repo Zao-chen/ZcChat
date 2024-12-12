@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_llm_url->setText(settings->value("/llm/url").toString());
     ui->lineEdit_llm_agent->setText(settings->value("/llm/agent").toString());
     ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
+    ui->checkBox_soft_autostart->setChecked(settings->value("/soft/autostart").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
     ui->lineEdit_vits_id->setText(settings->value("/vits/id").toString());
     ui->comboBox_tachio_choose->setCurrentIndex(folderList.indexOf(settings->value("/tachie/name").toString()));
@@ -68,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_sysTrayIcon->show(); //在系统托盘显示此对象
     //构造Model
     QStandardItemModel* model = new QStandardItemModel(ui->treeView_up);
+    model->appendRow(new QStandardItem(QStringLiteral("软件设置")));
     model->appendRow(new QStandardItem(QStringLiteral("立绘设置")));
     model->appendRow(new QStandardItem(QStringLiteral("对话框设置")));
     model->appendRow(new QStandardItem(QStringLiteral("模型设置")));
@@ -152,15 +154,18 @@ void MainWindow::on_treeView_up_clicked(const QModelIndex &index)
     ui->stackedWidget->setCurrentIndex(index.row());
     switch (index.row()) {
     case 0:
-        ui->label_title->setText("立绘设置");
+        ui->label_title->setText("软件设置");
         break;
     case 1:
-        ui->label_title->setText("对话框设置");
+        ui->label_title->setText("立绘设置");
         break;
     case 2:
-        ui->label_title->setText("模型设置");
+        ui->label_title->setText("对话框设置");
         break;
     case 3:
+        ui->label_title->setText("模型设置");
+        break;
+    case 4:
         ui->label_title->setText("语音设置");
         break;
     default:
@@ -274,6 +279,23 @@ void MainWindow::on_comboBox_vits_model_currentTextChanged(const QString &arg1)
         delete settings;
     }
 }
+void MainWindow::on_checkBox_soft_autostart_clicked(bool checked)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/soft/autostart",checked);
+    delete settings;
+    QString application_name = QApplication::applicationName(); //获取应用名称
+    QSettings *nsettings = new QSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat); //创建QSetting, 需要添加QSetting头文件
+    if(checked)
+    {
+        QString application_path = QApplication::applicationFilePath(); //找到应用的目录
+        nsettings->setValue(application_name, application_path.replace("/", "\\")); //写入注册表
+    }
+    else
+    {
+        nsettings->remove(application_name); //从注册表中删除
+    }
+}
 /*托盘*/
 //托盘动作
 void MainWindow::createActions()
@@ -308,12 +330,3 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
-
-
-
-
-
-
-
-
-
