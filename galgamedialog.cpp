@@ -44,8 +44,9 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
     {
         if (!keys.contains(Qt::Key_Shift)) //过滤换行
         {
+            QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
             //对话框设置
-            ui->label_name->setText("她");
+            ui->label_name->setText(settings->value("/tachie/name").toString());
             ui->textEdit->setEnabled(false);
             ui->pushButton->hide();
             //去除换行
@@ -81,7 +82,7 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
                     }
                 }
             }
-            QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+
             if(message.isNull())
             {
                 message = "正常|[error] Letta返回了["+jsonDoc.toJson()+"]，可能是Letta未启动/agent配置错误|错误error";

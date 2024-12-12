@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include "ElaApplication.h"
+#include <QDir>
 
 int main(int argc, char *argv[])
 {
@@ -10,5 +11,6 @@ int main(int argc, char *argv[])
     //w.show();
     ElaApplication::getInstance()->init();
     QApplication::setQuitOnLastWindowClosed(false);
+    QDir::setCurrent(QCoreApplication::applicationDirPath());
     return a.exec();
 }
