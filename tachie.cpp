@@ -4,7 +4,7 @@
 #include <QMouseEvent>
 #include <QSettings>
 
-QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+
 
 tachie::tachie(QWidget *parent) :
     QWidget(parent),
@@ -18,13 +18,15 @@ tachie::tachie(QWidget *parent) :
     setWindowFlags (windowFlags () | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground);
 
-    settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
+    settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
     ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0)));
 }
 //初始化
 void tachie::init_from_main()
 {
+    QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     qDebug()<<qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png";
     QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
     ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0)));
@@ -32,6 +34,7 @@ void tachie::init_from_main()
 //立绘修改
 void tachie::changetachie_from_galdialog(QString name)
 {
+    QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     qDebug()<<"【接收】对话框 --- 修改立绘"+name+" ---> 立绘";
     qDebug()<<qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png";
     QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png");

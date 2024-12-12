@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_tachio_choose->addItems(folderList);
     ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
     //配置项
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     ui->spinBox_tachie_size->setValue(settings->value("/tachie/size").toInt());
     ui->lineEdit_llm_url->setText(settings->value("/llm/url").toString());
     ui->lineEdit_llm_agent->setText(settings->value("/llm/agent").toString());
