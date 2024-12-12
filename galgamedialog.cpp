@@ -12,6 +12,7 @@
 #include <QFile>
 #include <QSettings>
 #include <QTimer>
+#include <QPainter>
 
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
@@ -21,6 +22,7 @@ galgamedialog::galgamedialog(QWidget *parent)
     /*无边框设置*/
     setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
     setWindowOpacity(0.9);
+    setAttribute(Qt::WA_TranslucentBackground);
     /*内容初始化*/
     ui->pushButton->hide();
     ui->label_name->setText("你");
@@ -252,3 +254,15 @@ void galgamedialog::on_pushButton_clicked()
     ui->pushButton->hide();
 }
 
+
+void galgamedialog::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);// 创建一个QPainter对象并指定绘制设备为this，即当前窗口
+    painter.setRenderHint(QPainter::Antialiasing);  // 设置绘制选项为反锯齿，使绘制的图形边缘更加平滑
+    painter.setBrush(QBrush(QColor(240,243,244))); //设置画刷颜色,这里为白色
+    painter.setPen(Qt::transparent); //设置画笔颜色为透明，即不绘制边框线
+    QRect rect = this->rect(); //获取当前窗口的矩形区域
+    painter.drawRoundedRect(rect, 15, 15);  // 绘制一个带有圆角的矩形窗口，圆角半径为15px，如果把窗口设置成正方形，圆角半径设大，就会变成一个圆了
+
+}
+//需添加头文件 <QPainter>和 <QStyleOption>

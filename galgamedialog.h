@@ -41,6 +41,7 @@ private:
     QString fullText;
     int currentIndex;
     void changetext(QString text);
+    virtual void paintEvent(QPaintEvent *event) override; //重绘,
 };
 
 #endif // GALGAMEDIALOG_H

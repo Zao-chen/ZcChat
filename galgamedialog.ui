@@ -20,11 +20,10 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">* {
-    background-color: #F0F3F4;
-    font-family: Microsoft YaHei;
+   <string notr="true">
+*{
+	 background-color: #F0F3F4
 }
-
 QLineEdit {
     border: 2px solid #F0F3F4;
     border-radius: 3px;
