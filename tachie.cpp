@@ -5,6 +5,9 @@
 #include <QSettings>
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QGraphicsProxyWidget>
 
 tachie::tachie(QWidget *parent) :
     QWidget(parent),
@@ -47,19 +50,37 @@ void tachie::changetachie_from_galdialog(QString name)
     switch (config->value(name+"/animation").toInt()) {
     case 1:
     {
-        // 第一个动画：向上移动
         QPropertyAnimation *moveUp = new QPropertyAnimation(ui->label, "geometry");
         moveUp->setDuration(250); // 持续时间 1 秒
         moveUp->setStartValue(QRect(0, 0, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 起始位置
         moveUp->setEndValue(QRect(0, -15, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 结束位置
-        // 第二个动画：向下移动
         QPropertyAnimation *moveDown = new QPropertyAnimation(ui->label, "geometry");
         moveDown->setDuration(250); // 持续时间 1 秒
         moveDown->setStartValue(QRect(0, -15, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 起始位置
         moveDown->setEndValue(QRect(0, 0, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 结束位置
-        // 将动画按顺序添加到动画组
+        //将动画按顺序添加到动画组
         animationGroup->addAnimation(moveUp);
         animationGroup->addAnimation(moveDown);
+        break;
+    }
+    case 2:
+    {
+        QPropertyAnimation *moveleft = new QPropertyAnimation(ui->label, "geometry");
+        moveleft->setDuration(250); // 持续时间 1 秒
+        moveleft->setStartValue(QRect(0, 0, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 起始位置
+        moveleft->setEndValue(QRect(-15, 0, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 结束位置
+        QPropertyAnimation *moveright = new QPropertyAnimation(ui->label, "geometry");
+        moveright->setDuration(500); // 持续时间 1 秒
+        moveright->setStartValue(QRect(-15, 0, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 起始位置
+        moveright->setEndValue(QRect(15, 0, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 结束位置
+        QPropertyAnimation *moveleft2 = new QPropertyAnimation(ui->label, "geometry");
+        moveleft2->setDuration(250); // 持续时间 1 秒
+        moveleft2->setStartValue(QRect(15, 0, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 起始位置
+        moveleft2->setEndValue(QRect(0, 0, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 结束位置
+        //将动画按顺序添加到动画组
+        animationGroup->addAnimation(moveleft);
+        animationGroup->addAnimation(moveright);
+        animationGroup->addAnimation(moveleft2);
         break;
     }
     default:
