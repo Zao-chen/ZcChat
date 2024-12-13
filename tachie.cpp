@@ -3,8 +3,8 @@
 
 #include <QMouseEvent>
 #include <QSettings>
-
-
+#include <QPropertyAnimation>
+#include <QSequentialAnimationGroup>
 
 tachie::tachie(QWidget *parent) :
     QWidget(parent),
@@ -39,6 +39,34 @@ void tachie::changetachie_from_galdialog(QString name)
     qDebug()<<qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png";
     QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png");
     ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
+
+    //动画
+    QSettings *config = new QSettings(qApp->applicationDirPath()+"/tachie/"+settings->value("/tachie/name").toString()+"/config.ini",QSettings::IniFormat);
+    // 创建动画组
+    QSequentialAnimationGroup *animationGroup = new QSequentialAnimationGroup;
+    switch (config->value(name+"/animation").toInt()) {
+    case 1:
+    {
+        // 第一个动画：向上移动
+        QPropertyAnimation *moveUp = new QPropertyAnimation(ui->label, "geometry");
+        moveUp->setDuration(250); // 持续时间 1 秒
+        moveUp->setStartValue(QRect(0, 0, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 起始位置
+        moveUp->setEndValue(QRect(0, -15, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 结束位置
+        // 第二个动画：向下移动
+        QPropertyAnimation *moveDown = new QPropertyAnimation(ui->label, "geometry");
+        moveDown->setDuration(250); // 持续时间 1 秒
+        moveDown->setStartValue(QRect(0, -15, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 起始位置
+        moveDown->setEndValue(QRect(0, 0, pixmap.width()*(settings->value("tachie/size").toInt()/100.0), pixmap.height()*(settings->value("tachie/size").toInt()/100.0))); // 结束位置
+        // 将动画按顺序添加到动画组
+        animationGroup->addAnimation(moveUp);
+        animationGroup->addAnimation(moveDown);
+        break;
+    }
+    default:
+        break;
+    }
+    // 启动动画
+    animationGroup->start();
 }
 
 tachie::~tachie()
