@@ -24,7 +24,7 @@ tachie::tachie(QWidget *parent) :
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
-    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
+    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
 }
 //初始化
 void tachie::init_from_main()
@@ -32,7 +32,7 @@ void tachie::init_from_main()
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     qDebug()<<qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png";
     QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
-    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
+    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
 }
 //立绘修改
 void tachie::changetachie_from_galdialog(QString name)
@@ -41,7 +41,7 @@ void tachie::changetachie_from_galdialog(QString name)
     qDebug()<<"【接收】对话框 --- 修改立绘"+name+" ---> 立绘";
     qDebug()<<qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png";
     QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png");
-    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
+    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
 
     //动画
     QSettings *config = new QSettings(qApp->applicationDirPath()+"/tachie/"+settings->value("/tachie/name").toString()+"/config.ini",QSettings::IniFormat);
@@ -81,6 +81,30 @@ void tachie::changetachie_from_galdialog(QString name)
         animationGroup->addAnimation(moveleft);
         animationGroup->addAnimation(moveright);
         animationGroup->addAnimation(moveleft2);
+        break;
+    }
+    case 3:
+    {
+        ui->label->setScaledContents(true); // 确保图片随尺寸缩放
+        // 使用 QPropertyAnimation 创建放大动画
+        QPropertyAnimation *animation = new QPropertyAnimation(ui->label, "geometry");
+        // 创建动画
+        animation->setDuration(500); // 动画时长 500 毫秒
+        animation->setStartValue(ui->label->geometry());
+        animation->setEndValue(QRect(ui->label->geometry().x()-50,ui->label->geometry().y()-50,ui->label->geometry().width()+100,ui->label->geometry().height()+100));
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+        break;
+    }
+    case 4:
+    {
+        ui->label->setScaledContents(true); // 确保图片随尺寸缩放
+        // 使用 QPropertyAnimation 创建放大动画
+        QPropertyAnimation *animation = new QPropertyAnimation(ui->label, "geometry");
+        // 创建动画
+        animation->setDuration(500); // 动画时长 500 毫秒
+        animation->setStartValue(ui->label->geometry());
+        animation->setEndValue(QRect(ui->label->geometry().x()+50,ui->label->geometry().y()+50,ui->label->geometry().width()-100,ui->label->geometry().height()-100));
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
         break;
     }
     default:
