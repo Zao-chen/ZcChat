@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     QStringList folderList = dir.entryList();
     ui->comboBox_tachio_choose->addItems(folderList);
     ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
+    ui->comboBox_vits_API->addItems({"vits-simple-api","自定义"});
     //配置项
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     ui->spinBox_tachie_size->setValue(settings->value("/tachie/size").toInt());
@@ -30,9 +31,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
     ui->checkBox_soft_autostart->setChecked(settings->value("/soft/autostart").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
+    ui->lineEdit_vits_customUrl->setText(settings->value("/vits/custom_url").toString());
     ui->lineEdit_vits_id->setText(settings->value("/vits/id").toString());
     ui->comboBox_tachio_choose->setCurrentIndex(folderList.indexOf(settings->value("/tachie/name").toString()));
     ui->comboBox_vits_model->setCurrentText(settings->value("/vits/vitsmodel").toString());
+    ui->comboBox_vits_API->setCurrentIndex(settings->value("/vits/api").toInt());
+    ui->stackedWidget_vits->setCurrentIndex(settings->value("/vits/api").toInt());
     ui->lineEdit_tachi_location_x->setText(settings->value("/tachie/location_x").toString());
     ui->lineEdit_tachi_location_y->setText(settings->value("/tachie/location_y").toString());
     ui->checkBox_llm_autoopen_enable->setChecked(settings->value("/llm/autoOpen").toBool());
@@ -296,6 +300,22 @@ void MainWindow::on_checkBox_soft_autostart_clicked(bool checked)
         nsettings->remove(application_name); //从注册表中删除
     }
 }
+void MainWindow::on_comboBox_vits_API_currentIndexChanged(int index)
+{
+    if(already_init)
+    {
+        ui->stackedWidget_vits->setCurrentIndex(index);
+        QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+        settings->setValue("/vits/api",index);
+        delete settings;
+    }
+}
+void MainWindow::on_lineEdit_vits_customUrl_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/vits/custom_url",arg1);
+    delete settings;
+}
 /*托盘*/
 //托盘动作
 void MainWindow::createActions()
@@ -330,3 +350,9 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
+
+
+
+
+
+

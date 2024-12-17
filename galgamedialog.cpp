@@ -100,7 +100,11 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
             if(settings->value("/vits/enable").toBool())
             {
                 QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-                QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings->value("/vits/vitsmodel").toString()+"?text="+message.split("|")[2]+"&id="+settings->value("/vits/id").toString()+"&format=mp3")));
+                QNetworkReply* reply;
+                if(settings->value("/vits/api").toInt()==1)
+                    reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/custom_url").toString().replace("{msg}",message.split("|")[2]))));
+                else
+                    reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings->value("/vits/vitsmodel").toString()+"?text="+message.split("|")[2]+"&id="+settings->value("/vits/id").toString()+"&format=mp3")));
                 connect(reply, &QNetworkReply::finished, this, [=]() {
                     if (reply->error() == QNetworkReply::NoError) {
                         if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200)

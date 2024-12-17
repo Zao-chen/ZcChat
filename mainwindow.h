@@ -61,6 +61,10 @@ private slots:
 
     void on_checkBox_soft_autostart_clicked(bool checked);
 
+    void on_comboBox_vits_API_currentIndexChanged(int index);
+
+    void on_lineEdit_vits_customUrl_textChanged(const QString &arg1);
+
 signals:
     void init_to_tachie(); //初始化立绘
 
