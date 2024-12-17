@@ -33,6 +33,7 @@ private:
     QList<int> keys; //按键按键获取
     QPoint m_movePoint; //鼠标的位置
     bool isLeftPressDown; // 判断左键是否按下
+    //网络
     QNetworkAccessManager *m_manager;
     QString Urlpost();
     QByteArray getUrl(const QString &input);
@@ -41,7 +42,8 @@ private:
     QString fullText;
     int currentIndex;
     void changetext(QString text);
-    virtual void paintEvent(QPaintEvent *event) override; //重绘,
+    //重绘
+    virtual void paintEvent(QPaintEvent *event) override;
 };
 
 #endif // GALGAMEDIALOG_H

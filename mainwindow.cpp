@@ -9,43 +9,49 @@
 #include <QDesktopServices>
 #include <Qdir>
 
-
 MainWindow::MainWindow(QWidget *parent)
     : ElaWidget(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     setWindowIcon(QIcon(":/img/img/logo.png"));
-    //一些初始项
+    /*一些初始项*/
+    //立绘列表初始化
     QDir dir(qApp->applicationDirPath()+"/tachie");
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     QStringList folderList = dir.entryList();
     ui->comboBox_tachio_choose->addItems(folderList);
+    //一些combobox初始化
     ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
     ui->comboBox_vits_API->addItems({"vits-simple-api","自定义"});
-    //配置项
+    /*配置项读取*/
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
+    //立绘配置项
     ui->spinBox_tachie_size->setValue(settings->value("/tachie/size").toInt());
+    ui->comboBox_tachio_choose->setCurrentIndex(folderList.indexOf(settings->value("/tachie/name").toString()));
+    ui->lineEdit_tachi_location_x->setText(settings->value("/tachie/location_x").toString());
+    ui->lineEdit_tachi_location_y->setText(settings->value("/tachie/location_y").toString());
+    //对话框配置项
+    ui->spinBox_dialog->setValue(settings->value("/dialog/time").toInt());
+    //llm配置项
     ui->lineEdit_llm_url->setText(settings->value("/llm/url").toString());
     ui->lineEdit_llm_agent->setText(settings->value("/llm/agent").toString());
+    ui->checkBox_llm_autoopen_enable->setChecked(settings->value("/llm/autoOpen").toBool());
+    ui->lineEdit_llm_location->setText(settings->value("/llm/location").toString());
+    ui->checkBox_llm_errorfeedback->setChecked(settings->value("/llm/feedback").toBool());
+    //语音配置项
     ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
     ui->checkBox_soft_autostart->setChecked(settings->value("/soft/autostart").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
     ui->lineEdit_vits_customUrl->setText(settings->value("/vits/custom_url").toString());
     ui->lineEdit_vits_id->setText(settings->value("/vits/id").toString());
-    ui->comboBox_tachio_choose->setCurrentIndex(folderList.indexOf(settings->value("/tachie/name").toString()));
     ui->comboBox_vits_model->setCurrentText(settings->value("/vits/vitsmodel").toString());
     ui->comboBox_vits_API->setCurrentIndex(settings->value("/vits/api").toInt());
     ui->stackedWidget_vits->setCurrentIndex(settings->value("/vits/api").toInt());
-    ui->lineEdit_tachi_location_x->setText(settings->value("/tachie/location_x").toString());
-    ui->lineEdit_tachi_location_y->setText(settings->value("/tachie/location_y").toString());
-    ui->checkBox_llm_autoopen_enable->setChecked(settings->value("/llm/autoOpen").toBool());
-    ui->lineEdit_llm_location->setText(settings->value("/llm/location").toString());
     ui->checkBox_vits_autoopen->setChecked(settings->value("/vits/autoOpen").toBool());
-    ui->checkBox_llm_errorfeedback->setChecked(settings->value("/llm/feedback").toBool());
     ui->lineEdit_vits_location->setText(settings->value("/vits/location").toString());
-    ui->spinBox_dialog->setValue(settings->value("/dialog/time").toInt());
-    //托盘
+    /*托盘*/
+    //初始化托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
     QIcon icon = QIcon(":/img/img/logo.png"); //资源文件添加的图标
     m_sysTrayIcon->setIcon(icon);
@@ -68,10 +74,18 @@ MainWindow::MainWindow(QWidget *parent)
                 break;
             }
         });
-    createActions(); //建立托盘操作的菜单
-    createMenu();
+    //托盘菜单
+    m_showMainAction = new QAction("主界面", this);
+    connect(m_showMainAction,SIGNAL(triggered()),this,SLOT(on_showMainAction()));
+    m_exitAppAction = new QAction("退出", this);
+    connect(m_exitAppAction,SIGNAL(triggered()),this,SLOT(on_exitAppAction()));
+    m_menu = new QMenu(this);
+    m_menu->addAction(m_showMainAction); //新增菜单项
+    m_menu->addSeparator(); //增加分隔符
+    m_menu->addAction(m_exitAppAction); //新增菜单项---退出程序
+    m_sysTrayIcon->setContextMenu(m_menu); //把QMenu赋给QSystemTrayIcon对象
     m_sysTrayIcon->show(); //在系统托盘显示此对象
-    //构造Model
+    /*构造菜单*/
     QStandardItemModel* model = new QStandardItemModel(ui->treeView_up);
     model->appendRow(new QStandardItem(QStringLiteral("软件设置")));
     model->appendRow(new QStandardItem(QStringLiteral("立绘设置")));
@@ -81,18 +95,19 @@ MainWindow::MainWindow(QWidget *parent)
     ui->treeView_up->setModel(model);
     QModelIndex modelindex = ui->treeView_up->model()->index(0, 0);
     ui->treeView_up->setCurrentIndex(modelindex);
-    //窗口设置
+    /*窗口初始化*/
     dialog_win = new galgamedialog;
     dialog_win->move(ui->lineEdit_tachi_location_x->text().toInt(),ui->lineEdit_tachi_location_y->text().toInt());
     tachie_win = new tachie;
     tachie_win->show();
     tachie_win->move(ui->lineEdit_tachi_location_x->text().toInt(),ui->lineEdit_tachi_location_y->text().toInt());
-    //信号槽连接
+    /*信号槽连接*/
     connect(tachie_win, SIGNAL(show_dialogwin_to_main()), this, SLOT(show_dialogwin_from_tachie()));
     connect(tachie_win, SIGNAL(changeLocation_to_main(int,int)), this, SLOT(changeTachieLocation_from_tachie(int,int)));
     connect(dialog_win, SIGNAL(change_tachie_to_tachie(QString)), tachie_win, SLOT(changetachie_from_galdialog(QString)));
     connect(this, SIGNAL(init_to_tachie()), tachie_win, SLOT(init_from_main()));
-    //自启动
+    /*自启动*/
+    //letta自启动
     if(ui->checkBox_llm_autoopen_enable->isChecked())
     {
         QFile file("steart_letta.cmd");
@@ -106,6 +121,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
         QDesktopServices::openUrl(QUrl::fromLocalFile("steart_letta.cmd"));
     }
+    //vits自启动
     if(ui->checkBox_vits_autoopen->isChecked())
     {
         QFile file("steart_vits.cmd");
@@ -126,7 +142,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//显示对话框
+/*对话框显示隐藏*/
 void MainWindow::show_dialogwin_from_tachie()
 {
     qDebug()<<"【接收】立绘 --- 打开对话框 ---> 主窗口";
@@ -141,7 +157,7 @@ void MainWindow::show_dialogwin_from_tachie()
         ui->checkBox_dialog_enable->setChecked(true);
     }
 }
-//保存位置
+/*保存立绘位置*/
 void MainWindow::changeTachieLocation_from_tachie(int x,int y)
 {
     qDebug()<<"【接收】立绘 --- 保存位置 ---> 主窗口"<<this->x()<<" "<<this->y();
@@ -151,7 +167,7 @@ void MainWindow::changeTachieLocation_from_tachie(int x,int y)
     settings->setValue("/tachie/location_x",x);
     settings->setValue("/tachie/location_y",y);
 }
-//翻页
+/*主窗口翻页*/
 void MainWindow::on_treeView_up_clicked(const QModelIndex &index)
 {
     qDebug()<<"主窗口 翻页到"+QString::number(index.row());
@@ -176,7 +192,7 @@ void MainWindow::on_treeView_up_clicked(const QModelIndex &index)
         break;
     }
 }
-/*配置项修改*/
+/*配置项修改和保存*/
 void MainWindow::on_checkBox_dialog_enable_clicked(bool checked)
 {
     if(checked) dialog_win->show();
@@ -218,13 +234,6 @@ void MainWindow::on_lineEdit_vits_url_textChanged(const QString &arg1)
     settings->setValue("/vits/url",arg1);
     delete settings;
 }
-// void MainWindow::on_lineEdit_tachie_name_textChanged(const QString &arg1)
-// {
-//     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-//     settings->setValue("/tachie/name",arg1);
-//     delete settings;
-//     emit init_to_tachie();
-// }
 void MainWindow::on_lineEdit_vits_id_textChanged(const QString &arg1)
 {
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
@@ -316,36 +325,17 @@ void MainWindow::on_lineEdit_vits_customUrl_textChanged(const QString &arg1)
     settings->setValue("/vits/custom_url",arg1);
     delete settings;
 }
-/*托盘*/
-//托盘动作
-void MainWindow::createActions()
-{
-    m_showMainAction = new QAction("主界面", this);
-    connect(m_showMainAction,SIGNAL(triggered()),this,SLOT(on_showMainAction()));
-    m_exitAppAction = new QAction("退出", this);
-    connect(m_exitAppAction,SIGNAL(triggered()),this,SLOT(on_exitAppAction()));
-}
-//创建托盘菜单
-void MainWindow::createMenu()
-{
-    m_menu = new QMenu(this);
-    m_menu->addAction(m_showMainAction); //新增菜单项
-    m_menu->addSeparator(); //增加分隔符
-    m_menu->addAction(m_exitAppAction); //新增菜单项---退出程序
-    m_sysTrayIcon->setContextMenu(m_menu); //把QMenu赋给QSystemTrayIcon对象
-}
-//托盘主界面
+/*托盘主界面*/
 void MainWindow::on_showMainAction()
 {
     this->show();
-
 }
-//托盘推出
+/*托盘退出*/
 void MainWindow::on_exitAppAction()
 {
     qApp->exit();
 }
-//隐藏窗口
+/*隐藏窗口*/
 void MainWindow::hideWindow()
 {
     this->hide();
