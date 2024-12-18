@@ -37,7 +37,10 @@ void tachie::changetachie_from_galdialog(QString name)
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     qDebug()<<"【接收】对话框 --- 修改立绘"+name+" ---> 立绘";
     qDebug()<<qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png";
-    QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png");
+    QPixmap pixmap;
+    pixmap.load(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png");
+    qDebug()<<pixmap.isNull();
+    if(pixmap.isNull()) pixmap.load(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
     ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
     //动画
     QSettings *config = new QSettings(qApp->applicationDirPath()+"/tachie/"+settings->value("/tachie/name").toString()+"/config.ini",QSettings::IniFormat);
