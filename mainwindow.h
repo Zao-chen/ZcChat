@@ -51,6 +51,7 @@ private slots:
     void on_showMainAction();
     void on_exitAppAction();
     void hideWindow();
+    void on_comboBox_vits_language_currentTextChanged(const QString &arg1);
 
 signals:
     void init_to_tachie(); //初始化立绘

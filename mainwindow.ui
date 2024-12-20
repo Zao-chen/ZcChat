@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1012</width>
-    <height>682</height>
+    <width>1123</width>
+    <height>759</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -91,7 +91,7 @@ border:none;
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>4</number>
          </property>
          <widget class="QWidget" name="page_0">
           <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,1">
@@ -817,20 +817,14 @@ border:none;
           </layout>
          </widget>
          <widget class="QWidget" name="page_4">
-          <layout class="QVBoxLayout" name="verticalLayout_9">
-           <property name="spacing">
-            <number>0</number>
-           </property>
+          <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,0,0,0,0,0,0,0,1">
            <property name="leftMargin">
             <number>0</number>
            </property>
            <property name="topMargin">
-            <number>0</number>
+            <number>12</number>
            </property>
            <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
@@ -886,6 +880,33 @@ border:none;
             </widget>
            </item>
            <item>
+            <widget class="ElaScrollPageArea" name="widget_22" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_24" stretch="2,0">
+              <property name="leftMargin">
+               <number>15</number>
+              </property>
+              <property name="rightMargin">
+               <number>15</number>
+              </property>
+              <item>
+               <widget class="ElaText" name="label_32">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>输出语言</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ElaComboBox" name="comboBox_vits_language"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <widget class="ElaScrollPageArea" name="widget_20" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_21" stretch="2,0">
               <property name="leftMargin">
@@ -915,10 +936,13 @@ border:none;
            <item>
             <widget class="QStackedWidget" name="stackedWidget_vits">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="page">
-              <layout class="QVBoxLayout" name="verticalLayout_6">
+              <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0,0">
+               <property name="spacing">
+                <number>0</number>
+               </property>
                <property name="leftMargin">
                 <number>0</number>
                </property>
@@ -929,7 +953,7 @@ border:none;
                 <number>0</number>
                </property>
                <property name="bottomMargin">
-                <number>0</number>
+                <number>10</number>
                </property>
                <item>
                 <widget class="ElaScrollPageArea" name="widget_6" native="true">

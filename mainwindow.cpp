@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     //一些combobox初始化
     ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
     ui->comboBox_vits_API->addItems({"vits-simple-api","自定义"});
+    ui->comboBox_vits_language->addItems({"ja","zh"});
     /*配置项读取*/
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     //立绘配置项
@@ -47,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_vits_id->setText(settings->value("/vits/id").toString());
     ui->comboBox_vits_model->setCurrentText(settings->value("/vits/vitsmodel").toString());
     ui->comboBox_vits_API->setCurrentIndex(settings->value("/vits/api").toInt());
+    ui->comboBox_vits_language->setCurrentIndex(ui->comboBox_vits_language->findText(settings->value("/vits/lan").toString()));
     ui->stackedWidget_vits->setCurrentIndex(settings->value("/vits/api").toInt());
     ui->checkBox_vits_autoopen->setChecked(settings->value("/vits/autoOpen").toBool());
     ui->lineEdit_vits_location->setText(settings->value("/vits/location").toString());
@@ -325,6 +327,16 @@ void MainWindow::on_lineEdit_vits_customUrl_textChanged(const QString &arg1)
     settings->setValue("/vits/custom_url",arg1);
     delete settings;
 }
+void MainWindow::on_comboBox_vits_language_currentTextChanged(const QString &arg1)
+{
+    if(already_init)
+    {
+        QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+        settings->setValue("/vits/lan",arg1);
+        delete settings;
+    }
+}
+
 /*托盘主界面*/
 void MainWindow::on_showMainAction()
 {
@@ -340,9 +352,5 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
-
-
-
-
 
 

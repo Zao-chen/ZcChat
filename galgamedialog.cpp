@@ -90,11 +90,16 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
             {
                 QNetworkAccessManager* manager = new QNetworkAccessManager(this);
                 QNetworkReply* reply;
+                QString text;
+                if(settings->value("/vits/lan").toString()=="ja")
+                    text = message.split("|")[2];
+                else
+                    text = message.split("|")[1];
                 //语音api选择
                 if(settings->value("/vits/api").toInt()==1)
-                    reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/custom_url").toString().replace("{msg}",message.split("|")[2]))));
+                    reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/custom_url").toString().replace("{msg}",text))));
                 else
-                    reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings->value("/vits/vitsmodel").toString()+"?text="+message.split("|")[2]+"&id="+settings->value("/vits/id").toString()+"&format=mp3")));
+                    reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings->value("/vits/lan").toString())));
                 connect(reply, &QNetworkReply::finished, this, [=]() {
                     if (reply->error() == QNetworkReply::NoError) {
                         if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200)
