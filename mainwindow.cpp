@@ -112,8 +112,8 @@ MainWindow::MainWindow(QWidget *parent)
     //letta自启动
     if(ui->checkBox_llm_autoopen_enable->isChecked())
     {
-        QFile file("steart_letta.cmd");
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QFile file("start_letta.cmd");
+        if (!file.exists()&&file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             QTextStream out(&file);
             out << "@echo off\n";
             out << "cd /d "+ui->lineEdit_llm_location->text()+"\n";
@@ -121,20 +121,20 @@ MainWindow::MainWindow(QWidget *parent)
             out << "pause\n";
             file.close();
         }
-        QDesktopServices::openUrl(QUrl::fromLocalFile("steart_letta.cmd"));
+        QDesktopServices::openUrl(QUrl::fromLocalFile("start_letta.cmd"));
     }
     //vits自启动
     if(ui->checkBox_vits_autoopen->isChecked())
     {
-        QFile file("steart_vits.cmd");
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QFile file("start_vits.cmd");
+        if (!file.exists()&&file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             QTextStream out(&file);
             out << "@echo off\n";
             out << "cd /d "+ui->lineEdit_vits_location->text()+"\n";
             out << "start start.bat\n";
             file.close();
         }
-        QDesktopServices::openUrl(QUrl::fromLocalFile("steart_vits.cmd"));
+        QDesktopServices::openUrl(QUrl::fromLocalFile("start_vits.cmd"));
     }
     already_init = true;
 }
