@@ -51,6 +51,8 @@ private slots:
     //托盘slot
     void on_showMainAction();
     void on_exitAppAction();
+    void on_openGithub();
+    void on_restartAppAction();
     void hideWindow();
     void on_comboBox_vits_language_currentTextChanged(const QString &arg1);
 
@@ -65,6 +67,8 @@ private:
     QMenu *m_menu; //菜单
     QAction *m_showMainAction; //托盘动作
     QAction *m_exitAppAction; //托盘动作
+    QAction *m_restartAppAction; //托盘动作
+    QAction *m_openGithub; //托盘动作
     bool already_init=false;
 };
 #endif // MAINWINDOW_H

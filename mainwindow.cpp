@@ -79,11 +79,17 @@ MainWindow::MainWindow(QWidget *parent)
     //托盘菜单
     m_showMainAction = new QAction("主界面", this);
     connect(m_showMainAction,SIGNAL(triggered()),this,SLOT(on_showMainAction()));
+    m_openGithub = new QAction("Github", this);
+    connect(m_openGithub,SIGNAL(triggered()),this,SLOT(on_openGithub()));
     m_exitAppAction = new QAction("退出", this);
     connect(m_exitAppAction,SIGNAL(triggered()),this,SLOT(on_exitAppAction()));
+    m_restartAppAction = new QAction("重启", this);
+    connect(m_restartAppAction,SIGNAL(triggered()),this,SLOT(on_restartAppAction()));
     m_menu = new QMenu(this);
     m_menu->addAction(m_showMainAction); //新增菜单项
+    m_menu->addAction(m_openGithub); //新增菜单项
     m_menu->addSeparator(); //增加分隔符
+    m_menu->addAction(m_restartAppAction); //新增菜单项---重启
     m_menu->addAction(m_exitAppAction); //新增菜单项---退出程序
     m_sysTrayIcon->setContextMenu(m_menu); //把QMenu赋给QSystemTrayIcon对象
     m_sysTrayIcon->show(); //在系统托盘显示此对象
@@ -351,6 +357,23 @@ void MainWindow::on_showMainAction()
 void MainWindow::on_exitAppAction()
 {
     qApp->exit();
+}
+/*托盘重启*/
+void MainWindow::on_restartAppAction()
+{
+    // 获取当前程序的路径
+    QString program = QCoreApplication::applicationFilePath();
+    // 获取当前程序的启动参数
+    QStringList arguments = QCoreApplication::arguments();
+    // 启动新进程
+    QProcess::startDetached(program, arguments);
+    // 退出当前程序
+    QCoreApplication::quit();
+}
+/*托盘打开github*/
+void MainWindow::on_openGithub()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/Zao-chen/ZcChat"));
 }
 /*隐藏窗口*/
 void MainWindow::hideWindow()
