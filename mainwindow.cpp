@@ -315,9 +315,12 @@ void MainWindow::on_spinBox_dialog_valueChanged(int arg1)
 }
 void MainWindow::on_comboBox_tachio_choose_currentTextChanged(const QString &arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/tachie/name",arg1);
-    delete settings;
+    if(already_init)
+    {
+        QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+        settings->setValue("/tachie/name",arg1);
+        delete settings;
+    }
     emit init_to_tachie();
 }
 void MainWindow::on_checkBox_llm_errorfeedback_clicked(bool checked)
