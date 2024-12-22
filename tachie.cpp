@@ -26,10 +26,12 @@ tachie::tachie(QWidget *parent) :
 /*初始化*/
 void tachie::init_from_main()
 {
+    ui->label->setScaledContents(true); // 确保图片随尺寸缩放
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     qDebug()<<qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png";
     QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
     ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
+    this->setFixedSize(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0));
 }
 void tachie::resetlocation_from_main()
 {
@@ -46,6 +48,7 @@ void tachie::changetachie_from_galdialog(QString name)
     qDebug()<<pixmap.isNull();
     if(pixmap.isNull()) pixmap.load(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
     ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
+    this->setFixedSize(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0));
     //动画
     QSettings *config = new QSettings(qApp->applicationDirPath()+"/tachie/"+settings->value("/tachie/name").toString()+"/config.ini",QSettings::IniFormat);
     // 创建动画组
@@ -88,25 +91,49 @@ void tachie::changetachie_from_galdialog(QString name)
     }
     case 3: //放大
     {
-        ui->label->setScaledContents(true); // 确保图片随尺寸缩放
+        // 确保图片随尺寸缩放
+        ui->label->setScaledContents(true);
+        // 获取 QLabel 的原始几何和宽高比
+        QRect originalGeometry = ui->label->geometry();
+        qreal aspectRatio = static_cast<qreal>(originalGeometry.width()) / originalGeometry.height();
+        // 计算目标尺寸，保持宽高比
+        int delta = -50; // 缩小的总大小
+        int newWidth = originalGeometry.width() - delta;
+        int newHeight = static_cast<int>(newWidth / aspectRatio);
+        // 调整目标 QRect，确保宽高比一致
+        QRect targetGeometry(originalGeometry.x() + delta / 2,
+                             originalGeometry.y() + (originalGeometry.height() - newHeight) / 2,
+                             newWidth,
+                             newHeight);
         // 使用 QPropertyAnimation 创建放大动画
         QPropertyAnimation *animation = new QPropertyAnimation(ui->label, "geometry");
-        // 创建动画
         animation->setDuration(500); // 动画时长 500 毫秒
-        animation->setStartValue(ui->label->geometry());
-        animation->setEndValue(QRect(ui->label->geometry().x()-50,ui->label->geometry().y()-50,ui->label->geometry().width()+100,ui->label->geometry().height()+100));
+        animation->setStartValue(originalGeometry);
+        animation->setEndValue(targetGeometry);
         animation->start(QAbstractAnimation::DeleteWhenStopped);
         break;
     }
     case 4: //缩小
     {
-        ui->label->setScaledContents(true); // 确保图片随尺寸缩放
+        // 确保图片随尺寸缩放
+        ui->label->setScaledContents(true);
+        // 获取 QLabel 的原始几何和宽高比
+        QRect originalGeometry = ui->label->geometry();
+        qreal aspectRatio = static_cast<qreal>(originalGeometry.width()) / originalGeometry.height();
+        // 计算目标尺寸，保持宽高比
+        int delta = 50; // 缩小的总大小
+        int newWidth = originalGeometry.width() - delta;
+        int newHeight = static_cast<int>(newWidth / aspectRatio);
+        // 调整目标 QRect，确保宽高比一致
+        QRect targetGeometry(originalGeometry.x() + delta / 2,
+                             originalGeometry.y() + (originalGeometry.height() - newHeight) / 2,
+                             newWidth,
+                             newHeight);
         // 使用 QPropertyAnimation 创建放大动画
         QPropertyAnimation *animation = new QPropertyAnimation(ui->label, "geometry");
-        // 创建动画
         animation->setDuration(500); // 动画时长 500 毫秒
-        animation->setStartValue(ui->label->geometry());
-        animation->setEndValue(QRect(ui->label->geometry().x()+50,ui->label->geometry().y()+50,ui->label->geometry().width()-100,ui->label->geometry().height()-100));
+        animation->setStartValue(originalGeometry);
+        animation->setEndValue(targetGeometry);
         animation->start(QAbstractAnimation::DeleteWhenStopped);
         break;
     }
