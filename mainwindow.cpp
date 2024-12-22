@@ -150,14 +150,16 @@ MainWindow::MainWindow(QWidget *parent)
     }
     already_init = true;
     /*新版本获取*/
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest"));
+    QString reply = getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest");
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply.toUtf8());
     // 获取根对象
     QJsonObject jsonObj = jsonDoc.object();
     // 获取 "tag_name" 的值
     QString tagName = jsonObj.value("tag_name").toString();
     qDebug() << "Tag name:" << tagName;
 
-    if(local_version!=tagName) ui->label_mainMessage->setText(local_version+"  发现新版本"+tagName);
+    if(reply=="error" or tagName.isEmpty()) ui->label_mainMessage->setText(local_version+"  获取新版本失败");
+    else if(local_version!=tagName) ui->label_mainMessage->setText(local_version+"  发现新版本"+tagName);
     else ui->label_mainMessage->setText(local_version);
 
 
@@ -191,7 +193,12 @@ QByteArray MainWindow::getUrl(const QString &input)
     QNetworkReply *reply = m_manager->get(QNetworkRequest(QUrl(input)));
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
-    return reply->readAll();
+    if (reply->error() == QNetworkReply::NoError) {
+        return reply->readAll();
+    } else {
+        return "error";
+    }
+
 }
 /*保存立绘位置*/
 void MainWindow::changeTachieLocation_from_tachie(int x,int y)
