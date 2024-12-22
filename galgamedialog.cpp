@@ -173,7 +173,6 @@ QString galgamedialog::Urlpost()
 QByteArray galgamedialog::getUrl(const QString &input)
 {
     m_manager = new QNetworkAccessManager(this);//新建QNetworkAccessManager对象
-    QString read;
     QEventLoop loop;
     QNetworkReply *reply = m_manager->get(QNetworkRequest(QUrl(input)));
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));

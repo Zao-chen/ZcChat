@@ -8,6 +8,11 @@
 #include <QFile>
 #include <QDesktopServices>
 #include <Qdir>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
+
+QString local_version = "v1.2.0";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWidget(parent)
@@ -144,6 +149,18 @@ MainWindow::MainWindow(QWidget *parent)
         QDesktopServices::openUrl(QUrl::fromLocalFile("start_vits.cmd"));
     }
     already_init = true;
+    /*新版本获取*/
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest"));
+    // 获取根对象
+    QJsonObject jsonObj = jsonDoc.object();
+    // 获取 "tag_name" 的值
+    QString tagName = jsonObj.value("tag_name").toString();
+    qDebug() << "Tag name:" << tagName;
+
+    if(local_version!=tagName) ui->label_mainMessage->setText(local_version+"  发现新版本"+tagName);
+    else ui->label_mainMessage->setText(local_version);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -165,6 +182,16 @@ void MainWindow::show_dialogwin_from_tachie()
         dialog_win->show();
         ui->checkBox_dialog_enable->setChecked(true);
     }
+}
+/*get请求（用于获取版本）*/
+QByteArray MainWindow::getUrl(const QString &input)
+{
+    m_manager = new QNetworkAccessManager(this);//新建QNetworkAccessManager对象
+    QEventLoop loop;
+    QNetworkReply *reply = m_manager->get(QNetworkRequest(QUrl(input)));
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+    return reply->readAll();
 }
 /*保存立绘位置*/
 void MainWindow::changeTachieLocation_from_tachie(int x,int y)

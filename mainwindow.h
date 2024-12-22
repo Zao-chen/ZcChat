@@ -62,6 +62,7 @@ signals:
     void init_to_tachie(); //初始化立绘
 
 private:
+    QNetworkAccessManager *m_manager;
     Ui::MainWindow *ui;
     QSystemTrayIcon *m_sysTrayIcon; //系统托盘
     QMenu *m_menu; //菜单
@@ -70,5 +71,6 @@ private:
     QAction *m_restartAppAction; //托盘动作
     QAction *m_openGithub; //托盘动作
     bool already_init=false;
+    QByteArray getUrl(const QString &input);
 };
 #endif // MAINWINDOW_H
