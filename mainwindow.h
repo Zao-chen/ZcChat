@@ -15,7 +15,8 @@ QT_END_NAMESPACE
 class MainWindow : public ElaWidget
 {
     Q_OBJECT
-
+signals:
+    void resetlocation_to_tachie();
 public:
     MainWindow(QWidget *parent = nullptr);
     void playAudioFromUrl(const QUrl &url);
@@ -52,6 +53,8 @@ private slots:
     void on_exitAppAction();
     void hideWindow();
     void on_comboBox_vits_language_currentTextChanged(const QString &arg1);
+
+    void on_pushButton_reset_clicked();
 
 signals:
     void init_to_tachie(); //初始化立绘

@@ -91,7 +91,7 @@ border:none;
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>4</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page_0">
           <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,1">
@@ -311,7 +311,7 @@ border:none;
            </item>
            <item>
             <widget class="ElaScrollPageArea" name="widget_10" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="2,1,1">
+             <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="3,1,1,1">
               <property name="leftMargin">
                <number>15</number>
               </property>
@@ -327,6 +327,13 @@ border:none;
                 </property>
                 <property name="text">
                  <string>立绘位置</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ElaPushButton" name="pushButton_reset">
+                <property name="text">
+                 <string>重置位置</string>
                 </property>
                </widget>
               </item>
@@ -1293,6 +1300,11 @@ border:none;
    <class>ElaComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">elacombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaPushButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">elapushbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

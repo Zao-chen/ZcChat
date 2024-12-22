@@ -29,6 +29,7 @@ private:
 private slots:
     void changetachie_from_galdialog(QString name);
     void init_from_main();
+    void resetlocation_from_main();
 };
 
 #endif // TACHIE_H

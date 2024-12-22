@@ -31,6 +31,10 @@ void tachie::init_from_main()
     QPixmap pixmap(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
     ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
 }
+void tachie::resetlocation_from_main()
+{
+    this->move(QCursor::pos());
+}
 /*立绘修改*/
 void tachie::changetachie_from_galdialog(QString name)
 {

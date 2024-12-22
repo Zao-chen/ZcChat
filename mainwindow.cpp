@@ -108,6 +108,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(tachie_win, SIGNAL(changeLocation_to_main(int,int)), this, SLOT(changeTachieLocation_from_tachie(int,int)));
     connect(dialog_win, SIGNAL(change_tachie_to_tachie(QString)), tachie_win, SLOT(changetachie_from_galdialog(QString)));
     connect(this, SIGNAL(init_to_tachie()), tachie_win, SLOT(init_from_main()));
+    connect(this, SIGNAL(resetlocation_to_tachie()), tachie_win, SLOT(resetlocation_from_main()));
     /*自启动*/
     //letta自启动
     if(ui->checkBox_llm_autoopen_enable->isChecked())
@@ -336,7 +337,11 @@ void MainWindow::on_comboBox_vits_language_currentTextChanged(const QString &arg
         delete settings;
     }
 }
-
+/*重置立绘位置*/
+void MainWindow::on_pushButton_reset_clicked()
+{
+    emit resetlocation_to_tachie();
+}
 /*托盘主界面*/
 void MainWindow::on_showMainAction()
 {
@@ -352,5 +357,4 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
-
 
