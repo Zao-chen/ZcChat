@@ -60,6 +60,8 @@ Letta：Url和AgencyID（chat页面右上角可以找到）填入ZcCaht设置。
 
 Vits：Url和Id填入ZcChat设置即可。
 
+![QQ20241224-201819](https://github.com/user-attachments/assets/d7f583dd-324a-4d53-8ad0-21a7866589b9)
+
 ### Step 5 - 配置立绘
 
 将角色数据中的立绘放入"/tachie/{名称}"文件夹，并在ZcChat设置中填写{名称}。
