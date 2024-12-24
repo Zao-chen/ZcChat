@@ -74,6 +74,10 @@ Vits：Url和Id填入ZcChat设置即可。
 
 [Letta使用LLM文档](https://docs.letta.com/models/openai)
 
+### 更新/降级letta后数据库报错，无法启动
+
+一般是letta版本变化有数据库格式改动，如果你不在意数据的话可以尝试删除用户文件夹下的.letta文件夹后重新启动。
+
 ## 相关链接
 
 [LogChat](https://github.com/log159/LogChat)
