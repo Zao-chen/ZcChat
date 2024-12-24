@@ -55,7 +55,7 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
             cursor.deletePreviousChar(); //删除前一个字符
             QJsonDocument jsonDoc = QJsonDocument::fromJson(Urlpost().toUtf8());
             qDebug()<<"接收到post信息："<<jsonDoc;
-            //获取到的json处理
+            // 获取到的json处理
             QString message = "正常|[error]未知错误|错误error";
             QJsonObject rootObj = jsonDoc.object();
             QJsonArray messages = rootObj["messages"].toArray();
