@@ -42,7 +42,7 @@
 
 Agent名称、LLM模型、嵌入配置 根据自己的需求配置。
 
-![QQ20241224-201038](https://github.com/user-attachments/assets/a8612f48-cf72-4a8c-a0b7-d98fb6d09e6d)
+![QQ20241224-201612](https://github.com/user-attachments/assets/7356083a-84c5-4674-8f16-989fe2913d13)
 
 persona填入之前找的现成的角色数据的提示词（核心记忆）。
 
