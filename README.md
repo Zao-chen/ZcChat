@@ -42,8 +42,6 @@
 
 Agent名称、LLM模型、嵌入配置 根据自己的需求配置。
 
-![QQ20241224-201612](https://github.com/user-attachments/assets/7356083a-84c5-4674-8f16-989fe2913d13)
-
 persona填入之前找的现成的角色数据的提示词（核心记忆）。
 
 ![QQ20241224-201405](https://github.com/user-attachments/assets/64cbcdab-e3ee-4f8c-a6e5-116b85d2601c)
@@ -56,7 +54,7 @@ persona填入之前找的现成的角色数据的提示词（核心记忆）。
 
 Letta：Url和AgencyID（chat页面右上角可以找到）填入ZcCaht设置。
 
-![QQ20241118-195112](https://github.com/user-attachments/assets/fab1e378-f009-4fbb-b442-ce9627e0c8fe)
+![QQ20241224-201612](https://github.com/user-attachments/assets/7356083a-84c5-4674-8f16-989fe2913d13)
 
 Vits：Url和Id填入ZcChat设置即可。
 
