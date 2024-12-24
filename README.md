@@ -38,15 +38,15 @@
 
 ### Step 2 - 配置Letta
 
-启动了LettaServer后，角色，并填入之前找的现成的角色数据的提示词（核心记忆）。
-
-![QQ20241118-194653](https://github.com/user-attachments/assets/1d269f53-9679-4fb0-9b9f-6dea78c8fa61)
-
-然后创建agent。
+启动了LettaServer创建agent。
 
 Agent名称、LLM模型、嵌入配置 根据自己的需求配置。
 
-![QQ20241118-194935](https://github.com/user-attachments/assets/cf7cca75-5a3f-4add-8b14-b2dc3c3ec268)
+![QQ20241224-201038](https://github.com/user-attachments/assets/a8612f48-cf72-4a8c-a0b7-d98fb6d09e6d)
+
+persona填入之前找的现成的角色数据的提示词（核心记忆）。
+
+![QQ20241224-201405](https://github.com/user-attachments/assets/64cbcdab-e3ee-4f8c-a6e5-116b85d2601c)
 
 ### Step 3 - （可选）安装Vits
 
