@@ -54,14 +54,15 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
             if(cursor.hasSelection()) cursor.clearSelection();
             cursor.deletePreviousChar(); //删除前一个字符
             QJsonDocument jsonDoc = QJsonDocument::fromJson(Urlpost().toUtf8());
+            qDebug()<<"接收到post信息："<<jsonDoc;
             //获取到的json处理
             QString message = "正常|[error]未知错误|错误error";
             QJsonObject rootObj = jsonDoc.object();
             QJsonArray messages = rootObj["messages"].toArray();
             for (const QJsonValue &messageVal : messages) {
                 QJsonObject messageObj = messageVal.toObject();
-                if (messageObj["message_type"].toString() == "function_call") {
-                    QJsonObject functionCall = messageObj["function_call"].toObject();
+                if (messageObj["message_type"].toString() == "tool_call_message") {
+                    QJsonObject functionCall = messageObj["tool_call"].toObject();
                     if (functionCall["name"].toString() == "send_message") {
                         QString arguments = functionCall["arguments"].toString();
                         QJsonDocument argumentsDoc = QJsonDocument::fromJson(arguments.toUtf8());
