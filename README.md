@@ -75,6 +75,7 @@ Vits：Url和Id填入ZcChat设置即可。
 ### 更新/降级letta后数据库报错，无法启动
 
 一般是letta版本变化有数据库格式改动，如果你不在意数据的话可以尝试删除用户文件夹下的.letta文件夹后重新启动。
+参考[#1896](https://github.com/letta-ai/letta/issues/1896)[#1501](https://github.com/letta-ai/letta/issues/1501)
 
 ## 相关链接
 
