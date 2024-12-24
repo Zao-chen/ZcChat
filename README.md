@@ -38,7 +38,7 @@
 
 ### Step 2 - 配置Letta
 
-启动了LettaServer创建agent。
+启动LettaServer创建agent。
 
 Agent名称、LLM模型、嵌入配置 根据自己的需求配置。
 
