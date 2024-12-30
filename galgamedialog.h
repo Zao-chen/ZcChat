@@ -4,6 +4,8 @@
 #include <QNetworkAccessManager>
 #include <QMediaPlayer>
 #include <QWidget>
+#include <QMediaRecorder>
+#include <QMediaCaptureSession>
 
 namespace Ui {
 class galgamedialog;
@@ -19,6 +21,10 @@ public:
 private slots:
     void on_pushButton_clicked();
     void updateText(); //逐字显示-更新
+    void on_pushButton_2_pressed();
+
+    void on_pushButton_2_released();
+
 signals:
     void change_tachie_to_tachie(QString name);
 private:
@@ -35,7 +41,8 @@ private:
     bool isLeftPressDown; // 判断左键是否按下
     //网络
     QNetworkAccessManager *m_manager;
-    QString Urlpost();
+    QString UrlpostLLM();
+    QString UrlpostWithFile();
     QByteArray getUrl(const QString &input);
     //逐字显示
     QTimer *timer;
@@ -44,6 +51,9 @@ private:
     void changetext(QString text);
     //重绘
     virtual void paintEvent(QPaintEvent *event) override;
+    //
+    QMediaRecorder *audioRecorder = nullptr;
+    QMediaCaptureSession captureSession;
 };
 
 #endif // GALGAMEDIALOG_H
