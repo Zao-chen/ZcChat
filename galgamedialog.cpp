@@ -24,6 +24,8 @@
 #include <QUrlQuery>
 
 #include <QLoggingCategory>
+#include <QDesktopServices>
+#include <QThread>
 
 
 galgamedialog::galgamedialog(QWidget *parent)
@@ -41,7 +43,18 @@ galgamedialog::galgamedialog(QWidget *parent)
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
     //录音
+    audioRecorder = new QMediaRecorder(this);
+    captureSession.setRecorder(audioRecorder);
+    captureSession.setAudioInput(new QAudioInput(this));
 
+    QAudioInput *audioInput = captureSession.audioInput();
+    if (audioInput) {
+        audioInput->setDevice(QMediaDevices::defaultAudioInput());
+        qDebug() << "使用的音频输入设备:" << QMediaDevices::defaultAudioInput().description();
+    } else {
+        qDebug() << "无法初始化音频输入设备";
+        return;
+    }
 
 }
 galgamedialog::~galgamedialog()
@@ -204,51 +217,72 @@ QString galgamedialog::UrlpostWithFile()
     QNetworkAccessManager *manager = new QNetworkAccessManager();
 
     // 设置请求 URL
-    QUrl url("http://localhost:9000/asr");
+    QUrl url("http://localhost:9000/asr?output=txt");
     QNetworkRequest request(url);
 
     // 设置请求头
-    //request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
     request.setRawHeader("accept", "application/json");
 
     // 创建 QHttpMultiPart 对象
     QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
     // 添加文件字段
-    QHttpPart filePart;
-    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"audio_file\"; filename=\"output.mp3.m4a\""));
-    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("audio/x-m4a"));
 
-    QFile *file = new QFile(QDir::currentPath() + "/output.aac.m4a");
+
+    QFile *file = new QFile(QDir::currentPath() + "/output.m4a");
+    if (!file->exists()) {
+        qDebug() << "File does not exist!";
+        return "File does not exist!";
+    }
+
     if (!file->open(QIODevice::ReadOnly)) {
         qDebug() << "Failed to open file!";
-        return "";
+        return "Failed to open file!";
     }
+    //QDesktopServices::openUrl(QDir::currentPath() + "/output.m4a");
+
+    qDebug()<<"sleep";
+    qDebug() << "录音状态:" << audioRecorder->recorderState();
+    QThread::sleep(0);
+    qDebug()<<"sleepok";
+    qDebug() << "录音状态:" << audioRecorder->recorderState();
+    QHttpPart filePart;
+    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"audio_file\"; filename=\"output.m4a\""));
+    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("audio/x-m4a"));
     filePart.setBodyDevice(file);
-    file->setParent(multiPart); // 确保 multiPart 会管理 file 的生命周期
+
+    // 这行代码确保了文件在 multiPart 被销毁时能够正确销毁
+    file->setParent(multiPart);
 
     multiPart->append(filePart);
 
     // 发送 POST 请求
-
-
-
-
     QEventLoop loop;
     QNetworkReply *reply = manager->post(request, multiPart);
-    multiPart->setParent(reply); // 确保 multiPart 的生命周期与 reply 同步
-    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-    loop.exec();
+
+    // 确保多部分表单在回复结束后被销毁
+    multiPart->setParent(reply);
+
+    // 确保在请求完成后退出事件循环
+    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();  // 等待请求完成
+
+    // 处理响应结果
     if (reply->error() == QNetworkReply::NoError) {
-        qDebug() << "Response:" << reply->readAll();
-        return reply->readAll();
+        QString msg = reply->readAll();
+        qDebug() << "Response:" << msg;
+        return msg;
     } else {
         qDebug() << "Error:" << reply->errorString();
         qDebug() << "Response details:" << reply->readAll();
-
     }
-    return reply->readAll();
+
     reply->deleteLater();
+    return "error";
+
+
+
+
 
 
 
@@ -340,29 +374,17 @@ void galgamedialog::on_pushButton_2_pressed()
 {
     qDebug() << "开始录音";
 
-    audioRecorder = new QMediaRecorder(this);
-    captureSession.setRecorder(audioRecorder);
-    captureSession.setAudioInput(new QAudioInput(this));
 
-    QAudioInput *audioInput = captureSession.audioInput();
-    if (audioInput) {
-        audioInput->setDevice(QMediaDevices::defaultAudioInput());
-        qDebug() << "使用的音频输入设备:" << QMediaDevices::defaultAudioInput().description();
-    } else {
-        qDebug() << "无法初始化音频输入设备";
-        return;
-    }
 
     if (audioRecorder->recorderState() == QMediaRecorder::StoppedState) {
         QMediaFormat format;
-        format.setFileFormat(QMediaFormat::MP3);  // 更改为更通用的 MP3 格式
-        format.setAudioCodec(QMediaFormat::AudioCodec::MP3);  // 对应编码器
+        format.setAudioCodec(QMediaFormat::AudioCodec::AAC);  // 对应编码器
         audioRecorder->setMediaFormat(format);
 
         audioRecorder->setAudioSampleRate(44100);         // 设置采样率
         audioRecorder->setAudioChannelCount(2);           // 设置声道数
         audioRecorder->setQuality(QMediaRecorder::HighQuality); // 设置录制质量
-        audioRecorder->setOutputLocation(QUrl::fromLocalFile(QDir::currentPath() + "/output.aac"));
+        audioRecorder->setOutputLocation(QUrl::fromLocalFile(QDir::currentPath() + "/output.m4a"));
 
         audioRecorder->record();
         qDebug() << "录音状态:" << audioRecorder->recorderState();
@@ -371,11 +393,25 @@ void galgamedialog::on_pushButton_2_pressed()
 }
 void galgamedialog::on_pushButton_2_released()
 {
+
     qDebug() << "结束录音";
     if (audioRecorder) {
+
         audioRecorder->stop();
-        qDebug() << "录音已停止";
+
+
+
+        connect(audioRecorder, &QMediaRecorder::recorderStateChanged, this, [=](QMediaRecorder::RecorderState state) {
+            qDebug() << "录音状态已更改:" << state;
+            if (state == QMediaRecorder::StoppedState) {
+                qDebug() << "录音已停止";
+                qDebug() << "录音状态:" << audioRecorder->recorderState();
+                qDebug()<<"识别结果："<<UrlpostWithFile();
+            }
+        });
+        audioRecorder->stop();
+
     }
 
-    qDebug()<<UrlpostWithFile();
+
 }
