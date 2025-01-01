@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
     ui->comboBox_vits_API->addItems({"vits-simple-api","自定义"});
     ui->comboBox_vits_language->addItems({"ja","zh"});
+    ui->comboBox_speechInput_API->addItems({"whisper-asr-webservice"});
     /*配置项读取*/
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     //立绘配置项
@@ -57,6 +58,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget_vits->setCurrentIndex(settings->value("/vits/api").toInt());
     ui->checkBox_vits_autoopen->setChecked(settings->value("/vits/autoOpen").toBool());
     ui->lineEdit_vits_location->setText(settings->value("/vits/location").toString());
+    //语音输入配置项
+    ui->checkBox_speechInput_enable->setChecked(settings->value("/speechInput/enable").toBool());
+    ui->lineEdit_speechInput_url->setText(settings->value("/speechInput/url").toString());
     /*托盘*/
     //初始化托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
@@ -103,8 +107,9 @@ MainWindow::MainWindow(QWidget *parent)
     model->appendRow(new QStandardItem(QStringLiteral("软件设置")));
     model->appendRow(new QStandardItem(QStringLiteral("立绘设置")));
     model->appendRow(new QStandardItem(QStringLiteral("对话框设置")));
-    model->appendRow(new QStandardItem(QStringLiteral("模型设置")));
-    model->appendRow(new QStandardItem(QStringLiteral("语音设置")));
+    model->appendRow(new QStandardItem(QStringLiteral("AI模型设置")));
+    model->appendRow(new QStandardItem(QStringLiteral("语音合成设置")));
+    model->appendRow(new QStandardItem(QStringLiteral("语音输入设置")));
     ui->treeView_up->setModel(model);
     QModelIndex modelindex = ui->treeView_up->model()->index(0, 0);
     ui->treeView_up->setCurrentIndex(modelindex);
@@ -119,6 +124,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(tachie_win, SIGNAL(changeLocation_to_main(int,int)), this, SLOT(changeTachieLocation_from_tachie(int,int)));
     connect(dialog_win, SIGNAL(change_tachie_to_tachie(QString)), tachie_win, SLOT(changetachie_from_galdialog(QString)));
     connect(this, SIGNAL(init_to_tachie()), tachie_win, SLOT(init_from_main()));
+    connect(this, SIGNAL(init_to_dialog()), dialog_win, SLOT(init_from_main()));
     connect(this, SIGNAL(resetlocation_to_tachie()), tachie_win, SLOT(resetlocation_from_main()));
     /*自启动*/
     //letta自启动
@@ -161,8 +167,6 @@ MainWindow::MainWindow(QWidget *parent)
     if(reply=="error" or tagName.isEmpty()) ui->label_mainMessage->setText(local_version+"  获取新版本失败");
     else if(local_version!=tagName) ui->label_mainMessage->setText(local_version+"  发现新版本"+tagName);
     else ui->label_mainMessage->setText(local_version);
-
-
 }
 
 MainWindow::~MainWindow()
@@ -229,7 +233,10 @@ void MainWindow::on_treeView_up_clicked(const QModelIndex &index)
         ui->label_title->setText("模型设置");
         break;
     case 4:
-        ui->label_title->setText("语音设置");
+        ui->label_title->setText("语音合成设置");
+        break;
+    case 5:
+        ui->label_title->setText("语音输入设置");
         break;
     default:
         break;
@@ -380,6 +387,19 @@ void MainWindow::on_comboBox_vits_language_currentTextChanged(const QString &arg
         delete settings;
     }
 }
+void MainWindow::on_checkBox_speechInput_enable_clicked(bool checked)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/speechInput/enable",checked);
+    delete settings;
+    emit init_to_dialog();
+}
+void MainWindow::on_lineEdit_speechInput_url_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/speechInput/url",arg1);
+    delete settings;
+}
 /*重置立绘位置*/
 void MainWindow::on_pushButton_reset_clicked()
 {
@@ -417,4 +437,7 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
+
+
+
 

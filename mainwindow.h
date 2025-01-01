@@ -55,11 +55,13 @@ private slots:
     void on_restartAppAction();
     void hideWindow();
     void on_comboBox_vits_language_currentTextChanged(const QString &arg1);
-
     void on_pushButton_reset_clicked();
+    void on_checkBox_speechInput_enable_clicked(bool checked);
+    void on_lineEdit_speechInput_url_textChanged(const QString &arg1);
 
 signals:
     void init_to_tachie(); //初始化立绘
+    void init_to_dialog(); //初始化对话框
 
 private:
     QNetworkAccessManager *m_manager;

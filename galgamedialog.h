@@ -21,12 +21,11 @@ public:
 private slots:
     void on_pushButton_clicked();
     void updateText(); //逐字显示-更新
-    void on_pushButton_2_pressed();
-
-    void on_pushButton_2_released();
-
+    void on_pushButton_input_pressed();
+    void on_pushButton_input_released();
 signals:
     void change_tachie_to_tachie(QString name);
+
 private:
     Ui::galgamedialog *ui;
     //鼠标按下移动及释放事件
@@ -54,6 +53,8 @@ private:
     //
     QMediaRecorder *audioRecorder = nullptr;
     QMediaCaptureSession captureSession;
+private slots:
+    void init_from_main();
 };
 
 #endif // GALGAMEDIALOG_H

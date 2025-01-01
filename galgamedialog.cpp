@@ -13,20 +13,12 @@
 #include <QSettings>
 #include <QTimer>
 #include <QPainter>
-
 #include <QAudioInput>
 #include <QMediaFormat>
 #include <QAudioDevice>
 #include <QDir>
 #include <QMediaDevices>
-#include <QStandardPaths>
 #include <QHttpPart>
-#include <QUrlQuery>
-
-#include <QLoggingCategory>
-#include <QDesktopServices>
-#include <QThread>
-
 
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
@@ -42,19 +34,7 @@ galgamedialog::galgamedialog(QWidget *parent)
     ui->label_name->setText("你");
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
-    //录音
-    audioRecorder = new QMediaRecorder(this);
-    captureSession.setRecorder(audioRecorder);
-    captureSession.setAudioInput(new QAudioInput(this));
-
-    QAudioInput *audioInput = captureSession.audioInput();
-    if (audioInput) {
-        audioInput->setDevice(QMediaDevices::defaultAudioInput());
-        qDebug() << "使用的音频输入设备:" << QMediaDevices::defaultAudioInput().description();
-    } else {
-        qDebug() << "无法初始化音频输入设备";
-        return;
-    }
+    emit init_from_main();
 
 }
 galgamedialog::~galgamedialog()
@@ -209,15 +189,12 @@ QString galgamedialog::UrlpostWithFile()
 {
 
 
-
-    // 启用网络调试日志
-    QLoggingCategory::setFilterRules("qt.network.ssl.warning=false\n"
-                                     "qt.network.request=true");
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
 
     QNetworkAccessManager *manager = new QNetworkAccessManager();
 
     // 设置请求 URL
-    QUrl url("http://localhost:9000/asr?output=txt");
+    QUrl url(settings->value("/speechInput/url").toString()+"/asr?language=zh&output=txt");
     QNetworkRequest request(url);
 
     // 设置请求头
@@ -227,8 +204,6 @@ QString galgamedialog::UrlpostWithFile()
     QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
     // 添加文件字段
-
-
     QFile *file = new QFile(QDir::currentPath() + "/output.m4a");
     if (!file->exists()) {
         qDebug() << "File does not exist!";
@@ -243,7 +218,6 @@ QString galgamedialog::UrlpostWithFile()
 
     qDebug()<<"sleep";
     qDebug() << "录音状态:" << audioRecorder->recorderState();
-    QThread::sleep(0);
     qDebug()<<"sleepok";
     qDebug() << "录音状态:" << audioRecorder->recorderState();
     QHttpPart filePart;
@@ -279,13 +253,6 @@ QString galgamedialog::UrlpostWithFile()
 
     reply->deleteLater();
     return "error";
-
-
-
-
-
-
-
 }
 /*get请求（用于vits）*/
 QByteArray galgamedialog::getUrl(const QString &input)
@@ -370,48 +337,59 @@ void galgamedialog::paintEvent(QPaintEvent *event)
     painter.drawRoundedRect(rect, 15, 15);  // 绘制一个带有圆角的矩形窗口，圆角半径为15px，如果把窗口设置成正方形，圆角半径设大，就会变成一个圆了
 }
 
-void galgamedialog::on_pushButton_2_pressed()
+void galgamedialog::on_pushButton_input_pressed()
 {
     qDebug() << "开始录音";
-
-
-
     if (audioRecorder->recorderState() == QMediaRecorder::StoppedState) {
         QMediaFormat format;
         format.setAudioCodec(QMediaFormat::AudioCodec::AAC);  // 对应编码器
         audioRecorder->setMediaFormat(format);
-
         audioRecorder->setAudioSampleRate(44100);         // 设置采样率
         audioRecorder->setAudioChannelCount(2);           // 设置声道数
         audioRecorder->setQuality(QMediaRecorder::HighQuality); // 设置录制质量
         audioRecorder->setOutputLocation(QUrl::fromLocalFile(QDir::currentPath() + "/output.m4a"));
-
         audioRecorder->record();
         qDebug() << "录音状态:" << audioRecorder->recorderState();
         qDebug() << "文件路径:" << audioRecorder->outputLocation();
     }
 }
-void galgamedialog::on_pushButton_2_released()
+void galgamedialog::on_pushButton_input_released()
 {
-
     qDebug() << "结束录音";
     if (audioRecorder) {
-
         audioRecorder->stop();
-
-
-
+    }
+}
+void galgamedialog::init_from_main()
+{
+    qDebug()<<"dialog初始化";
+    /*录音*/
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    if(settings->value("/speechInput/enable").toBool())
+    {
+        ui->pushButton_input->show();
+        audioRecorder = new QMediaRecorder(this);
+        captureSession.setRecorder(audioRecorder);
+        captureSession.setAudioInput(new QAudioInput(this));
+        QAudioInput *audioInput = captureSession.audioInput();
+        if (audioInput) {
+            audioInput->setDevice(QMediaDevices::defaultAudioInput());
+            qDebug() << "使用的音频输入设备:" << QMediaDevices::defaultAudioInput().description();
+        } else {
+            qDebug() << "无法初始化音频输入设备";
+            return;
+        }
         connect(audioRecorder, &QMediaRecorder::recorderStateChanged, this, [=](QMediaRecorder::RecorderState state) {
             qDebug() << "录音状态已更改:" << state;
             if (state == QMediaRecorder::StoppedState) {
                 qDebug() << "录音已停止";
                 qDebug() << "录音状态:" << audioRecorder->recorderState();
-                qDebug()<<"识别结果："<<UrlpostWithFile();
+                ui->textEdit->setText(UrlpostWithFile());
             }
         });
-        audioRecorder->stop();
-
     }
-
-
+    else
+    {
+        ui->pushButton_input->hide();
+    }
 }

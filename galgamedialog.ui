@@ -111,17 +111,32 @@ QPushButton:pressed {
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="pushButton_input">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>170</y>
-     <width>75</width>
-     <height>23</height>
+     <x>10</x>
+     <y>175</y>
+     <width>71</width>
+     <height>21</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color:#F0F3F4 ;
+	font: 9pt ;
+    border: none;
+    border-radius: 6px;
+    padding: 0px 4px;
+}
+QPushButton:hover {
+    background-color: #FFFFFF ;
+}
+QPushButton:pressed {
+    background-color: 	#ECF0F1;
+}</string>
+   </property>
    <property name="text">
-    <string>测试</string>
+    <string>长按录音</string>
    </property>
   </widget>
  </widget>
