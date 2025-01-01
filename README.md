@@ -26,17 +26,15 @@
 
 [视频教程](https://www.bilibili.com/video/BV1nYiyYdE9G)
 
-### Step 0 - 准备角色数据
+### Step 0 - 准备工作
 
-在[讨论区](https://github.com/Zao-chen/ZcChat/discussions)找到现成的角色数据，当然也可以自定义角色。
+在[Release](https://github.com/Zao-chen/ZcChat/releases)下载并安装ZcChat
 
-同时安装ZcChat。
+在[讨论区](https://github.com/Zao-chen/ZcChat/discussions)找到现成的角色数据，当然你也可以自定义角色。
 
-### Step 1 - 安装Letta
+### Step 1 - 安装配置Letta
 
 [Letta安装教程](https://github.com/letta-ai/letta?tab=readme-ov-file#-quickstart)
-
-### Step 2 - 配置Letta
 
 启动LettaServer创建agent。
 
@@ -46,25 +44,37 @@ persona填入之前找的现成的角色数据的提示词（核心记忆）。
 
 ![QQ20241224-201405](https://github.com/user-attachments/assets/64cbcdab-e3ee-4f8c-a6e5-116b85d2601c)
 
-### Step 3 - （可选）安装Vits
-
-[Vits安装教程](https://github.com/Artrajz/vits-simple-api/blob/main/README_zh.md)
-
-### Step 4 配置ZcChat
-
-Letta：Url和AgencyID（chat页面右上角可以找到）填入ZcCaht设置。
+Url和AgencyID（chat页面右上角可以找到）填入ZcCaht设置。
 
 ![QQ20241224-201612](https://github.com/user-attachments/assets/7356083a-84c5-4674-8f16-989fe2913d13)
 
-Vits：Url和Id填入ZcChat设置即可。
+### Step 2 - （可选）安装配置Vits
+
+可以使用任意的语音合成模型，这里用vits-simple-api为例。
+
+[Vits安装教程](https://github.com/Artrajz/vits-simple-api/blob/main/README_zh.md)
+
+打开vits，Url和Id填入ZcChat设置。
 
 ![QQ20241224-201819](https://github.com/user-attachments/assets/d7f583dd-324a-4d53-8ad0-21a7866589b9)
 
-### Step 5 - 配置立绘
+### Step 3- 配置立绘
 
 将角色数据中的立绘放入"/tachie/{名称}"文件夹，并在ZcChat设置中填写{名称}。
 
 最后的项目结构应该是"/tachie/{名称}/开心.png..."
+
+### Step4-（可选）配置语音输入
+
+#### 方式1：whisper-asr-webservice
+
+[whisper-asr-webservice安装教程](https://github.com/ahmetoner/whisper-asr-webservice?tab=readme-ov-file#quick-usage)
+
+将Url填入ZcChat设置。
+
+#### 方式2：百度语音识别
+
+TBD
 
 ## F&Q
 
