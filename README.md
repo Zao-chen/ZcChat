@@ -4,7 +4,7 @@
 
 ![QQ20241115-201211](https://github.com/user-attachments/assets/46a80ea9-35dc-4c2d-be6a-4f262a3f3a35)
 
-[视频演示](https://www.bilibili.com/video/BV1YUUaYgEgC/)
+视频演示：[基础功能](https://www.bilibili.com/video/BV1YUUaYgEgC/) [立绘动画](https://www.bilibili.com/video/BV1aFCKYJEy4/)
 
 ## 介绍
 
@@ -16,6 +16,7 @@
 - 立绘动画显示
 - 支持语音输出
 - 多种llm支持
+- 支持语音输入
 
 ### 技术介绍
 
