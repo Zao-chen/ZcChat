@@ -51,7 +51,9 @@ Url和AgencyID（chat页面右上角可以找到）填入ZcCaht设置。
 
 ### Step 2 - （可选）安装配置Vits
 
-可以使用任意的语音合成模型，这里用vits-simple-api为例。
+可以使用任意的语音合成模型，注意的是必须输出的是mp3文件。
+
+这里用vits-simple-api为例。
 
 [Vits安装教程](https://github.com/Artrajz/vits-simple-api/blob/main/README_zh.md)
 
@@ -79,9 +81,13 @@ TBD
 
 ## F&Q
 
-### 如何使用其他LLM，如GPT-4
+### 如何使用其他LLM，如OpenAI、Gemini等
 
-[Letta使用LLM文档](https://docs.letta.com/models/openai)
+[Letta使用不同LLM文档](https://docs.letta.com/models/openai)，总的来说就是设置环境变量即可
+
+### 如何自定义base url，我想用一些第三方的转发，比如说GPT_API_free
+
+添加环境变量OPENAI_API_BASE即可
 
 ### 更新/降级letta后数据库报错，无法启动
 
