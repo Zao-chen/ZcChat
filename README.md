@@ -14,9 +14,9 @@
 - 性格和个性会发展拓展
 - 动作和表情显示
 - 立绘动画显示
-- 支持语音输出
-- 多种llm支持
 - 支持语音输入
+- 支持语音合成
+- 多种LLM支持
 
 ### 技术介绍
 
@@ -37,29 +37,39 @@
 
 [Letta安装教程](https://github.com/letta-ai/letta?tab=readme-ov-file#-quickstart)
 
-启动LettaServer创建agent。
+启动LettaServer并创建agent。Agent名称、LLM模型、嵌入配置 根据自己的需求配置。
 
-Agent名称、LLM模型、嵌入配置 根据自己的需求配置。
-
-persona填入之前找的现成的角色数据的提示词（核心记忆）。
+Persona填入之前找的现成的角色数据的提示词（核心记忆）。
 
 ![QQ20241224-201405](https://github.com/user-attachments/assets/64cbcdab-e3ee-4f8c-a6e5-116b85d2601c)
 
-Url和AgencyID（chat页面右上角可以找到）填入ZcCaht设置。
+Letta地址（如果你没有改过Letta端口，ZcChat默认的就是正确的地址）和AgenctID填入ZcCaht设置，此处必须准确填写。
 
 ![QQ20241224-201612](https://github.com/user-attachments/assets/7356083a-84c5-4674-8f16-989fe2913d13)
 
 ### Step 2 - （可选）安装配置Vits
 
-可以使用任意的语音合成模型，注意的是必须输出的是mp3文件。
-
-这里用vits-simple-api为例。
+#### 方式1：vits-simple-api
 
 [Vits安装教程](https://github.com/Artrajz/vits-simple-api/blob/main/README_zh.md)
 
 打开vits，Url和Id填入ZcChat设置。
 
 ![QQ20241224-201819](https://github.com/user-attachments/assets/d7f583dd-324a-4d53-8ad0-21a7866589b9)
+
+
+
+#### 方式2：其他语音合成
+
+项目允许使用任意的语音合成工具，首先开启自定义模式。
+
+填入合成的API调用地址，但注意必须输出的是mp3文件，并使用{msg}作为文本的占符位，例如：
+
+```
+http://127.0.0.1:23456/voice/vits?id=0&text={msg}&format=mp3
+```
+
+这个链接访问得到的应该是一个合成出来的mp3文件。
 
 ### Step 3- 配置立绘
 
@@ -92,7 +102,12 @@ TBD
 ### 更新/降级letta后数据库报错，无法启动
 
 一般是letta版本变化有数据库格式改动，如果你不在意数据的话可以尝试删除用户文件夹下的.letta文件夹后重新启动。
+
 参考[#1896](https://github.com/letta-ai/letta/issues/1896)[#1501](https://github.com/letta-ai/letta/issues/1501)
+
+### 对话不久后会出现格式错误
+
+可能是她忘记了或者是一些误导性的词语篡改了记忆。尝试改进提示词或者用命令的语气告诉她要用正确的格式回复，使其加入记忆。效果如何取决于你使用的模型。我用的是gpt-4o-mini，命令过了一次后就没出现过该问题了。
 
 ## 相关链接
 
@@ -101,3 +116,5 @@ TBD
 [Letta](https://github.com/letta-ai/letta)
 
 [vits-simple-api](https://github.com/Artrajz/vits-simple-api)
+
+[whisper-asr-webservice](https://github.com/ahmetoner/whisper-asr-webservice)
