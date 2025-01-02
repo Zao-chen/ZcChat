@@ -158,12 +158,11 @@ MainWindow::MainWindow(QWidget *parent)
     /*新版本获取*/
     QString reply = getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest");
     QJsonDocument jsonDoc = QJsonDocument::fromJson(reply.toUtf8());
-    // 获取根对象
+    //获取根对象
     QJsonObject jsonObj = jsonDoc.object();
-    // 获取 "tag_name" 的值
+    //获取 "tag_name" 的值
     QString tagName = jsonObj.value("tag_name").toString();
     qDebug() << "Tag name:" << tagName;
-
     if(reply=="error" or tagName.isEmpty()) ui->label_mainMessage->setText(local_version+"  获取新版本失败");
     else if(local_version!=tagName) ui->label_mainMessage->setText(local_version+"  发现新版本"+tagName);
     else ui->label_mainMessage->setText(local_version);

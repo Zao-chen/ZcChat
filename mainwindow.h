@@ -48,16 +48,17 @@ private slots:
     void on_checkBox_soft_autostart_clicked(bool checked);
     void on_comboBox_vits_API_currentIndexChanged(int index);
     void on_lineEdit_vits_customUrl_textChanged(const QString &arg1);
+    void on_checkBox_speechInput_enable_clicked(bool checked);
+    void on_lineEdit_speechInput_url_textChanged(const QString &arg1);
+    void on_comboBox_vits_language_currentTextChanged(const QString &arg1);
     //托盘slot
     void on_showMainAction();
     void on_exitAppAction();
     void on_openGithub();
     void on_restartAppAction();
     void hideWindow();
-    void on_comboBox_vits_language_currentTextChanged(const QString &arg1);
+    //按钮
     void on_pushButton_reset_clicked();
-    void on_checkBox_speechInput_enable_clicked(bool checked);
-    void on_lineEdit_speechInput_url_textChanged(const QString &arg1);
 
 signals:
     void init_to_tachie(); //初始化立绘
@@ -72,7 +73,7 @@ private:
     QAction *m_exitAppAction; //托盘动作
     QAction *m_restartAppAction; //托盘动作
     QAction *m_openGithub; //托盘动作
-    bool already_init=false;
-    QByteArray getUrl(const QString &input);
+    bool already_init=false; //是否已经初始化了
+    QByteArray getUrl(const QString &input); //网络
 };
 #endif // MAINWINDOW_H

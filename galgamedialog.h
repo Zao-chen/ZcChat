@@ -19,10 +19,10 @@ public:
     explicit galgamedialog(QWidget *parent = nullptr);
     ~galgamedialog();
 private slots:
-    void on_pushButton_clicked();
+    void on_pushButton_clicked(); //下一步
     void updateText(); //逐字显示-更新
-    void on_pushButton_input_pressed();
-    void on_pushButton_input_released();
+    void on_pushButton_input_pressed(); //语音输入
+    void on_pushButton_input_released(); //语音输入
 signals:
     void change_tachie_to_tachie(QString name);
 
@@ -50,7 +50,7 @@ private:
     void changetext(QString text);
     //重绘
     virtual void paintEvent(QPaintEvent *event) override;
-    //
+    //录音
     QMediaRecorder *audioRecorder = nullptr;
     QMediaCaptureSession captureSession;
 private slots:

@@ -32,10 +32,10 @@ galgamedialog::galgamedialog(QWidget *parent)
     /*内容初始化*/
     ui->pushButton->hide();
     ui->label_name->setText("你");
+    emit init_from_main();
+    /*逐字显示*/
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
-    emit init_from_main();
-
 }
 galgamedialog::~galgamedialog()
 {
@@ -61,13 +61,11 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
             QTextCursor cursor=ui->textEdit->textCursor(); //得到当前text的光标
             if(cursor.hasSelection()) cursor.clearSelection();
             cursor.deletePreviousChar(); //删除前一个字符
-
-
-
+            //发送post请求
             QJsonDocument jsonDoc = QJsonDocument::fromJson(UrlpostLLM().toUtf8());
             qDebug()<<"接收到post信息："<<jsonDoc;
-            // 获取到的json处理
-            QString message = "正常|[error]未知错误|错误error";
+            //获取到的json处理
+            QString message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为["+jsonDoc.toJson()+"]|错误error";
             QJsonObject rootObj = jsonDoc.object();
             QJsonArray messages = rootObj["messages"].toArray();
             for (const QJsonValue &messageVal : messages) {
@@ -103,6 +101,7 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
                 QNetworkAccessManager* manager = new QNetworkAccessManager(this);
                 QNetworkReply* reply;
                 QString text;
+                //语音语言选择
                 if(settings->value("/vits/lan").toString()=="ja")
                     text = message.split("|")[2];
                 else
@@ -112,6 +111,7 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
                     reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/custom_url").toString().replace("{msg}",text))));
                 else
                     reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings->value("/vits/lan").toString())));
+                //播放返回值
                 connect(reply, &QNetworkReply::finished, this, [=]() {
                     if (reply->error() == QNetworkReply::NoError) {
                         if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200)
@@ -122,13 +122,13 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
                                 outputFile.write(reply->readAll());
                                 outputFile.close();
                             }
-                            QMediaPlayer *player = new QMediaPlayer; // 创建 QMediaPlayer 对象
-                            QAudioOutput *audioOutput = new QAudioOutput; // 创建 QAudioOutput 对象来控制音量
-                            player->setAudioOutput(audioOutput); // 将 QAudioOutput 连接到 QMediaPlayer
+                            QMediaPlayer *player = new QMediaPlayer; //创建 QMediaPlayer 对象
+                            QAudioOutput *audioOutput = new QAudioOutput; //创建 QAudioOutput 对象来控制音量
+                            player->setAudioOutput(audioOutput); //将 QAudioOutput 连接到 QMediaPlayer
                             player->setSource(QUrl::fromLocalFile(qApp->applicationDirPath()+"/temp.mp3")); //设置媒体源文件
                             audioOutput->setVolume(1); //0.0 为最小音量，1.0 为最大音量
                             player->play(); //播放音频
-                            changetext(message.split("|")[1]);
+                            changetext(message.split("|")[1]); //逐字显示
                             ui->pushButton->show();
                         }
                     }
@@ -141,25 +141,23 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
             }
             else
             {
-                changetext(message.split("|")[1]);
+                changetext(message.split("|")[1]); //逐字显示
                 ui->pushButton->show();
             }
         }
     }
     keys.removeAll(event->key());
 }
-/*post请求*/
+/*LLMpost请求*/
 QString galgamedialog::UrlpostLLM()
 {
     qDebug()<<"post!";
     QNetworkAccessManager* naManager = new QNetworkAccessManager(this);
-
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     QNetworkRequest request;
-    // 头设置
+    //头设置
     request.setUrl(QUrl(settings->value("/llm/url").toString()+"/v1/agents/"+settings->value("/llm/agent").toString()+"/messages"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
-
     //json处理
     QJsonObject rootObject;
     QJsonArray messagesArray; // 创建messages数组
@@ -172,7 +170,7 @@ QString galgamedialog::UrlpostLLM()
     rootObject["stream_steps"] = false; // 添加其他键值对到rootObject
     rootObject["stream_tokens"] = false; // 创建QJsonDocument并设置其为rootObject
     QJsonDocument jsonDoc(rootObject);
-
+    //获取结果
     QEventLoop loop;
     QNetworkReply* reply = naManager->post(request, jsonDoc.toJson());
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -184,80 +182,63 @@ QString galgamedialog::UrlpostLLM()
     qDebug()<<"POST:"<<read;
     return read;
 }
-/*post请求*/
+/*语言识别post请求*/
 QString galgamedialog::UrlpostWithFile()
 {
-
-
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-
     QNetworkAccessManager *manager = new QNetworkAccessManager();
-
-    // 设置请求 URL
+    //设置请求 URL
     QUrl url(settings->value("/speechInput/url").toString()+"/asr?language=zh&output=txt");
     QNetworkRequest request(url);
-
-    // 设置请求头
+    //设置请求头
     request.setRawHeader("accept", "application/json");
-
-    // 创建 QHttpMultiPart 对象
+    //创建 QHttpMultiPart 对象
     QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-
-    // 添加文件字段
+    //添加文件字段
     QFile *file = new QFile(QDir::currentPath() + "/output.m4a");
     if (!file->exists()) {
         qDebug() << "File does not exist!";
         return "File does not exist!";
     }
-
     if (!file->open(QIODevice::ReadOnly)) {
         qDebug() << "Failed to open file!";
         return "Failed to open file!";
     }
-    //QDesktopServices::openUrl(QDir::currentPath() + "/output.m4a");
-
-    qDebug()<<"sleep";
-    qDebug() << "录音状态:" << audioRecorder->recorderState();
-    qDebug()<<"sleepok";
     qDebug() << "录音状态:" << audioRecorder->recorderState();
     QHttpPart filePart;
     filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"audio_file\"; filename=\"output.m4a\""));
     filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("audio/x-m4a"));
     filePart.setBodyDevice(file);
-
-    // 这行代码确保了文件在 multiPart 被销毁时能够正确销毁
+    //这行代码确保了文件在 multiPart 被销毁时能够正确销毁
     file->setParent(multiPart);
-
     multiPart->append(filePart);
-
-    // 发送 POST 请求
+    //发送 POST 请求
     QEventLoop loop;
     QNetworkReply *reply = manager->post(request, multiPart);
-
-    // 确保多部分表单在回复结束后被销毁
+    //确保多部分表单在回复结束后被销毁
     multiPart->setParent(reply);
-
-    // 确保在请求完成后退出事件循环
+    //确保在请求完成后退出事件循环
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();  // 等待请求完成
-
-    // 处理响应结果
-    if (reply->error() == QNetworkReply::NoError) {
+    loop.exec();  //等待请求完成
+    //处理响应结果
+    if (reply->error() == QNetworkReply::NoError)
+    {
         QString msg = reply->readAll();
         qDebug() << "Response:" << msg;
         return msg;
-    } else {
+    }
+    else
+    {
         qDebug() << "Error:" << reply->errorString();
         qDebug() << "Response details:" << reply->readAll();
     }
-
     reply->deleteLater();
     return "error";
 }
 /*get请求（用于vits）*/
 QByteArray galgamedialog::getUrl(const QString &input)
 {
-    m_manager = new QNetworkAccessManager(this);//新建QNetworkAccessManager对象
+    m_manager = new QNetworkAccessManager(this); //新建QNetworkAccessManager对象
     QEventLoop loop;
     QNetworkReply *reply = m_manager->get(QNetworkRequest(QUrl(input)));
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -329,24 +310,24 @@ void galgamedialog::on_pushButton_clicked()
 /*圆角边框*/
 void galgamedialog::paintEvent(QPaintEvent *event)
 {
-    QPainter painter(this);// 创建一个QPainter对象并指定绘制设备为this，即当前窗口
-    painter.setRenderHint(QPainter::Antialiasing);  // 设置绘制选项为反锯齿，使绘制的图形边缘更加平滑
+    QPainter painter(this); //创建一个QPainter对象并指定绘制设备为this，即当前窗口
+    painter.setRenderHint(QPainter::Antialiasing); //设置绘制选项为反锯齿，使绘制的图形边缘更加平滑
     painter.setBrush(QBrush(QColor(240,243,244))); //设置画刷颜色,这里为白色
     painter.setPen(Qt::transparent); //设置画笔颜色为透明，即不绘制边框线
     QRect rect = this->rect(); //获取当前窗口的矩形区域
     painter.drawRoundedRect(rect, 15, 15);  // 绘制一个带有圆角的矩形窗口，圆角半径为15px，如果把窗口设置成正方形，圆角半径设大，就会变成一个圆了
 }
-
+/*录音相关*/
 void galgamedialog::on_pushButton_input_pressed()
 {
     qDebug() << "开始录音";
     if (audioRecorder->recorderState() == QMediaRecorder::StoppedState) {
         QMediaFormat format;
-        format.setAudioCodec(QMediaFormat::AudioCodec::AAC);  // 对应编码器
+        format.setAudioCodec(QMediaFormat::AudioCodec::AAC); //对应编码器
         audioRecorder->setMediaFormat(format);
-        audioRecorder->setAudioSampleRate(44100);         // 设置采样率
-        audioRecorder->setAudioChannelCount(2);           // 设置声道数
-        audioRecorder->setQuality(QMediaRecorder::HighQuality); // 设置录制质量
+        audioRecorder->setAudioSampleRate(44100); //设置采样率
+        audioRecorder->setAudioChannelCount(2); // 设置声道数
+        audioRecorder->setQuality(QMediaRecorder::HighQuality); //设置录制质量
         audioRecorder->setOutputLocation(QUrl::fromLocalFile(QDir::currentPath() + "/output.m4a"));
         audioRecorder->record();
         qDebug() << "录音状态:" << audioRecorder->recorderState();
@@ -356,9 +337,7 @@ void galgamedialog::on_pushButton_input_pressed()
 void galgamedialog::on_pushButton_input_released()
 {
     qDebug() << "结束录音";
-    if (audioRecorder) {
-        audioRecorder->stop();
-    }
+    if (audioRecorder) audioRecorder->stop();
 }
 void galgamedialog::init_from_main()
 {
@@ -388,7 +367,7 @@ void galgamedialog::init_from_main()
             }
         });
     }
-    else
+    else //不开启语言输入
     {
         ui->pushButton_input->hide();
     }
