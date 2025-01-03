@@ -9,7 +9,8 @@ assignees: ''
 
 **确认在反馈bug前尝试过以下办法（在[]内输入x确认）**
 - [ ] 我确认我使用的是最新版本的ZcChat
-- [ ] 我已经认真阅读过readme和wiki
+- [ ] 我已经认真阅读过README和WIKI
+- [ ] 我认为ZcChat的问题，而不是Letta或者是Vits的
 
 **bug描述**
 对bug的清晰简洁的描述。
