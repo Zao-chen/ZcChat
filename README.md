@@ -87,7 +87,10 @@ http://127.0.0.1:23456/voice/vits?id=0&text={msg}&format=mp3
 
 #### 方式2：百度语音识别
 
-TBD
+在[百度智能云控制台](https://console.bce.baidu.com/ai-engine/old/#/ai/speech/app/list)创建短语音识别应用。
+
+
+将API Key和Secret Key填入ZcChat设置即可。
 
 ## F&Q
 
