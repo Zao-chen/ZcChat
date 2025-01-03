@@ -82,6 +82,9 @@ QPushButton:pressed {
    <property name="frameShape">
     <enum>QFrame::Shape::NoFrame</enum>
    </property>
+   <property name="acceptRichText">
+    <bool>true</bool>
+   </property>
    <property name="placeholderText">
     <string>说点什么吧（Shift+Enter回车 Enter发送）</string>
    </property>
