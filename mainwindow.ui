@@ -91,7 +91,7 @@ border:none;
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="page_0">
           <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,1">
@@ -1341,12 +1341,12 @@ border:none;
             </widget>
            </item>
            <item>
-            <widget class="QStackedWidget" name="stackedWidget_vits_2">
+            <widget class="QStackedWidget" name="stackedWidget_speechInput">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="page_7">
-              <layout class="QVBoxLayout" name="verticalLayout_11" stretch="0">
+              <layout class="QVBoxLayout" name="verticalLayout_11" stretch="0,1">
                <property name="spacing">
                 <number>0</number>
                </property>
@@ -1360,7 +1360,7 @@ border:none;
                 <number>0</number>
                </property>
                <property name="bottomMargin">
-                <number>10</number>
+                <number>0</number>
                </property>
                <item>
                 <widget class="ElaScrollPageArea" name="widget_25" native="true">
@@ -1402,10 +1402,26 @@ border:none;
                  </layout>
                 </widget>
                </item>
+               <item>
+                <spacer name="verticalSpacer_8">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
               </layout>
              </widget>
              <widget class="QWidget" name="page_8">
-              <layout class="QVBoxLayout" name="verticalLayout_12" stretch="0">
+              <layout class="QVBoxLayout" name="verticalLayout_12">
+               <property name="spacing">
+                <number>0</number>
+               </property>
                <property name="leftMargin">
                 <number>0</number>
                </property>
@@ -1435,12 +1451,12 @@ border:none;
                      </font>
                     </property>
                     <property name="text">
-                     <string>请求地址</string>
+                     <string>API Key</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="ElaLineEdit" name="lineEdit_vits_customUrl_2">
+                   <widget class="ElaLineEdit" name="lineEdit_speechInput_BaiduAPIKey">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -1448,7 +1464,47 @@ border:none;
                      </size>
                     </property>
                     <property name="text">
-                     <string>http://127.0.0.1:23456/voice/vits?text={msg}&amp;id=1http://127.0.0.1:23456/voice/vits?id=0&amp;text={msg}&amp;format=mp3</string>
+                     <string/>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="ElaScrollPageArea" name="widget_31" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout_32" stretch="2,2">
+                  <property name="leftMargin">
+                   <number>15</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>15</number>
+                  </property>
+                  <item>
+                   <widget class="ElaText" name="label_43">
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Secret Key</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="ElaLineEdit" name="lineEdit_speechInput_BaiduSecretKey">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string/>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>

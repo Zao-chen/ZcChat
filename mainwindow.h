@@ -60,6 +60,12 @@ private slots:
     //按钮
     void on_pushButton_reset_clicked();
 
+    void on_comboBox_speechInput_API_currentIndexChanged(int index);
+
+    void on_lineEdit_speechInput_BaiduAPIKey_textChanged(const QString &arg1);
+
+    void on_lineEdit_speechInput_BaiduSecretKey_textChanged(const QString &arg1);
+
 signals:
     void init_to_tachie(); //初始化立绘
     void init_to_dialog(); //初始化对话框

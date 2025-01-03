@@ -20,6 +20,8 @@
 #include <QMediaDevices>
 #include <QHttpPart>
 
+#include <QUrlQuery>
+
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::galgamedialog)
@@ -186,54 +188,186 @@ QString galgamedialog::UrlpostLLM()
 QString galgamedialog::UrlpostWithFile()
 {
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    QNetworkAccessManager *manager = new QNetworkAccessManager();
-    //设置请求 URL
-    QUrl url(settings->value("/speechInput/url").toString()+"/asr?language=zh&output=txt");
-    QNetworkRequest request(url);
-    //设置请求头
-    request.setRawHeader("accept", "application/json");
-    //创建 QHttpMultiPart 对象
-    QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-    //添加文件字段
-    QFile *file = new QFile(QDir::currentPath() + "/output.m4a");
-    if (!file->exists()) {
-        qDebug() << "File does not exist!";
-        return "File does not exist!";
-    }
-    if (!file->open(QIODevice::ReadOnly)) {
-        qDebug() << "Failed to open file!";
-        return "Failed to open file!";
-    }
-    qDebug() << "录音状态:" << audioRecorder->recorderState();
-    QHttpPart filePart;
-    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"audio_file\"; filename=\"output.m4a\""));
-    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("audio/x-m4a"));
-    filePart.setBodyDevice(file);
-    //这行代码确保了文件在 multiPart 被销毁时能够正确销毁
-    file->setParent(multiPart);
-    multiPart->append(filePart);
-    //发送 POST 请求
-    QEventLoop loop;
-    QNetworkReply *reply = manager->post(request, multiPart);
-    //确保多部分表单在回复结束后被销毁
-    multiPart->setParent(reply);
-    //确保在请求完成后退出事件循环
-    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();  //等待请求完成
-    //处理响应结果
-    if (reply->error() == QNetworkReply::NoError)
+    if(settings->value("/speechInput/api").toInt()==0)
     {
-        QString msg = reply->readAll();
-        qDebug() << "Response:" << msg;
-        return msg;
+        QNetworkAccessManager *manager = new QNetworkAccessManager();
+        //设置请求 URL
+        QUrl url(settings->value("/speechInput/url").toString()+"/asr?language=zh&output=txt");
+        QNetworkRequest request(url);
+        //设置请求头
+        request.setRawHeader("accept", "application/json");
+        //创建 QHttpMultiPart 对象
+        QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+        //添加文件字段
+        QFile *file = new QFile(QDir::currentPath() + "/output.m4a");
+        if (!file->exists()) {
+            qDebug() << "File does not exist!";
+            return "File does not exist!";
+        }
+        if (!file->open(QIODevice::ReadOnly)) {
+            qDebug() << "Failed to open file!";
+            return "Failed to open file!";
+        }
+        qDebug() << "录音状态:" << audioRecorder->recorderState();
+        QHttpPart filePart;
+        filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"audio_file\"; filename=\"output.m4a\""));
+        filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("audio/x-m4a"));
+        filePart.setBodyDevice(file);
+        //这行代码确保了文件在 multiPart 被销毁时能够正确销毁
+        file->setParent(multiPart);
+        multiPart->append(filePart);
+        //发送 POST 请求
+        QEventLoop loop;
+        QNetworkReply *reply = manager->post(request, multiPart);
+        //确保多部分表单在回复结束后被销毁
+        multiPart->setParent(reply);
+        //确保在请求完成后退出事件循环
+        connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();  //等待请求完成
+        //处理响应结果
+        if (reply->error() == QNetworkReply::NoError)
+        {
+            QString msg = reply->readAll();
+            qDebug() << "Response:" << msg;
+            return msg;
+        }
+        else
+        {
+            qDebug() << "Error:" << reply->errorString();
+            qDebug() << "Response details:" << reply->readAll();
+        }
+        reply->deleteLater();
+        return "error";
     }
     else
     {
-        qDebug() << "Error:" << reply->errorString();
-        qDebug() << "Response details:" << reply->readAll();
+        QNetworkAccessManager manager;
+
+        // 创建请求 URL 和查询参数
+        QUrl url("https://aip.baidubce.com/oauth/2.0/token");
+        QUrlQuery query;
+        query.addQueryItem("grant_type", "client_credentials");
+        query.addQueryItem("client_id", settings->value("/speechInput/baidu_apikey").toString()); // 替换为你的实际client_id
+        query.addQueryItem("client_secret", settings->value("/speechInput/baidu_secretkey").toString()); // 替换为你的实际client_secret
+        url.setQuery(query);
+
+        // 创建请求对象并设置头信息
+        QNetworkRequest request(url);
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+        // 创建事件循环
+        QEventLoop loop;
+
+        // 发送 POST 请求
+        QNetworkReply *reply = manager.post(request, QByteArray());
+
+        // 当请求完成时，退出事件循环
+        QString accessToken;
+        QObject::connect(reply, &QNetworkReply::finished, [&]() {
+            if (reply->error() == QNetworkReply::NoError) {
+                QByteArray response = reply->readAll();
+                QJsonDocument doc = QJsonDocument::fromJson(response);
+                if (!doc.isNull()) {
+                    QJsonObject jsonObj = doc.object();
+                    // 获取access_token
+                    accessToken = jsonObj.value("access_token").toString();
+                    qDebug() << "Access Token:" << accessToken;
+                } else {
+                    qDebug() << "Failed to parse JSON response";
+                }
+            } else {
+                qDebug() << "Request failed:" << reply->errorString();
+            }
+            reply->deleteLater();
+            loop.quit();  // 退出事件循环
+        });
+        // 进入事件循环，等待请求完成
+        loop.exec();
+
+        /*识别*/
+        QNetworkAccessManager manager_api;
+
+        // 读取本地音频文件为二进制数据
+        QString audioFilePath = QDir::currentPath() + "/output.m4a"; // 音频文件路径
+        QFile file(audioFilePath);
+        if (!file.open(QIODevice::ReadOnly)) {
+            qWarning() << "无法打开音频文件" << audioFilePath;
+        }
+        QByteArray audioData = file.readAll();
+        file.close();
+        QString resultJson;
+        if (!audioData.isEmpty()) {
+            // 将音频数据进行 Base64 编码
+            QString base64AudioData = audioData.toBase64();
+
+            // 创建 JSON 请求体
+            QJsonObject json;
+            json["format"] = "m4a";  // 音频格式
+            json["rate"] = 16000;     // 采样率
+            json["channel"] = 1;      // 单声道
+            json["token"] = accessToken; // 使用获取的 access_token
+            json["cuid"] = "WVqcZK3Tv7iX0kjI4aYuGg4VDUwjZ7k5"; // 替换为设备 ID
+            json["speech"] = base64AudioData; // 音频数据的 Base64 编码
+            json["len"] = audioData.size(); // 音频文件原始大小（字节数）
+
+            // 将 JSON 数据转换为字节流
+            QJsonDocument doc(json);
+            QByteArray jsonData = doc.toJson();
+
+            // 创建 POST 请求
+            QUrl url("https://vop.baidu.com/server_api");
+            QNetworkRequest request(url);
+
+            // 设置请求头部
+            request.setRawHeader("Content-Type", "application/json");
+            request.setRawHeader("Accept", "application/json");
+
+            // 创建事件循环
+            QEventLoop loop;
+
+            // 发送 POST 请求
+            QNetworkReply *reply_api= manager_api.post(request, jsonData);
+
+            // 连接请求的 finished 信号
+            QObject::connect(reply_api, &QNetworkReply::finished, [&]() {
+                if (reply_api->error() == QNetworkReply::NoError) {
+                    // 处理响应结果
+                    resultJson= reply_api->readAll();
+                    qDebug() << "识别成功：" << resultJson;
+
+                } else {
+                    qWarning() << "请求失败：" << reply_api->errorString();
+                }
+                loop.quit();  // 请求完成后退出事件循环
+                reply_api->deleteLater();
+            });
+
+            // 启动事件循环，等待回复
+            loop.exec();
+
+        } else {
+            qWarning() << "音频文件为空，跳过请求";
+        }
+
+        qDebug()<<"解析"<<resultJson;
+        // 解析 JSON 数据
+        QString result;
+        QJsonDocument doc = QJsonDocument::fromJson(resultJson.toUtf8());
+        if (doc.isObject()) {
+            QJsonObject obj = doc.object();
+
+            // 获取 "result" 字段
+            if (obj.contains("result") && obj["result"].isArray()) {
+                QJsonArray resultArray = obj["result"].toArray();
+                for (const QJsonValue &value : resultArray) {
+                    qDebug() << value.toString();
+                    result=value.toString();
+                }
+            }
+        }
+        qDebug()<<"得到"<<result;
+        return result;
     }
-    reply->deleteLater();
-    return "error";
 }
 /*get请求（用于vits）*/
 QByteArray galgamedialog::getUrl(const QString &input)

@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
     ui->comboBox_vits_API->addItems({"vits-simple-api","自定义"});
     ui->comboBox_vits_language->addItems({"ja","zh"});
-    ui->comboBox_speechInput_API->addItems({"whisper-asr-webservice"});
+    ui->comboBox_speechInput_API->addItems({"whisper-asr-webservice","百度语音识别"});
     /*配置项读取*/
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     //立绘配置项
@@ -61,6 +61,10 @@ MainWindow::MainWindow(QWidget *parent)
     //语音输入配置项
     ui->checkBox_speechInput_enable->setChecked(settings->value("/speechInput/enable").toBool());
     ui->lineEdit_speechInput_url->setText(settings->value("/speechInput/url").toString());
+    ui->comboBox_speechInput_API->setCurrentIndex(settings->value("/speechInput/api").toInt());
+    ui->stackedWidget_speechInput->setCurrentIndex(settings->value("/speechInput/api").toInt());
+    ui->lineEdit_speechInput_BaiduAPIKey->setText(settings->value("/speechInput/baidu_apikey").toString());
+    ui->lineEdit_speechInput_BaiduSecretKey->setText(settings->value("/speechInput/baidu_secretkey").toString());
     /*托盘*/
     //初始化托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
@@ -399,6 +403,28 @@ void MainWindow::on_lineEdit_speechInput_url_textChanged(const QString &arg1)
     settings->setValue("/speechInput/url",arg1);
     delete settings;
 }
+void MainWindow::on_comboBox_speechInput_API_currentIndexChanged(int index)
+{
+    if(already_init)
+    {
+        QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+        settings->setValue("/speechInput/api",index);
+        delete settings;
+    }
+    ui->stackedWidget_speechInput->setCurrentIndex(index);
+}
+void MainWindow::on_lineEdit_speechInput_BaiduAPIKey_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/speechInput/baidu_apikey",arg1);
+    delete settings;
+}
+void MainWindow::on_lineEdit_speechInput_BaiduSecretKey_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/speechInput/baidu_secretkey",arg1);
+    delete settings;
+}
 /*重置立绘位置*/
 void MainWindow::on_pushButton_reset_clicked()
 {
@@ -436,6 +462,11 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
+
+
+
+
+
 
 
 
