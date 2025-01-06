@@ -63,6 +63,8 @@ private:
     //
     void send_to_llm();
     bool is_record = false;
+    //
+    QMediaPlayer *player = new QMediaPlayer; //创建 QMediaPlayer 对象
 private slots:
     void init_from_main();
     void on_checkBox_autoInput_clicked(bool checked);
