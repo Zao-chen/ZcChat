@@ -20,6 +20,13 @@
 #include <QMediaDevices>
 #include <QHttpPart>
 
+#include <QCoreApplication>
+#include <QAudioFormat>
+#include <QAudioDevice>
+#include <QAudioSource> // 添加 QAudioSource 头文件
+#include <QMediaDevices>
+#include <QDebug>
+
 #include <QUrlQuery>
 
 galgamedialog::galgamedialog(QWidget *parent)
@@ -27,6 +34,45 @@ galgamedialog::galgamedialog(QWidget *parent)
     , ui(new Ui::galgamedialog)
 {
     ui->setupUi(this);
+    /*录音*/
+    // 设置音频格式
+    format.setSampleRate(16000); // 设置采样率
+    format.setChannelCount(1);   // 设置通道数
+    format.setSampleFormat(QAudioFormat::Int16); // 设置采样格式为 16 位整数
+
+    // 获取默认的音频输入设备
+    QAudioDevice inputDevice = QMediaDevices::defaultAudioInput();
+    if (!inputDevice.isFormatSupported(format)) {
+        qWarning() << "Default format not supported, trying to use the nearest.";
+        format = inputDevice.preferredFormat();
+    }
+
+    // 创建 VAD 对象
+    vad = new VAD(this);
+    // 连接 VAD 的信号到槽函数
+    connect(vad, &VAD::voiceDetected, this, [](bool detected) {
+        if (detected) {
+            qDebug() << "Voice detected!";
+        } else {
+            qDebug() << "No voice detected.";
+        }
+    });
+    // 创建音频输入对象
+    audioInput = new QAudioSource(inputDevice, format, this);
+
+    // 启动音频输入
+    audioDevice = audioInput->start();
+    if (!audioDevice) {
+        qWarning() << "Failed to start audio input!";
+    }
+
+    // 当有音频数据可用时，调用 VAD 进行处理
+    connect(audioDevice, &QIODevice::readyRead, this, [=]() {
+        QByteArray audioData = audioDevice->readAll();
+        vad->processAudio(audioData, format);
+    });
+
+
     /*无边框设置*/
     setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
     setWindowOpacity(0.9);

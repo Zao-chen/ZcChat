@@ -30,6 +30,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         include/ElaWidgetTools.qrc
         res.qrc
         logo.rc
+        vad.h vad.cpp
+
+
 
 
     )

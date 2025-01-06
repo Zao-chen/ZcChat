@@ -6,6 +6,8 @@
 #include <QWidget>
 #include <QMediaRecorder>
 #include <QMediaCaptureSession>
+#include "vad.h"
+#include <QAudioSource>
 
 namespace Ui {
 class galgamedialog;
@@ -53,6 +55,11 @@ private:
     //录音
     QMediaRecorder *audioRecorder = nullptr;
     QMediaCaptureSession captureSession;
+    //
+    VAD *vad; // VAD 对象
+    QAudioSource *audioInput; // 音频输入对象
+    QIODevice *audioDevice; // 音频设备
+    QAudioFormat format; // 音频格式
 private slots:
     void init_from_main();
 };
