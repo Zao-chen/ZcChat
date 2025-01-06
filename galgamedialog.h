@@ -60,8 +60,12 @@ private:
     QAudioSource *audioInput; // 音频输入对象
     QIODevice *audioDevice; // 音频设备
     QAudioFormat format; // 音频格式
+    //
+    void send_to_llm();
+    bool is_record = false;
 private slots:
     void init_from_main();
+    void on_checkBox_autoInput_clicked(bool checked);
 };
 
 #endif // GALGAMEDIALOG_H

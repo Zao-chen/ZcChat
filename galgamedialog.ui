@@ -139,7 +139,20 @@ QPushButton:pressed {
 }</string>
    </property>
    <property name="text">
-    <string>长按录音</string>
+    <string>长按输入</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_autoInput">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>177</y>
+     <width>80</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>直接对话</string>
    </property>
   </widget>
  </widget>

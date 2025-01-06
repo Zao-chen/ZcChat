@@ -34,45 +34,13 @@ galgamedialog::galgamedialog(QWidget *parent)
     , ui(new Ui::galgamedialog)
 {
     ui->setupUi(this);
-    /*录音*/
-    // 设置音频格式
-    format.setSampleRate(16000); // 设置采样率
-    format.setChannelCount(1);   // 设置通道数
-    format.setSampleFormat(QAudioFormat::Int16); // 设置采样格式为 16 位整数
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    if(settings->value("/speechInput/enable").toBool())
+    {
 
-    // 获取默认的音频输入设备
-    QAudioDevice inputDevice = QMediaDevices::defaultAudioInput();
-    if (!inputDevice.isFormatSupported(format)) {
-        qWarning() << "Default format not supported, trying to use the nearest.";
-        format = inputDevice.preferredFormat();
+
     }
-
-    // 创建 VAD 对象
-    vad = new VAD(this);
-    // 连接 VAD 的信号到槽函数
-    connect(vad, &VAD::voiceDetected, this, [](bool detected) {
-        if (detected) {
-            qDebug() << "Voice detected!";
-        } else {
-            qDebug() << "No voice detected.";
-        }
-    });
-    // 创建音频输入对象
-    audioInput = new QAudioSource(inputDevice, format, this);
-
-    // 启动音频输入
-    audioDevice = audioInput->start();
-    if (!audioDevice) {
-        qWarning() << "Failed to start audio input!";
-    }
-
-    // 当有音频数据可用时，调用 VAD 进行处理
-    connect(audioDevice, &QIODevice::readyRead, this, [=]() {
-        QByteArray audioData = audioDevice->readAll();
-        vad->processAudio(audioData, format);
-    });
-
-
+    else qDebug()<<"不使用对话";
     /*无边框设置*/
     setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
     setWindowOpacity(0.9);
@@ -100,98 +68,7 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
     {
         if (!keys.contains(Qt::Key_Shift)) //过滤换行
         {
-            QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-            //对话框设置
-            ui->label_name->setText(settings->value("/tachie/name").toString());
-            ui->textEdit->setEnabled(false);
-            ui->pushButton->hide();
-            //去除换行
-            QTextCursor cursor=ui->textEdit->textCursor(); //得到当前text的光标
-            if(cursor.hasSelection()) cursor.clearSelection();
-            cursor.deletePreviousChar(); //删除前一个字符
-            //发送post请求
-            QJsonDocument jsonDoc = QJsonDocument::fromJson(UrlpostLLM().toUtf8());
-            qDebug()<<"接收到post信息："<<jsonDoc;
-            //获取到的json处理
-            QString message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为["+jsonDoc.toJson()+"]|错误error";
-            QJsonObject rootObj = jsonDoc.object();
-            QJsonArray messages = rootObj["messages"].toArray();
-            for (const QJsonValue &messageVal : messages) {
-                QJsonObject messageObj = messageVal.toObject();
-                if (messageObj["message_type"].toString() == "tool_call_message") {
-                    QJsonObject functionCall = messageObj["tool_call"].toObject();
-                    if (functionCall["name"].toString() == "send_message") {
-                        QString arguments = functionCall["arguments"].toString();
-                        QJsonDocument argumentsDoc = QJsonDocument::fromJson(arguments.toUtf8());
-                        if (!argumentsDoc.isNull() && argumentsDoc.isObject()) {
-                            message = argumentsDoc.object()["message"].toString();
-                            qDebug() << "Extracted message:" << message;
-                        }
-                    }
-                }
-            }
-            //信息判断
-            if(message.isNull())
-            {
-                message = "正常|[error] Letta返回了["+jsonDoc.toJson()+"]，可能是Letta未启动/agent配置错误|错误error";
-            }
-            else if(message.split("|").size()!=3)
-            {
-                if(!settings->value("/llm/feedback").toBool()) message = "正常|[error] Letta正常返回，但是返回值格式错误，返回值["+message+"]|错误error";
-                //如果忽略报错
-                else message = "正常|"+message+"|";
-            }
-            emit change_tachie_to_tachie(message.split("|")[0]);
-            qDebug()<<"【发送】对话框 --- 修改立绘"+message.split("|")[0]+" ---> 立绘";
-            //语音合成
-            if(settings->value("/vits/enable").toBool())
-            {
-                QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-                QNetworkReply* reply;
-                QString text;
-                //语音语言选择
-                if(settings->value("/vits/lan").toString()=="ja")
-                    text = message.split("|")[2];
-                else
-                    text = message.split("|")[1];
-                //语音api选择
-                if(settings->value("/vits/api").toInt()==1)
-                    reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/custom_url").toString().replace("{msg}",text))));
-                else
-                    reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings->value("/vits/lan").toString())));
-                //播放返回值
-                connect(reply, &QNetworkReply::finished, this, [=]() {
-                    if (reply->error() == QNetworkReply::NoError) {
-                        if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200)
-                        {
-                            QFile outputFile(qApp->applicationDirPath()+"/temp.mp3");
-                            if (outputFile.open(QIODevice::WriteOnly))
-                            {
-                                outputFile.write(reply->readAll());
-                                outputFile.close();
-                            }
-                            QMediaPlayer *player = new QMediaPlayer; //创建 QMediaPlayer 对象
-                            QAudioOutput *audioOutput = new QAudioOutput; //创建 QAudioOutput 对象来控制音量
-                            player->setAudioOutput(audioOutput); //将 QAudioOutput 连接到 QMediaPlayer
-                            player->setSource(QUrl::fromLocalFile(qApp->applicationDirPath()+"/temp.mp3")); //设置媒体源文件
-                            audioOutput->setVolume(1); //0.0 为最小音量，1.0 为最大音量
-                            player->play(); //播放音频
-                            changetext(message.split("|")[1]); //逐字显示
-                            ui->pushButton->show();
-                        }
-                    }
-                    else
-                    {
-                        ui->textEdit->setText("[error] Vits错误，请检查Vits配置或者关闭语言输出");
-                        ui->pushButton->show();
-                    }
-                });
-            }
-            else
-            {
-                changetext(message.split("|")[1]); //逐字显示
-                ui->pushButton->show();
-            }
+            send_to_llm();
         }
     }
     keys.removeAll(event->key());
@@ -233,6 +110,13 @@ QString galgamedialog::UrlpostLLM()
 /*语言识别post请求*/
 QString galgamedialog::UrlpostWithFile()
 {
+    QFile *file = new QFile(QDir::currentPath() + "/output.m4a");
+    qDebug()<<"测试"<<file->size();
+    if(file->size()<=7000)
+    {
+        qDebug()<<file->size()<<"文件太小，认定为噪音";
+        return "";
+    }
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     if(settings->value("/speechInput/api").toInt()==0)
     {
@@ -245,7 +129,8 @@ QString galgamedialog::UrlpostWithFile()
         //创建 QHttpMultiPart 对象
         QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
         //添加文件字段
-        QFile *file = new QFile(QDir::currentPath() + "/output.m4a");
+
+
         if (!file->exists()) {
             qDebug() << "File does not exist!";
             return "File does not exist!";
@@ -517,7 +402,10 @@ void galgamedialog::on_pushButton_input_pressed()
 void galgamedialog::on_pushButton_input_released()
 {
     qDebug() << "结束录音";
-    if (audioRecorder) audioRecorder->stop();
+    if (audioRecorder)
+    {
+        audioRecorder->stop();
+    }
 }
 void galgamedialog::init_from_main()
 {
@@ -527,6 +415,7 @@ void galgamedialog::init_from_main()
     if(settings->value("/speechInput/enable").toBool())
     {
         ui->pushButton_input->show();
+        ui->checkBox_autoInput->show();
         audioRecorder = new QMediaRecorder(this);
         captureSession.setRecorder(audioRecorder);
         captureSession.setAudioInput(new QAudioInput(this));
@@ -543,12 +432,189 @@ void galgamedialog::init_from_main()
             if (state == QMediaRecorder::StoppedState) {
                 qDebug() << "录音已停止";
                 qDebug() << "录音状态:" << audioRecorder->recorderState();
-                ui->textEdit->setText(UrlpostWithFile());
+                QString msg = UrlpostWithFile();
+                ui->textEdit->setText(msg);
+                if(ui->checkBox_autoInput->isChecked())
+                {
+                    if(msg!="")send_to_llm();
+                }
             }
         });
     }
     else //不开启语言输入
     {
         ui->pushButton_input->hide();
+        ui->checkBox_autoInput->hide();
     }
 }
+void galgamedialog::send_to_llm()
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    //对话框设置
+    ui->label_name->setText(settings->value("/tachie/name").toString());
+    ui->textEdit->setEnabled(false);
+    ui->pushButton->hide();
+    //去除换行
+    QTextCursor cursor=ui->textEdit->textCursor(); //得到当前text的光标
+    if(cursor.hasSelection()) cursor.clearSelection();
+    cursor.deletePreviousChar(); //删除前一个字符
+    //发送post请求
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(UrlpostLLM().toUtf8());
+    qDebug()<<"接收到post信息："<<jsonDoc;
+    //获取到的json处理
+    QString message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为["+jsonDoc.toJson()+"]|错误error";
+    QJsonObject rootObj = jsonDoc.object();
+    QJsonArray messages = rootObj["messages"].toArray();
+    for (const QJsonValue &messageVal : messages) {
+        QJsonObject messageObj = messageVal.toObject();
+        if (messageObj["message_type"].toString() == "tool_call_message") {
+            QJsonObject functionCall = messageObj["tool_call"].toObject();
+            if (functionCall["name"].toString() == "send_message") {
+                QString arguments = functionCall["arguments"].toString();
+                QJsonDocument argumentsDoc = QJsonDocument::fromJson(arguments.toUtf8());
+                if (!argumentsDoc.isNull() && argumentsDoc.isObject()) {
+                    message = argumentsDoc.object()["message"].toString();
+                    qDebug() << "Extracted message:" << message;
+                }
+            }
+        }
+    }
+    //信息判断
+    if(message.isNull())
+    {
+        message = "正常|[error] Letta返回了["+jsonDoc.toJson()+"]，可能是Letta未启动/agent配置错误|错误error";
+    }
+    else if(message.split("|").size()!=3)
+    {
+        if(!settings->value("/llm/feedback").toBool()) message = "正常|[error] Letta正常返回，但是返回值格式错误，返回值["+message+"]|错误error";
+        //如果忽略报错
+        else message = "正常|"+message+"|";
+    }
+    emit change_tachie_to_tachie(message.split("|")[0]);
+    qDebug()<<"【发送】对话框 --- 修改立绘"+message.split("|")[0]+" ---> 立绘";
+    //语音合成
+    if(settings->value("/vits/enable").toBool())
+    {
+        QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+        QNetworkReply* reply;
+        QString text;
+        //语音语言选择
+        if(settings->value("/vits/lan").toString()=="ja")
+            text = message.split("|")[2];
+        else
+            text = message.split("|")[1];
+        //语音api选择
+        if(settings->value("/vits/api").toInt()==1)
+            reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/custom_url").toString().replace("{msg}",text))));
+        else
+            reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings->value("/vits/lan").toString())));
+        //播放返回值
+        connect(reply, &QNetworkReply::finished, this, [=]() {
+            if (reply->error() == QNetworkReply::NoError) {
+                if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200)
+                {
+                    QFile outputFile(qApp->applicationDirPath()+"/temp.mp3");
+                    if (outputFile.open(QIODevice::WriteOnly))
+                    {
+                        outputFile.write(reply->readAll());
+                        outputFile.close();
+                    }
+                    QMediaPlayer *player = new QMediaPlayer; //创建 QMediaPlayer 对象
+                    QAudioOutput *audioOutput = new QAudioOutput; //创建 QAudioOutput 对象来控制音量
+                    player->setAudioOutput(audioOutput); //将 QAudioOutput 连接到 QMediaPlayer
+                    player->setSource(QUrl::fromLocalFile(qApp->applicationDirPath()+"/temp.mp3")); //设置媒体源文件
+                    audioOutput->setVolume(1); //0.0 为最小音量，1.0 为最大音量
+                    player->play(); //播放音频
+                    changetext(message.split("|")[1]); //逐字显示
+                    ui->pushButton->show();
+                }
+            }
+            else
+            {
+                ui->textEdit->setText("[error] Vits错误，请检查Vits配置或者关闭语言输出");
+                ui->pushButton->show();
+            }
+        });
+    }
+    else
+    {
+        changetext(message.split("|")[1]); //逐字显示
+        ui->pushButton->show();
+    }
+}
+
+void galgamedialog::on_checkBox_autoInput_clicked(bool checked)
+{
+    if(checked)
+    {
+        /*录音*/
+        // 设置音频格式
+        format.setSampleRate(16000); // 设置采样率
+        format.setChannelCount(1);   // 设置通道数
+        format.setSampleFormat(QAudioFormat::Int16); // 设置采样格式为 16 位整数
+
+        // 获取默认的音频输入设备
+        QAudioDevice inputDevice = QMediaDevices::defaultAudioInput();
+        if (!inputDevice.isFormatSupported(format)) {
+            qWarning() << "Default format not supported, trying to use the nearest.";
+            format = inputDevice.preferredFormat();
+        }
+
+        // 创建 VAD 对象
+        vad = new VAD(this);
+        // 连接 VAD 的信号到槽函数
+
+        //qDebug() << "is_record1"<<is_record;
+        connect(vad, &VAD::voiceDetected, this, [&](bool detected) {
+            //qDebug() << "is_record"<<is_record<<detected;
+            if (detected)
+            {
+                if(!is_record)
+                {
+                    ui->pushButton_input->pressed();
+                    is_record = true;
+                    qDebug() << "修改t："<<is_record;
+                }
+                //qDebug() << "Voice detected!";
+            }
+            else
+            {
+                //qDebug() << "No voice detected."<<is_record;
+                if(is_record)
+                {
+                    qDebug() << "修改："<<is_record;
+                    ui->pushButton_input->released();
+                    is_record = false;
+                    qDebug() << "修改："<<is_record;
+                }
+
+            }
+        });
+        // 创建音频输入对象
+        audioInput = new QAudioSource(inputDevice, format, this);
+
+        // 启动音频输入
+        audioDevice = audioInput->start();
+        if (!audioDevice) {
+            qWarning() << "Failed to start audio input!";
+        }
+
+        // 当有音频数据可用时，调用 VAD 进行处理
+        connect(audioDevice, &QIODevice::readyRead, this, [=]() {
+            QByteArray audioData = audioDevice->readAll();
+            vad->processAudio(audioData, format);
+        });
+    }
+    else
+    {
+        if (audioInput) {
+            audioInput->stop(); // 停止音频输入
+            qDebug() << "Audio input stopped.";
+        }
+        if (audioDevice) {
+            audioDevice->close(); // 关闭音频设备
+            qDebug() << "Audio device closed.";
+        }
+    }
+}
+
