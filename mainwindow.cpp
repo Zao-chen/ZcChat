@@ -12,7 +12,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-QString local_version = "v1.2.1";
+QString local_version = "v2.1.0";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWidget(parent)
