@@ -65,6 +65,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget_speechInput->setCurrentIndex(settings->value("/speechInput/api").toInt());
     ui->lineEdit_speechInput_BaiduAPIKey->setText(settings->value("/speechInput/baidu_apikey").toString());
     ui->lineEdit_speechInput_BaiduSecretKey->setText(settings->value("/speechInput/baidu_secretkey").toString());
+    ui->checkBox_speechInput_wake->setChecked(settings->value("/speechInput/wake_enable").toBool());
+    ui->spinBox_energy->setValue(settings->value("/speechInput/energy").toInt());
+    ui->spinBox_size->setValue(settings->value("/speechInput/size").toInt());
+    ui->lineEdit_speechInput_url_wakeWord->setText(settings->value("/speechInput/wakeWord").toString());
+    ui->lineEdit_speechInput_url_endWord->setText(settings->value("/speechInput/endWord").toString());
     /*托盘*/
     //初始化托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
@@ -425,6 +430,37 @@ void MainWindow::on_lineEdit_speechInput_BaiduSecretKey_textChanged(const QStrin
     settings->setValue("/speechInput/baidu_secretkey",arg1);
     delete settings;
 }
+void MainWindow::on_checkBox_speechInput_wake_clicked(bool checked)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/speechInput/wake_enable",checked);
+    emit init_to_dialog();
+    delete settings;
+}
+void MainWindow::on_lineEdit_speechInput_url_wakeWord_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/speechInput/wakeWord",arg1);
+    delete settings;
+}
+void MainWindow::on_lineEdit_speechInput_url_endWord_textChanged(const QString &arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/speechInput/endWord",arg1);
+    delete settings;
+}
+void MainWindow::on_spinBox_energy_valueChanged(int arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/speechInput/energy",arg1);
+    delete settings;
+}
+void MainWindow::on_spinBox_size_valueChanged(int arg1)
+{
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    settings->setValue("/speechInput/size",arg1);
+    delete settings;
+}
 /*重置立绘位置*/
 void MainWindow::on_pushButton_reset_clicked()
 {
@@ -462,12 +498,3 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
-
-
-
-
-
-
-
-
-

@@ -57,7 +57,7 @@ private:
     QMediaCaptureSession captureSession;
     //
     VAD *vad; // VAD 对象
-    QAudioSource *audioInput; // 音频输入对象
+    QAudioSource *audioSource; // 音频输入对象
     QIODevice *audioDevice; // 音频设备
     QAudioFormat format; // 音频格式
     //

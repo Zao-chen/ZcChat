@@ -16,8 +16,8 @@
   <property name="styleSheet">
    <string notr="true">QScrollArea
 {
-border: none;
 
+border: none;
 }
 
 QWidget#scrollAreaWidgetContents {
@@ -41,6 +41,10 @@ QWidget#scrollAreaWidgetContents_6 {
 }
 QWidget#scrollAreaWidgetContents_7 {
     background: #f3f3f3
+}
+QLineEdit {
+    padding-left: 7px;  /* 设置左侧空白 */
+    padding-right: 7px; /* 设置右侧空白 */
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -136,7 +140,7 @@ border:none;
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="page_0">
           <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0">
@@ -518,8 +522,8 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1033</width>
-                <height>654</height>
+                <width>252</width>
+                <height>109</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_19" stretch="0,0,0,1">
@@ -665,7 +669,7 @@ border:none;
             <number>0</number>
            </property>
            <item>
-            <widget class="QScrollArea" name="scrollArea_6">
+            <widget class="ElaScrollArea" name="scrollArea_6">
              <property name="widgetResizable">
               <bool>true</bool>
              </property>
@@ -1142,7 +1146,7 @@ border:none;
                <item>
                 <widget class="QStackedWidget" name="stackedWidget_vits">
                  <property name="currentIndex">
-                  <number>1</number>
+                  <number>0</number>
                  </property>
                  <widget class="QWidget" name="page">
                   <layout class="QVBoxLayout" name="verticalLayout_11" stretch="0,0,0">
@@ -1486,13 +1490,16 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>992</width>
+                <width>1033</width>
                 <height>663</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_2">
                <property name="spacing">
                 <number>6</number>
+               </property>
+               <property name="sizeConstraint">
+                <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
                </property>
                <property name="leftMargin">
                 <number>0</number>
@@ -1770,40 +1777,6 @@ border:none;
                 </widget>
                </item>
                <item>
-                <widget class="ElaScrollPageArea" name="widget_32" native="true">
-                 <layout class="QHBoxLayout" name="horizontalLayout_33" stretch="1,0">
-                  <property name="leftMargin">
-                   <number>15</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>15</number>
-                  </property>
-                  <item>
-                   <widget class="ElaText" name="label_45">
-                    <property name="font">
-                     <font>
-                      <pointsize>12</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>启用对话功能</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="ElaCheckBox" name="checkBox_speechInput_enable_2">
-                    <property name="enabled">
-                     <bool>true</bool>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
                 <widget class="ElaScrollPageArea" name="widget_33" native="true">
                  <layout class="QHBoxLayout" name="horizontalLayout_34" stretch="1,0">
                   <property name="leftMargin">
@@ -1820,12 +1793,12 @@ border:none;
                      </font>
                     </property>
                     <property name="text">
-                     <string>启用语音唤醒</string>
+                     <string>启用语音唤醒与结束对话</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="ElaCheckBox" name="checkBox_speechInput_enable_3">
+                   <widget class="ElaCheckBox" name="checkBox_speechInput_wake">
                     <property name="enabled">
                      <bool>true</bool>
                     </property>
@@ -1839,7 +1812,7 @@ border:none;
                </item>
                <item>
                 <widget class="ElaScrollPageArea" name="widget_26" native="true">
-                 <layout class="QHBoxLayout" name="horizontalLayout_27" stretch="2,1,1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_27" stretch="3,1">
                   <property name="leftMargin">
                    <number>15</number>
                   </property>
@@ -1859,25 +1832,12 @@ border:none;
                    </widget>
                   </item>
                   <item>
-                   <widget class="ElaPushButton" name="pushButton_speechInput_nowEnergy">
-                    <property name="text">
-                     <string>查看当前能量</string>
+                   <widget class="ElaSpinBox" name="spinBox_energy">
+                    <property name="maximum">
+                     <number>999999999</number>
                     </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="ElaLineEdit" name="lineEdit_speechInput_url_2">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>1000000</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                    <property name="value">
+                     <number>1000000</number>
                     </property>
                    </widget>
                   </item>
@@ -1887,13 +1847,13 @@ border:none;
                <item>
                 <widget class="QLabel" name="label_31">
                  <property name="text">
-                  <string>不说话和说话的能量值一般有较大差值，使用上面的能量检测按钮，选择一个合适的阈值</string>
+                  <string>当声音能量超过这个值，会认定为有人说话并开始录音知道能量小于这个值，即值越小越灵敏。</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="ElaScrollPageArea" name="widget_27" native="true">
-                 <layout class="QHBoxLayout" name="horizontalLayout_28" stretch="3,1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_28" stretch="4,1">
                   <property name="leftMargin">
                    <number>15</number>
                   </property>
@@ -1913,18 +1873,12 @@ border:none;
                    </widget>
                   </item>
                   <item>
-                   <widget class="ElaLineEdit" name="lineEdit_speechInput_url_3">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
+                   <widget class="ElaSpinBox" name="spinBox_size">
+                    <property name="maximum">
+                     <number>999999999</number>
                     </property>
-                    <property name="text">
-                     <string>7000</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                    <property name="value">
+                     <number>5000</number>
                     </property>
                    </widget>
                   </item>
@@ -1960,7 +1914,7 @@ border:none;
                    </widget>
                   </item>
                   <item>
-                   <widget class="ElaLineEdit" name="lineEdit_speechInput_url_4">
+                   <widget class="ElaLineEdit" name="lineEdit_speechInput_url_wakeWord">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -2007,7 +1961,7 @@ border:none;
                    </widget>
                   </item>
                   <item>
-                   <widget class="ElaLineEdit" name="lineEdit_speechInput_url_5">
+                   <widget class="ElaLineEdit" name="lineEdit_speechInput_url_endWord">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
