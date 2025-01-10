@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QApplication>
 
+
 VAD::VAD(QObject *parent) : QObject(parent), silentFrameCount(0)
 {
 }
@@ -14,6 +15,7 @@ void VAD::processAudio(const QByteArray &audioData, const QAudioFormat &format)
 
     //qDebug() << "Energy:" << energy; // 打印能量值
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
+    emit energy_to_main(energy);
     // 简单的能量阈值检测
     if (energy > settings->value("/speechInput/energy").toInt()) { // 调整阈值
         silentFrameCount = 0;

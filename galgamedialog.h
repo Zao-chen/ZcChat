@@ -27,6 +27,8 @@ private slots:
     void on_pushButton_input_released(); //语音输入
 signals:
     void change_tachie_to_tachie(QString name);
+    void energy_to_main(int energy);
+
 
 private:
     Ui::galgamedialog *ui;

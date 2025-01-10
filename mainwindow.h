@@ -59,24 +59,16 @@ private slots:
     void hideWindow();
     //按钮
     void on_pushButton_reset_clicked();
-
     void on_comboBox_speechInput_API_currentIndexChanged(int index);
-
     void on_lineEdit_speechInput_BaiduAPIKey_textChanged(const QString &arg1);
-
     void on_lineEdit_speechInput_BaiduSecretKey_textChanged(const QString &arg1);
-
     void on_checkBox_speechInput_wake_clicked(bool checked);
-
     void on_lineEdit_speechInput_url_wakeWord_textChanged(const QString &arg1);
-
     void on_lineEdit_speechInput_url_endWord_textChanged(const QString &arg1);
-
-
-
     void on_spinBox_energy_valueChanged(int arg1);
-
     void on_spinBox_size_valueChanged(int arg1);
+
+    void getEnergy_from_gal(int energy);
 
 signals:
     void init_to_tachie(); //初始化立绘

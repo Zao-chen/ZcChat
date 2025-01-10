@@ -459,6 +459,10 @@ void galgamedialog::init_from_main()
     // 创建 VAD 对象
     vad = new VAD(this);
     // 连接 VAD 的信号到槽函数
+    connect(vad,&VAD::energy_to_main,this,[=](int energy)
+    {
+        emit energy_to_main(energy);
+    });
     connect(vad, &VAD::voiceDetected, this, [&](bool detected) {
         if (detected)
         {

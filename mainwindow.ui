@@ -140,7 +140,7 @@ border:none;
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>5</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="page_0">
           <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0">
@@ -1017,8 +1017,8 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1033</width>
-                <height>654</height>
+                <width>216</width>
+                <height>425</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_16" stretch="0,0,0,0,0,0,0,0,1">
@@ -1812,7 +1812,7 @@ border:none;
                </item>
                <item>
                 <widget class="ElaScrollPageArea" name="widget_26" native="true">
-                 <layout class="QHBoxLayout" name="horizontalLayout_27" stretch="3,1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_27" stretch="3,1,1">
                   <property name="leftMargin">
                    <number>15</number>
                   </property>
@@ -1828,6 +1828,30 @@ border:none;
                     </property>
                     <property name="text">
                      <string>语音能量阈值</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLCDNumber" name="lcdNumber">
+                    <property name="font">
+                     <font>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="smallDecimalPoint">
+                     <bool>true</bool>
+                    </property>
+                    <property name="digitCount">
+                     <number>15</number>
+                    </property>
+                    <property name="segmentStyle">
+                     <enum>QLCDNumber::SegmentStyle::Flat</enum>
+                    </property>
+                    <property name="value" stdset="0">
+                     <double>999999999.000000000000000</double>
+                    </property>
+                    <property name="intValue" stdset="0">
+                     <number>999999999</number>
                     </property>
                    </widget>
                   </item>

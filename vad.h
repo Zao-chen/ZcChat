@@ -15,6 +15,7 @@ public:
 
 signals:
     void voiceDetected(bool detected);
+    void energy_to_main(int energy);
 
 private:
     double calculateEnergy(const QVector<double> &samples);

@@ -12,7 +12,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-QString local_version = "v2.1.0";
+QString local_version = "v2.3.0";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWidget(parent)
@@ -134,6 +134,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(dialog_win, SIGNAL(change_tachie_to_tachie(QString)), tachie_win, SLOT(changetachie_from_galdialog(QString)));
     connect(this, SIGNAL(init_to_tachie()), tachie_win, SLOT(init_from_main()));
     connect(this, SIGNAL(init_to_dialog()), dialog_win, SLOT(init_from_main()));
+    connect(dialog_win, SIGNAL(energy_to_main(int)), this, SLOT(getEnergy_from_gal(int)));
     connect(this, SIGNAL(resetlocation_to_tachie()), tachie_win, SLOT(resetlocation_from_main()));
     /*自启动*/
     //letta自启动
@@ -497,4 +498,11 @@ void MainWindow::on_openGithub()
 void MainWindow::hideWindow()
 {
     this->hide();
+}
+int i=0;
+void MainWindow::getEnergy_from_gal(int energy)
+{
+    if(i>=50) i=0;
+    if(i==0) ui->lcdNumber->display(energy);
+    i++;
 }
