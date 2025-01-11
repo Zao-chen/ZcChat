@@ -143,7 +143,7 @@ border:none;
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="page_0">
           <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0">
@@ -572,8 +572,8 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1033</width>
-                <height>654</height>
+                <width>252</width>
+                <height>109</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_19" stretch="0,0,0,1">
@@ -728,8 +728,8 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1033</width>
-                <height>654</height>
+                <width>247</width>
+                <height>238</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_20" stretch="0,0,0,0,0,0,1">
@@ -975,8 +975,8 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1033</width>
-                <height>654</height>
+                <width>216</width>
+                <height>306</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_16" stretch="0,0,0,0,0,1">
@@ -1374,40 +1374,6 @@ border:none;
                 <number>0</number>
                </property>
                <item>
-                <widget class="ElaScrollPageArea" name="widget_29" native="true">
-                 <layout class="QHBoxLayout" name="horizontalLayout_30" stretch="1,0">
-                  <property name="leftMargin">
-                   <number>15</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>15</number>
-                  </property>
-                  <item>
-                   <widget class="ElaText" name="label_40">
-                    <property name="font">
-                     <font>
-                      <pointsize>12</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>启用语言输入</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="ElaCheckBox" name="checkBox_speechInput_enable">
-                    <property name="enabled">
-                     <bool>true</bool>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
                 <widget class="QLabel" name="label_42">
                  <property name="font">
                   <font>
@@ -1634,6 +1600,40 @@ border:none;
                  <property name="text">
                   <string>语音设定</string>
                  </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="ElaScrollPageArea" name="widget_29" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout_30" stretch="1,0">
+                  <property name="leftMargin">
+                   <number>15</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>15</number>
+                  </property>
+                  <item>
+                   <widget class="ElaText" name="label_40">
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>启用长按输入</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="ElaCheckBox" name="checkBox_speechInput_enable">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                </item>
                <item>
