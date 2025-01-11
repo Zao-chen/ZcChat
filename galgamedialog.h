@@ -68,6 +68,7 @@ private:
     bool is_record = false;
     QMediaPlayer *player = new QMediaPlayer; //创建 QMediaPlayer 对象
     QSettings *settings; // 声明 settings 为成员变量
+    bool is_in_llm = false;
 };
 
 #endif // GALGAMEDIALOG_H
