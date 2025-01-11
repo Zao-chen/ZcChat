@@ -11,6 +11,7 @@
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QTimer>
 
 QString local_version = "v2.3.0";
 
@@ -18,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     : ElaWidget(parent)
     , ui(new Ui::MainWindow)
 {
+    qInfo()<<"MainWindows（设置页）初始化……";
     ui->setupUi(this);
     setWindowIcon(QIcon(":/img/img/logo.png"));
     /*一些初始项*/
@@ -104,7 +106,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_restartAppAction,SIGNAL(triggered()),this,SLOT(on_restartAppAction()));
     m_menu = new QMenu(this);
     m_menu->addAction(m_showMainAction); //新增菜单项
-    m_menu->addAction(m_openGithub); //新增菜单项
+    m_menu->addAction(m_openGithub); //新增菜单项--打开github
     m_menu->addSeparator(); //增加分隔符
     m_menu->addAction(m_restartAppAction); //新增菜单项---重启
     m_menu->addAction(m_exitAppAction); //新增菜单项---退出程序
@@ -137,7 +139,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, SIGNAL(resetlocation_to_tachie()), tachie_win, SLOT(resetlocation_from_main()));
     /*自启动*/
     //letta自启动
-    if(ui->checkBox_soft_autoOpen)
+    if(ui->checkBox_soft_autoOpen->isChecked())
     {
         qInfo()<<"运行autoOpen.cmd…";
         QDesktopServices::openUrl(QUrl::fromLocalFile("autoOpen.cmd"));
@@ -146,6 +148,11 @@ MainWindow::MainWindow(QWidget *parent)
     m_manager = new QNetworkAccessManager(this);//新建QNetworkAccessManager对象
     checkForUpdates();
     already_init = true;
+    /*获取能量定时器*/
+    energyTimer = new QTimer(this);
+    connect(energyTimer, &QTimer::timeout, this, &MainWindow::updateEnergyDisplay);
+    energyTimer->start(100); // 每100毫秒触发一次
+    qInfo()<<"MainWindows（设置页）加载完成！";
 }
 
 MainWindow::~MainWindow()
@@ -174,13 +181,17 @@ void MainWindow::checkForUpdates() {
     QJsonDocument jsonDoc = QJsonDocument::fromJson(reply.toUtf8());
     QJsonObject jsonObj = jsonDoc.object();
     QString tagName = jsonObj.value("tag_name").toString();
-    qDebug() << "Tag name:" << tagName;
-
-    if (reply == "error" || tagName.isEmpty()) {
+    qInfo()<<"获取最新版，返回值："<<reply;
+    if (reply == "error" || tagName.isEmpty())
+    {
         ui->label_mainMessage->setText(local_version + "  获取新版本失败");
-    } else if (local_version != tagName) {
+    }
+    else if (local_version != tagName)
+    {
         ui->label_mainMessage->setText(local_version + "  发现新版本" + tagName);
-    } else {
+    }
+    else
+    {
         ui->label_mainMessage->setText(local_version);
     }
 }
@@ -200,7 +211,7 @@ QByteArray MainWindow::getUrl(const QString &input)
 /*保存立绘位置*/
 void MainWindow::changeTachieLocation_from_tachie(int x,int y)
 {
-    qDebug()<<"【接收】立绘 --- 保存位置 ---> 主窗口"<<this->x()<<" "<<this->y();
+    qInfo()<<"【接收】立绘移动到："<<this->x()<<" "<<this->y();
     ui->lineEdit_tachi_location_x->setText(QString::number(x));
     ui->lineEdit_tachi_location_y->setText(QString::number(y));
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
@@ -210,30 +221,9 @@ void MainWindow::changeTachieLocation_from_tachie(int x,int y)
 /*主窗口翻页*/
 void MainWindow::on_treeView_up_clicked(const QModelIndex &index)
 {
-    qDebug()<<"主窗口 翻页到"+QString::number(index.row());
+    qInfo()<<"主窗口 翻页到"+QString::number(index.row());
     ui->stackedWidget->setCurrentIndex(index.row());
-    switch (index.row()) {
-    case 0:
-        ui->label_title->setText("软件设置");
-        break;
-    case 1:
-        ui->label_title->setText("立绘设置");
-        break;
-    case 2:
-        ui->label_title->setText("对话框设置");
-        break;
-    case 3:
-        ui->label_title->setText("模型设置");
-        break;
-    case 4:
-        ui->label_title->setText("语音合成设置");
-        break;
-    case 5:
-        ui->label_title->setText("语音输入设置");
-        break;
-    default:
-        break;
-    }
+    ui->label_title->setText(ui->treeView_up->model()->data(index,Qt::DisplayRole).toString());
 }
 /*保存配置*/
 void MainWindow::saveSetting(const QString &key, const QVariant &value) {
@@ -418,14 +408,13 @@ void MainWindow::hideWindow()
 {
     this->hide();
 }
-int i=0;
+//能量显示
 void MainWindow::getEnergy_from_gal(int energy)
 {
-    if(i>=50) i=0;
-    if(i==0) ui->lcdNumber->display(energy);
-    i++;
+    currentEnergy = energy; // 更新当前能量值
 }
-
-
+void MainWindow::updateEnergyDisplay() {
+    ui->lcdNumber->display(currentEnergy);
+}
 
 

@@ -12,8 +12,6 @@ void VAD::processAudio(const QByteArray &audioData, const QAudioFormat &format)
 {
     QVector<double> samples = convertToPCM(audioData, format);
     double energy = calculateEnergy(samples);
-
-    //qDebug() << "Energy:" << energy; // 打印能量值
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     emit energy_to_main(energy);
     // 简单的能量阈值检测
@@ -22,7 +20,7 @@ void VAD::processAudio(const QByteArray &audioData, const QAudioFormat &format)
         emit voiceDetected(true);
     } else {
         silentFrameCount++;
-        if (silentFrameCount > 10) { // 连续 10 帧静音
+        if (silentFrameCount > 15) { // 连续 15 帧静音
             emit voiceDetected(false);
         }
     }

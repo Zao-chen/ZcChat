@@ -99,6 +99,9 @@ border:none;
 
 }</string>
          </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::EditTrigger::EditKeyPressed</set>
+         </property>
          <property name="indentation">
           <number>2</number>
          </property>
@@ -172,7 +175,7 @@ border:none;
                 <number>0</number>
                </property>
                <property name="topMargin">
-                <number>12</number>
+                <number>0</number>
                </property>
                <property name="rightMargin">
                 <number>0</number>
@@ -569,8 +572,8 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>252</width>
-                <height>109</height>
+                <width>1033</width>
+                <height>654</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_19" stretch="0,0,0,1">
@@ -1358,6 +1361,18 @@ border:none;
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,1">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
                <item>
                 <widget class="ElaScrollPageArea" name="widget_29" native="true">
                  <layout class="QHBoxLayout" name="horizontalLayout_30" stretch="1,0">

@@ -8,6 +8,7 @@
 #include <QMediaCaptureSession>
 #include "vad.h"
 #include <QAudioSource>
+#include <QSettings>
 
 namespace Ui {
 class galgamedialog;
@@ -25,6 +26,7 @@ private slots:
     void updateText(); //逐字显示-更新
     void on_pushButton_input_pressed(); //语音输入
     void on_pushButton_input_released(); //语音输入
+    void init_from_main();
 signals:
     void change_tachie_to_tachie(QString name);
     void energy_to_main(int energy);
@@ -57,19 +59,15 @@ private:
     //录音
     QMediaRecorder *audioRecorder = nullptr;
     QMediaCaptureSession captureSession;
-    //
+    //vad
     VAD *vad; // VAD 对象
     QAudioSource *audioSource; // 音频输入对象
     QIODevice *audioDevice; // 音频设备
     QAudioFormat format; // 音频格式
-    //
     void send_to_llm();
     bool is_record = false;
-    //
     QMediaPlayer *player = new QMediaPlayer; //创建 QMediaPlayer 对象
-private slots:
-    void init_from_main();
-    void on_checkBox_autoInput_clicked(bool checked);
+    QSettings *settings; // 声明 settings 为成员变量
 };
 
 #endif // GALGAMEDIALOG_H

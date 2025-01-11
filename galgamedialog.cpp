@@ -27,9 +27,9 @@
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::galgamedialog)
+    , settings(new QSettings(qApp->applicationDirPath()+"/Setting.ini", QSettings::IniFormat, this))
 {
     ui->setupUi(this);
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     /*无边框设置*/
     setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
     setWindowOpacity(0.9);
@@ -65,8 +65,8 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
 /*LLMpost请求*/
 QString galgamedialog::UrlpostLLM()
 {
+    qInfo()<<"发送llmPost请求……";
     QNetworkAccessManager* naManager = new QNetworkAccessManager(this);
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     QNetworkRequest request;
     //头设置
     request.setUrl(QUrl(settings->value("/llm/url").toString()+"/v1/agents/"+settings->value("/llm/agent").toString()+"/messages"));
@@ -92,21 +92,21 @@ QString galgamedialog::UrlpostLLM()
     read = reply->readAll();
     read = read.replace(" ","");
     reply->deleteLater(); //记得释放内存
-    qDebug()<<"获取到LLMpost结果:"<<read;
+    qInfo()<<"获取到llmPost请求结果："<<read;
     return read;
 }
 /*语言识别post请求*/
 QString galgamedialog::UrlpostWithFile()
 {
     QFile *file = new QFile(QDir::currentPath() + "/output.m4a");
-    QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     if(file->size()<=settings->value("/speechInput/size").toInt())
     {
-        qDebug()<<file->size()<<"文件太小，认定为噪音";
+        qInfo()<<file->size()<<" 文件太小，认定为噪音";
         return "";
     }
     if(settings->value("/speechInput/api").toInt()==0)
     {
+        qInfo()<<"使用whisper-asr-webservice语音识别……";
         QNetworkAccessManager *manager = new QNetworkAccessManager();
         //设置请求 URL
         QUrl url(settings->value("/speechInput/url").toString()+"/asr?language=zh&output=txt");
@@ -117,8 +117,8 @@ QString galgamedialog::UrlpostWithFile()
         QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
         //添加文件字段
         if (!file->open(QIODevice::ReadOnly)) {
-            qDebug() << "Failed to open file!";
-            return "Failed to open file!";
+            qWarning() << "语音识别-whisper-打开文件失败";
+            return "无法打开文件!";
         }
         QHttpPart filePart;
         filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"audio_file\"; filename=\"output.m4a\""));
@@ -139,21 +139,21 @@ QString galgamedialog::UrlpostWithFile()
         if (reply->error() == QNetworkReply::NoError)
         {
             QString msg = reply->readAll();
-            qDebug() << "Response:" << msg;
+            qInfo()<< "语音识别-whisper-结果:" << msg;
             return msg;
         }
         else
         {
-            qDebug() << "Error:" << reply->errorString();
-            qDebug() << "Response details:" << reply->readAll();
+            qWarning() << "语音识别-whisper-错误:" << reply->errorString();
+            qWarning() << "语音识别-whisper-错误信息:" << reply->readAll();
         }
         reply->deleteLater();
         return "error";
     }
     else
     {
+        qInfo()<<"使用百度语音识别……";
         QNetworkAccessManager manager;
-
         // 创建请求 URL 和查询参数
         QUrl url("https://aip.baidubce.com/oauth/2.0/token");
         QUrlQuery query;
@@ -178,12 +178,12 @@ QString galgamedialog::UrlpostWithFile()
                     QJsonObject jsonObj = doc.object();
                     // 获取access_token
                     accessToken = jsonObj.value("access_token").toString();
-                    qDebug() << "Access Token:" << accessToken;
+                    qInfo() << "语音识别-百度-token-获取到token:" << accessToken;
                 } else {
-                    qDebug() << "Failed to parse JSON response";
+                    qWarning() << "语音识别-百度-token-Json解析错误";
                 }
             } else {
-                qDebug() << "Request failed:" << reply->errorString();
+                qWarning() << "语音识别-百度-token-请求失败" << reply->errorString();
             }
             reply->deleteLater();
             loop.quit();  // 退出事件循环
@@ -196,7 +196,7 @@ QString galgamedialog::UrlpostWithFile()
         QString audioFilePath = QDir::currentPath() + "/output.m4a"; // 音频文件路径
         QFile file(audioFilePath);
         if (!file.open(QIODevice::ReadOnly)) {
-            qWarning() << "无法打开音频文件" << audioFilePath;
+            qWarning() << "语音识别-百度-识别-打开文件失败" << audioFilePath;
         }
         QByteArray audioData = file.readAll();
         file.close();
@@ -231,9 +231,9 @@ QString galgamedialog::UrlpostWithFile()
                 if (reply_api->error() == QNetworkReply::NoError) {
                     // 处理响应结果
                     resultJson= reply_api->readAll();
-                    qDebug() << "识别成功：" << resultJson;
+                    qInfo() << "语音识别-百度-识别-识别成功：" << resultJson;
                 } else {
-                    qWarning() << "请求失败：" << reply_api->errorString();
+                    qWarning() << "语音识别-百度-识别-请求失败：" << reply_api->errorString();
                 }
                 loop.quit();  // 请求完成后退出事件循环
                 reply_api->deleteLater();
@@ -241,9 +241,8 @@ QString galgamedialog::UrlpostWithFile()
             // 启动事件循环，等待回复
             loop.exec();
         } else {
-            qWarning() << "音频文件为空，跳过请求";
+            qWarning() << "语音识别-百度-识别-音频文件为空，跳过请求";
         }
-        qDebug()<<"解析"<<resultJson;
         // 解析 JSON 数据
         QString result;
         QJsonDocument doc = QJsonDocument::fromJson(resultJson.toUtf8());
@@ -253,7 +252,7 @@ QString galgamedialog::UrlpostWithFile()
             if (obj.contains("result") && obj["result"].isArray()) {
                 QJsonArray resultArray = obj["result"].toArray();
                 for (const QJsonValue &value : resultArray) {
-                    qDebug() << value.toString();
+                    qInfo() <<"语音识别-百度-识别-获取到结果："<< value.toString();
                     result=value.toString();
                 }
             }
@@ -274,18 +273,15 @@ QByteArray galgamedialog::getUrl(const QString &input)
 /*逐字显示*/
 void galgamedialog::changetext(QString text)
 {
-    qDebug()<<"输出中文:"<<text;
     timer->stop();
     fullText = text;
     currentIndex = 0;
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     timer->start(settings->value("/dialog/time").toInt());
 }
 /*逐字显示-更新*/
 void galgamedialog::updateText() {
     if (currentIndex <= fullText.length()) {
         ui->textEdit->setText(fullText.left(++currentIndex));
-        qDebug()<<"逐字输出中文:"<<fullText.left(++currentIndex);
     }
     return;
 }
@@ -347,7 +343,7 @@ void galgamedialog::paintEvent(QPaintEvent *event)
 void galgamedialog::on_pushButton_input_pressed()
 {
     qDebug() << "开始录音";
-    player->stop();
+    if(settings->value("/speechInput/interrupt").toBool()) player->stop();
     if (audioRecorder->recorderState() == QMediaRecorder::StoppedState) {
         QMediaFormat format;
         format.setAudioCodec(QMediaFormat::AudioCodec::AAC); //对应编码器
@@ -357,24 +353,20 @@ void galgamedialog::on_pushButton_input_pressed()
         audioRecorder->setQuality(QMediaRecorder::HighQuality); //设置录制质量
         audioRecorder->setOutputLocation(QUrl::fromLocalFile(QDir::currentPath() + "/output.m4a"));
         audioRecorder->record();
-        qDebug() << "录音状态:" << audioRecorder->recorderState();
-        qDebug() << "文件路径:" << audioRecorder->outputLocation();
     }
 }
 void galgamedialog::on_pushButton_input_released()
 {
-    qDebug() << "结束录音";
+    qInfo() << "结束录音";
     if (audioRecorder)
     {
         audioRecorder->stop();
     }
-    qDebug() << "录音状态:" << audioRecorder->recorderState();
 }
 void galgamedialog::init_from_main()
 {
-    qDebug()<<"dialog初始化";
+    qInfo()<<"dialog初始化";
     /*录音*/
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     ui->pushButton_input->show();
     ui->checkBox_autoInput->show();
     audioRecorder = new QMediaRecorder(this);
@@ -383,17 +375,28 @@ void galgamedialog::init_from_main()
     QAudioInput *audioInput = captureSession.audioInput();
     if (audioInput) {
         audioInput->setDevice(QMediaDevices::defaultAudioInput());
-        qDebug() << "使用的音频输入设备:" << QMediaDevices::defaultAudioInput().description();
+        qInfo() << "使用的音频输入设备:" << QMediaDevices::defaultAudioInput().description();
     } else {
-        qDebug() << "无法初始化音频输入设备";
+        qWarning() << "无法初始化音频输入设备";
     }
     connect(audioRecorder, &QMediaRecorder::recorderStateChanged, this, [=](QMediaRecorder::RecorderState state) {
-        qDebug() << "录音状态已更改:" << state;
         if (state == QMediaRecorder::StoppedState) {
-            qDebug() << "录音已停止";
-            qDebug() << "录音状态:" << audioRecorder->recorderState();
-            if(settings->value("/speechInput/wake_enable").toBool())
+            qInfo() << "结束录音->识别";
+            if(ui->checkBox_autoInput->isChecked())
             {
+                QString msg = UrlpostWithFile();
+                if(msg!="")
+                {
+                    ui->textEdit->setText(msg);
+                    if(ui->checkBox_autoInput->isChecked())
+                    {
+                        send_to_llm();
+                    }
+                }
+            }
+            else if(settings->value("/speechInput/wake_enable").toBool())
+            {
+                qInfo() << "语音唤醒-发送到语音识别";
                 QString msg = UrlpostWithFile();
                 if(msg!="")
                 {
@@ -406,7 +409,11 @@ void galgamedialog::init_from_main()
                         }
                     }
                     ui->textEdit->setText(msg);
-                    if(containsAny) ui->checkBox_autoInput->setChecked(true);
+                    if(containsAny)
+                    {
+                        ui->checkBox_autoInput->setChecked(true);
+                        send_to_llm();
+                    }
                     containsAny = false;  // 初始化标志为 false
                     // 遍历 list，检查 msg 是否包含任意一个子字符串
                     for (const QString &str : settings->value("/speechInput/endWord").toString().split("|")) {
@@ -422,25 +429,12 @@ void galgamedialog::init_from_main()
                     }
                 }
             }
-            if(ui->checkBox_autoInput->isChecked())
-            {
-                QString msg = UrlpostWithFile();
-                if(msg!="")
-                {
-                    ui->textEdit->setText(msg);
-                    if(ui->checkBox_autoInput->isChecked())
-                    {
-                        send_to_llm();
-                    }
-                }
-            }
-
         }
     });
 
     if(!settings->value("/speechInput/enable").toBool()) //不开启语言输入
     {
-        qDebug()<<"不使用语音输入";
+        qInfo()<<"不使用语音输入";
         ui->pushButton_input->hide();
         ui->checkBox_autoInput->hide();
     }
@@ -460,9 +454,9 @@ void galgamedialog::init_from_main()
     vad = new VAD(this);
     // 连接 VAD 的信号到槽函数
     connect(vad,&VAD::energy_to_main,this,[=](int energy)
-    {
-        emit energy_to_main(energy);
-    });
+            {
+                emit energy_to_main(energy);
+            });
     connect(vad, &VAD::voiceDetected, this, [&](bool detected) {
         if (detected)
         {
@@ -497,7 +491,6 @@ void galgamedialog::init_from_main()
 }
 void galgamedialog::send_to_llm()
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     //对话框设置
     ui->label_name->setText(settings->value("/tachie/name").toString());
     ui->textEdit->setEnabled(false);
@@ -538,7 +531,6 @@ void galgamedialog::send_to_llm()
         //如果忽略报错
         else message = "正常|"+message+"|";
     }
-    emit change_tachie_to_tachie(message.split("|")[0]);
     qDebug()<<"【发送】对话框 --- 修改立绘"+message.split("|")[0]+" ---> 立绘";
     //语音合成
     if(settings->value("/vits/enable").toBool())
@@ -571,6 +563,7 @@ void galgamedialog::send_to_llm()
                     player->setAudioOutput(audioOutput); //将 QAudioOutput 连接到 QMediaPlayer
                     player->setSource(QUrl::fromLocalFile(qApp->applicationDirPath()+"/temp.mp3")); //设置媒体源文件
                     audioOutput->setVolume(1); //0.0 为最小音量，1.0 为最大音量
+                    player->setPosition(0);
                     player->play(); //播放音频
                     changetext(message.split("|")[1]); //逐字显示
                     ui->pushButton->show();
@@ -588,10 +581,6 @@ void galgamedialog::send_to_llm()
         changetext(message.split("|")[1]); //逐字显示
         ui->pushButton->show();
     }
-}
-
-void galgamedialog::on_checkBox_autoInput_clicked(bool checked)
-{
-
+    emit change_tachie_to_tachie(message.split("|")[0]);
 }
 
