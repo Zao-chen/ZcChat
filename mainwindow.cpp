@@ -33,6 +33,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_speechInput_API->addItems({"whisper-asr-webservice","百度语音识别"});
     /*配置项读取*/
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
+    //软件配置项
+    ui->checkBox_soft_autostart->setChecked(settings->value("/soft/autostart").toBool());
+    ui->checkBox_soft_autoOpen->setChecked(settings->value("/soft/autoOpen").toBool());
     //立绘配置项
     ui->spinBox_tachie_size->setValue(settings->value("/tachie/size").toInt());
     ui->comboBox_tachio_choose->setCurrentIndex(folderList.indexOf(settings->value("/tachie/name").toString()));
@@ -43,12 +46,9 @@ MainWindow::MainWindow(QWidget *parent)
     //llm配置项
     ui->lineEdit_llm_url->setText(settings->value("/llm/url").toString());
     ui->lineEdit_llm_agent->setText(settings->value("/llm/agent").toString());
-    ui->checkBox_llm_autoopen_enable->setChecked(settings->value("/llm/autoOpen").toBool());
-    ui->lineEdit_llm_location->setText(settings->value("/llm/location").toString());
     ui->checkBox_llm_errorfeedback->setChecked(settings->value("/llm/feedback").toBool());
     //语音配置项
     ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
-    ui->checkBox_soft_autostart->setChecked(settings->value("/soft/autostart").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
     ui->lineEdit_vits_customUrl->setText(settings->value("/vits/custom_url").toString());
     ui->lineEdit_vits_id->setText(settings->value("/vits/id").toString());
@@ -56,8 +56,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_vits_API->setCurrentIndex(settings->value("/vits/api").toInt());
     ui->comboBox_vits_language->setCurrentIndex(ui->comboBox_vits_language->findText(settings->value("/vits/lan").toString()));
     ui->stackedWidget_vits->setCurrentIndex(settings->value("/vits/api").toInt());
-    ui->checkBox_vits_autoopen->setChecked(settings->value("/vits/autoOpen").toBool());
-    ui->lineEdit_vits_location->setText(settings->value("/vits/location").toString());
     //语音输入配置项
     ui->checkBox_speechInput_enable->setChecked(settings->value("/speechInput/enable").toBool());
     ui->lineEdit_speechInput_url->setText(settings->value("/speechInput/url").toString());
@@ -70,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->spinBox_size->setValue(settings->value("/speechInput/size").toInt());
     ui->lineEdit_speechInput_url_wakeWord->setText(settings->value("/speechInput/wakeWord").toString());
     ui->lineEdit_speechInput_url_endWord->setText(settings->value("/speechInput/endWord").toString());
+    ui->checkBox_speechInput_interrupt->setChecked(settings->value("/speechInput/interrupt").toBool());
     /*托盘*/
     //初始化托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
@@ -138,44 +137,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, SIGNAL(resetlocation_to_tachie()), tachie_win, SLOT(resetlocation_from_main()));
     /*自启动*/
     //letta自启动
-    if(ui->checkBox_llm_autoopen_enable->isChecked())
+    if(ui->checkBox_soft_autoOpen)
     {
-        QFile file("start_letta.cmd");
-        if (!file.exists()&&file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QTextStream out(&file);
-            out << "@echo off\n";
-            out << "cd /d "+ui->lineEdit_llm_location->text()+"\n";
-            out << "letta server\n";
-            out << "pause\n";
-            file.close();
-        }
-        QDesktopServices::openUrl(QUrl::fromLocalFile("start_letta.cmd"));
+        qInfo()<<"运行autoOpen.cmd…";
+        QDesktopServices::openUrl(QUrl::fromLocalFile("autoOpen.cmd"));
     }
-    //vits自启动
-    if(ui->checkBox_vits_autoopen->isChecked())
-    {
-        QFile file("start_vits.cmd");
-        if (!file.exists()&&file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QTextStream out(&file);
-            out << "@echo off\n";
-            out << "cd /d "+ui->lineEdit_vits_location->text()+"\n";
-            out << "start start.bat\n";
-            file.close();
-        }
-        QDesktopServices::openUrl(QUrl::fromLocalFile("start_vits.cmd"));
-    }
-    already_init = true;
     /*新版本获取*/
-    QString reply = getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest");
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply.toUtf8());
-    //获取根对象
-    QJsonObject jsonObj = jsonDoc.object();
-    //获取 "tag_name" 的值
-    QString tagName = jsonObj.value("tag_name").toString();
-    qDebug() << "Tag name:" << tagName;
-    if(reply=="error" or tagName.isEmpty()) ui->label_mainMessage->setText(local_version+"  获取新版本失败");
-    else if(local_version!=tagName) ui->label_mainMessage->setText(local_version+"  发现新版本"+tagName);
-    else ui->label_mainMessage->setText(local_version);
+    m_manager = new QNetworkAccessManager(this);//新建QNetworkAccessManager对象
+    checkForUpdates();
+    already_init = true;
 }
 
 MainWindow::~MainWindow()
@@ -198,20 +168,34 @@ void MainWindow::show_dialogwin_from_tachie()
         ui->checkBox_dialog_enable->setChecked(true);
     }
 }
+/*检查更新*/
+void MainWindow::checkForUpdates() {
+    QString reply = getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest");
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply.toUtf8());
+    QJsonObject jsonObj = jsonDoc.object();
+    QString tagName = jsonObj.value("tag_name").toString();
+    qDebug() << "Tag name:" << tagName;
+
+    if (reply == "error" || tagName.isEmpty()) {
+        ui->label_mainMessage->setText(local_version + "  获取新版本失败");
+    } else if (local_version != tagName) {
+        ui->label_mainMessage->setText(local_version + "  发现新版本" + tagName);
+    } else {
+        ui->label_mainMessage->setText(local_version);
+    }
+}
 /*get请求（用于获取版本）*/
 QByteArray MainWindow::getUrl(const QString &input)
 {
-    m_manager = new QNetworkAccessManager(this);//新建QNetworkAccessManager对象
     QEventLoop loop;
     QNetworkReply *reply = m_manager->get(QNetworkRequest(QUrl(input)));
-    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
     loop.exec();
     if (reply->error() == QNetworkReply::NoError) {
         return reply->readAll();
     } else {
         return "error";
     }
-
 }
 /*保存立绘位置*/
 void MainWindow::changeTachieLocation_from_tachie(int x,int y)
@@ -251,6 +235,11 @@ void MainWindow::on_treeView_up_clicked(const QModelIndex &index)
         break;
     }
 }
+/*保存配置*/
+void MainWindow::saveSetting(const QString &key, const QVariant &value) {
+    QScopedPointer<QSettings> settings(new QSettings("Setting.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
+    settings->setValue(key, value);
+}
 /*配置项修改和保存*/
 void MainWindow::on_checkBox_dialog_enable_clicked(bool checked)
 {
@@ -264,101 +253,53 @@ void MainWindow::on_checkBox_tachie_enable_clicked(bool checked)
 }
 void MainWindow::on_spinBox_tachie_size_valueChanged(int arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/tachie/size",arg1);
-    delete settings;
+    saveSetting("/tachie/size",arg1);
     emit init_to_tachie();
 }
 void MainWindow::on_lineEdit_llm_url_textChanged(const QString &arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/llm/url",arg1);
-    delete settings;
+    saveSetting("/llm/url",arg1);
 }
 void MainWindow::on_lineEdit_llm_agent_textChanged(const QString &arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/llm/agent",arg1);
-    delete settings;
+    saveSetting("/llm/agent",arg1);
 }
 void MainWindow::on_checkBox_vits_enable_clicked(bool checked)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/vits/enable",checked);
-    delete settings;
+    saveSetting("/vits/enable",checked);
 }
 void MainWindow::on_lineEdit_vits_url_textChanged(const QString &arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/vits/url",arg1);
-    delete settings;
+    saveSetting("/vits/url",arg1);
 }
 void MainWindow::on_lineEdit_vits_id_textChanged(const QString &arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/vits/id",arg1);
-    delete settings;
+    saveSetting("/vits/id",arg1);
 }
-void MainWindow::on_checkBox_llm_autoopen_enable_clicked(bool checked)
+void MainWindow::on_checkBox_soft_autoOpen_clicked(bool checked)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/llm/autoOpen",checked);
-    delete settings;
-}
-void MainWindow::on_lineEdit_llm_location_textChanged(const QString &arg1)
-{
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/llm/location",arg1);
-    delete settings;
-}
-void MainWindow::on_checkBox_vits_autoopen_clicked(bool checked)
-{
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/vits/autoOpen",checked);
-    delete settings;
-}
-void MainWindow::on_lineEdit_vits_location_textChanged(const QString &arg1)
-{
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/vits/location",arg1);
-    delete settings;
+    saveSetting("/soft/autoOpen",checked);
 }
 void MainWindow::on_spinBox_dialog_valueChanged(int arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/dialog/time",arg1);
-    delete settings;
+    saveSetting("/dialog/time",arg1);
 }
 void MainWindow::on_comboBox_tachio_choose_currentTextChanged(const QString &arg1)
 {
-    if(already_init)
-    {
-        QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-        settings->setValue("/tachie/name",arg1);
-        delete settings;
-    }
+    if(already_init) saveSetting("/tachie/name",arg1);
     emit init_to_tachie();
 }
 void MainWindow::on_checkBox_llm_errorfeedback_clicked(bool checked)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/llm/feedback",checked);
-    delete settings;
+    saveSetting("/llm/feedback",checked);
 }
 void MainWindow::on_comboBox_vits_model_currentTextChanged(const QString &arg1)
 {
-    if(already_init)
-    {
-        QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-        settings->setValue("/vits/vitsmodel",arg1);
-        delete settings;
-    }
+    if(already_init) saveSetting("/vits/vitsmodel",arg1);
 }
 void MainWindow::on_checkBox_soft_autostart_clicked(bool checked)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/soft/autostart",checked);
-    delete settings;
+    saveSetting("/soft/autostart",checked);
     QString application_name = QApplication::applicationName(); //获取应用名称
     QSettings *nsettings = new QSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat); //创建QSetting, 需要添加QSetting头文件
     if(checked)
@@ -376,91 +317,69 @@ void MainWindow::on_comboBox_vits_API_currentIndexChanged(int index)
     if(already_init)
     {
         ui->stackedWidget_vits->setCurrentIndex(index);
-        QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-        settings->setValue("/vits/api",index);
-        delete settings;
+        saveSetting("/vits/api",index);
     }
 }
 void MainWindow::on_lineEdit_vits_customUrl_textChanged(const QString &arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/vits/custom_url",arg1);
-    delete settings;
+    saveSetting("/vits/custom_url",arg1);
 }
 void MainWindow::on_comboBox_vits_language_currentTextChanged(const QString &arg1)
 {
     if(already_init)
     {
-        QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-        settings->setValue("/vits/lan",arg1);
-        delete settings;
+        saveSetting("/vits/lan",arg1);
     }
 }
 void MainWindow::on_checkBox_speechInput_enable_clicked(bool checked)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/speechInput/enable",checked);
-    delete settings;
+    saveSetting("/speechInput/enable",checked);
     emit init_to_dialog();
 }
 void MainWindow::on_lineEdit_speechInput_url_textChanged(const QString &arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/speechInput/url",arg1);
-    delete settings;
+    saveSetting("/speechInput/url",arg1);
 }
 void MainWindow::on_comboBox_speechInput_API_currentIndexChanged(int index)
 {
     if(already_init)
     {
-        QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-        settings->setValue("/speechInput/api",index);
-        delete settings;
+        saveSetting("/speechInput/api",index);
     }
     ui->stackedWidget_speechInput->setCurrentIndex(index);
 }
 void MainWindow::on_lineEdit_speechInput_BaiduAPIKey_textChanged(const QString &arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/speechInput/baidu_apikey",arg1);
-    delete settings;
+    saveSetting("/speechInput/baidu_apikey",arg1);
 }
 void MainWindow::on_lineEdit_speechInput_BaiduSecretKey_textChanged(const QString &arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/speechInput/baidu_secretkey",arg1);
-    delete settings;
+    saveSetting("/speechInput/baidu_secretkey",arg1);
 }
 void MainWindow::on_checkBox_speechInput_wake_clicked(bool checked)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/speechInput/wake_enable",checked);
+    saveSetting("/speechInput/wake_enable",checked);
     emit init_to_dialog();
-    delete settings;
 }
 void MainWindow::on_lineEdit_speechInput_url_wakeWord_textChanged(const QString &arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/speechInput/wakeWord",arg1);
-    delete settings;
+    saveSetting("/speechInput/wakeWord",arg1);
 }
 void MainWindow::on_lineEdit_speechInput_url_endWord_textChanged(const QString &arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/speechInput/endWord",arg1);
-    delete settings;
+    saveSetting("/speechInput/endWord",arg1);
 }
 void MainWindow::on_spinBox_energy_valueChanged(int arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/speechInput/energy",arg1);
-    delete settings;
+    saveSetting("/speechInput/energy",arg1);
 }
 void MainWindow::on_spinBox_size_valueChanged(int arg1)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
-    settings->setValue("/speechInput/size",arg1);
-    delete settings;
+    saveSetting("/speechInput/size",arg1);
+}
+void MainWindow::on_checkBox_speechInput_interrupt_clicked(bool checked)
+{
+    saveSetting("/speechInput/interrupt",checked);
 }
 /*重置立绘位置*/
 void MainWindow::on_pushButton_reset_clicked()
@@ -506,3 +425,7 @@ void MainWindow::getEnergy_from_gal(int energy)
     if(i==0) ui->lcdNumber->display(energy);
     i++;
 }
+
+
+
+

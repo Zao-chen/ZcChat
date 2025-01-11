@@ -1,14 +1,14 @@
 #include "mainwindow.h"
 
 #include <QApplication>
-#include "ElaApplication.h"
 #include <QDir>
 #include "log.h"
+#include "ElaApplication.h"
 
 int main(int argc, char *argv[])
 {  
     QApplication a(argc, argv);
-    QT_LOG::logInit();
+    QT_LOG::logInit(); //日志初始化
     MainWindow w;
     ElaApplication::getInstance()->init();
     QApplication::setQuitOnLastWindowClosed(false);

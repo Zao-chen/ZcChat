@@ -37,10 +37,6 @@ private slots:
     void on_checkBox_vits_enable_clicked(bool checked);
     void on_lineEdit_vits_url_textChanged(const QString &arg1);
     void on_lineEdit_vits_id_textChanged(const QString &arg1);
-    void on_checkBox_llm_autoopen_enable_clicked(bool checked);
-    void on_lineEdit_llm_location_textChanged(const QString &arg1);
-    void on_checkBox_vits_autoopen_clicked(bool checked);
-    void on_lineEdit_vits_location_textChanged(const QString &arg1);
     void on_spinBox_dialog_valueChanged(int arg1);
     void on_comboBox_tachio_choose_currentTextChanged(const QString &arg1);
     void on_checkBox_llm_errorfeedback_clicked(bool checked);
@@ -67,8 +63,10 @@ private slots:
     void on_lineEdit_speechInput_url_endWord_textChanged(const QString &arg1);
     void on_spinBox_energy_valueChanged(int arg1);
     void on_spinBox_size_valueChanged(int arg1);
-
     void getEnergy_from_gal(int energy);
+    void on_checkBox_speechInput_interrupt_clicked(bool checked);
+
+    void on_checkBox_soft_autoOpen_clicked(bool checked);
 
 signals:
     void init_to_tachie(); //初始化立绘
@@ -85,5 +83,7 @@ private:
     QAction *m_openGithub; //托盘动作
     bool already_init=false; //是否已经初始化了
     QByteArray getUrl(const QString &input); //网络
+    void saveSetting(const QString &key, const QVariant &value);
+    void checkForUpdates();
 };
 #endif // MAINWINDOW_H

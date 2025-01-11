@@ -140,7 +140,7 @@ border:none;
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>3</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page_0">
           <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0">
@@ -167,12 +167,12 @@ border:none;
                 <height>654</height>
                </rect>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_17" stretch="0,1">
+              <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,1">
                <property name="leftMargin">
                 <number>0</number>
                </property>
                <property name="topMargin">
-                <number>0</number>
+                <number>12</number>
                </property>
                <property name="rightMargin">
                 <number>0</number>
@@ -224,6 +224,53 @@ border:none;
                    </widget>
                   </item>
                  </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="ElaScrollPageArea" name="widget_15" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout_15">
+                  <property name="leftMargin">
+                   <number>15</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>15</number>
+                  </property>
+                  <item>
+                   <widget class="ElaText" name="label_19">
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>自启动脚本</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="ElaCheckBox" name="checkBox_soft_autoOpen">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="checked">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_12">
+                 <property name="text">
+                  <string>是否在ZcChat启动时自动运行目录下的autoOpen.cmd，你可以在cmd里写上启动letta、vits等的命令以达到一次启动的目的。</string>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -682,7 +729,7 @@ border:none;
                 <height>654</height>
                </rect>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_20" stretch="0,0,0,0,0,0,0,0,0,1">
+              <layout class="QVBoxLayout" name="verticalLayout_20" stretch="0,0,0,0,0,0,1">
                <property name="leftMargin">
                 <number>0</number>
                </property>
@@ -831,98 +878,6 @@ border:none;
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="label_15">
-                 <property name="font">
-                  <font>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>启动设定（选填）</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="ElaScrollPageArea" name="widget_12" native="true">
-                 <layout class="QHBoxLayout" name="horizontalLayout_13">
-                  <property name="leftMargin">
-                   <number>15</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>15</number>
-                  </property>
-                  <item>
-                   <widget class="ElaText" name="label_13">
-                    <property name="font">
-                     <font>
-                      <pointsize>12</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>自启动</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="ElaCheckBox" name="checkBox_llm_autoopen_enable">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="checked">
-                     <bool>false</bool>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="ElaScrollPageArea" name="widget_11" native="true">
-                 <layout class="QHBoxLayout" name="horizontalLayout_12" stretch="2,2">
-                  <property name="leftMargin">
-                   <number>15</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>15</number>
-                  </property>
-                  <item>
-                   <widget class="ElaText" name="label_12">
-                    <property name="font">
-                     <font>
-                      <pointsize>12</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Letta根目录</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="ElaLineEdit" name="lineEdit_llm_location">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
                 <widget class="QLabel" name="label_24">
                  <property name="font">
                   <font>
@@ -1017,11 +972,11 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>216</width>
-                <height>425</height>
+                <width>1033</width>
+                <height>654</height>
                </rect>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_16" stretch="0,0,0,0,0,0,0,0,1">
+              <layout class="QVBoxLayout" name="verticalLayout_16" stretch="0,0,0,0,0,1">
                <property name="spacing">
                 <number>6</number>
                </property>
@@ -1353,98 +1308,6 @@ border:none;
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="label_20">
-                 <property name="font">
-                  <font>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>启动设定（选填）</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="ElaScrollPageArea" name="widget_15" native="true">
-                 <layout class="QHBoxLayout" name="horizontalLayout_15">
-                  <property name="leftMargin">
-                   <number>15</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>15</number>
-                  </property>
-                  <item>
-                   <widget class="ElaText" name="label_19">
-                    <property name="font">
-                     <font>
-                      <pointsize>12</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>自启动</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="ElaCheckBox" name="checkBox_vits_autoopen">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="checked">
-                     <bool>false</bool>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="ElaScrollPageArea" name="widget_23" native="true">
-                 <layout class="QHBoxLayout" name="horizontalLayout_16" stretch="2,2">
-                  <property name="leftMargin">
-                   <number>15</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>15</number>
-                  </property>
-                  <item>
-                   <widget class="ElaText" name="label_21">
-                    <property name="font">
-                     <font>
-                      <pointsize>12</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Vits根目录</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="ElaLineEdit" name="lineEdit_vits_location">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
                 <spacer name="verticalSpacer_4">
                  <property name="orientation">
                   <enum>Qt::Orientation::Vertical</enum>
@@ -1494,25 +1357,7 @@ border:none;
                 <height>663</height>
                </rect>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_2">
-               <property name="spacing">
-                <number>6</number>
-               </property>
-               <property name="sizeConstraint">
-                <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
-               </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
+              <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,1">
                <item>
                 <widget class="ElaScrollPageArea" name="widget_29" native="true">
                  <layout class="QHBoxLayout" name="horizontalLayout_30" stretch="1,0">
@@ -1799,6 +1644,40 @@ border:none;
                   </item>
                   <item>
                    <widget class="ElaCheckBox" name="checkBox_speechInput_wake">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="ElaScrollPageArea" name="widget_36" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout_37" stretch="1,0">
+                  <property name="leftMargin">
+                   <number>15</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>15</number>
+                  </property>
+                  <item>
+                   <widget class="ElaText" name="label_48">
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>对话打断</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="ElaCheckBox" name="checkBox_speechInput_interrupt">
                     <property name="enabled">
                      <bool>true</bool>
                     </property>
