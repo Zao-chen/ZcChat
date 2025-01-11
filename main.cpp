@@ -6,17 +6,9 @@
 #include "log.h"
 
 int main(int argc, char *argv[])
-{
-    if (argc > 1)
-    {//设置log文件名为可执行文件名，如果程序启动时有参数，则认为参数为调试级别，否则，按默认级别
-        QT_LOG::logInit("log.txt");
-    }
-    else
-    {
-
-        QT_LOG::logInit("log.txt");
-    }
+{  
     QApplication a(argc, argv);
+    QT_LOG::logInit();
     MainWindow w;
     ElaApplication::getInstance()->init();
     QApplication::setQuitOnLastWindowClosed(false);
