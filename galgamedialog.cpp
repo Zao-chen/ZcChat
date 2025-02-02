@@ -77,13 +77,14 @@ QString galgamedialog::UrlpostLLM()
     QJsonArray messagesArray;
     QJsonObject messageObject;
     messageObject["role"] = "user";
-    messageObject["text"] = ui->textEdit->toPlainText();
+    messageObject["content"] = ui->textEdit->toPlainText();
     ui->textEdit->setText("...");
     messagesArray.append(messageObject); //将messageObject添加到messagesArray
     rootObject["messages"] = messagesArray; //将messagesArray添加到rootObject
-    rootObject["stream_steps"] = false; //添加其他键值对到rootObject
-    rootObject["stream_tokens"] = false; //创建QJsonDocument并设置其为rootObject
+    // rootObject["stream_steps"] = false; //添加其他键值对到rootObject
+    // rootObject["stream_tokens"] = false; //创建QJsonDocument并设置其为rootObject
     QJsonDocument jsonDoc(rootObject);
+    qDebug()<<"发送post"<<rootObject;
     //获取结果
     QEventLoop loop;
     QNetworkReply* reply = naManager->post(request, jsonDoc.toJson());
@@ -95,7 +96,9 @@ QString galgamedialog::UrlpostLLM()
     reply->deleteLater(); //记得释放内存
     qInfo()<<"获取到llmPost请求结果："<<read;
     is_in_llm = false;
+
     return read;
+
 }
 /*语言识别post请求*/
 QString galgamedialog::UrlpostWithFile()
@@ -505,20 +508,30 @@ void galgamedialog::send_to_llm()
     QString message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为["+jsonDoc.toJson()+"]|错误error";
     QJsonObject rootObj = jsonDoc.object();
     QJsonArray messages = rootObj["messages"].toArray();
-    for (const QJsonValue &messageVal : messages) {
-        QJsonObject messageObj = messageVal.toObject();
-        if (messageObj["message_type"].toString() == "tool_call_message") {
-            QJsonObject functionCall = messageObj["tool_call"].toObject();
-            if (functionCall["name"].toString() == "send_message") {
-                QString arguments = functionCall["arguments"].toString();
-                QJsonDocument argumentsDoc = QJsonDocument::fromJson(arguments.toUtf8());
-                if (!argumentsDoc.isNull() && argumentsDoc.isObject()) {
-                    message = argumentsDoc.object()["message"].toString();
-                    qDebug() << "Extracted message:" << message;
-                }
-            }
+    //
+
+    // 解析 JSON 字符串
+    if (jsonDoc.isNull()) {
+        qDebug() << "Failed to create JSON doc.";
+    }
+
+    // 获取 messages 数组
+    QJsonArray messagesArray = rootObj["messages"].toArray();
+
+    // 查找 "content" 字段
+    for (const QJsonValue &value : messagesArray) {
+        QJsonObject messageObject = value.toObject();
+        if (messageObject.contains("content")) {
+            message = messageObject["content"].toString();
+            break; // 找到第一个匹配的 content 字段后退出
         }
     }
+
+    qDebug()<<"读取message"<<message;
+
+    // 输出 content
+
+    //
     //信息判断
     if(message.isNull())
     {
