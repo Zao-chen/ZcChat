@@ -387,14 +387,19 @@ void galgamedialog::init_from_main()
     connect(audioRecorder, &QMediaRecorder::recorderStateChanged, this, [=](QMediaRecorder::RecorderState state) {
         if (state == QMediaRecorder::StoppedState) {
             qInfo() << "结束录音->识别";
-            if(ui->checkBox_autoInput->isChecked())
+            QString msg = UrlpostWithFile();
+            if(msg!="")
             {
-                QString msg = UrlpostWithFile();
-                if(msg!="")
+                ui->textEdit->setText(msg);
+                if(ui->checkBox_autoInput->isChecked())
                 {
-                    bool containsAny = false;
-                    ui->textEdit->setText(msg);
+                    qInfo() << "自动发送！";
                     send_to_llm();
+                }
+                if(settings->value("/speechInput/wake_enable").toBool()) //开启的语音唤醒
+                {
+                    /*结束词检查*/
+                    bool containsAny = false;
                     // 遍历 list，检查 msg 是否包含任意一个子字符串
                     for (const QString &str : settings->value("/speechInput/endWord").toString().split("|")) {
                         if (msg.contains(str)) {
@@ -404,31 +409,25 @@ void galgamedialog::init_from_main()
                     }
                     if(containsAny)
                     {
+                        qInfo() << "发现结束词";
                         ui->checkBox_autoInput->setChecked(false);
-                        ui->textEdit->setText(msg);
+                    }
+                    /*唤醒词检查*/
+                    containsAny = false;  // 初始化标志为 false
+                    // 遍历 list，检查 msg 是否包含任意一个子字符串
+                    for (const QString &str : settings->value("/speechInput/wakeWord").toString().split("|")) {
+                        if (msg.contains(str)) {
+                            containsAny = true;  // 如果包含，设置标志为 true
+                            break;               // 找到匹配后立即退出循环
+                        }
+                    }
+                    if(containsAny)
+                    {
+                        qInfo() << "发现唤醒词";
+                        ui->checkBox_autoInput->setChecked(true);
+                        send_to_llm();
                     }
                 }
-            }
-            else if(settings->value("/speechInput/wake_enable").toBool())
-            {
-                qInfo() << "语音唤醒-发送到语音识别";
-                QString msg = UrlpostWithFile();
-                qInfo()<<"开始关键词检查";
-                bool containsAny = false;  // 初始化标志为 false
-                // 遍历 list，检查 msg 是否包含任意一个子字符串
-                for (const QString &str : settings->value("/speechInput/wakeWord").toString().split("|")) {
-                    if (msg.contains(str)) {
-                        containsAny = true;  // 如果包含，设置标志为 true
-                        break;               // 找到匹配后立即退出循环
-                    }
-                }
-                if(containsAny)
-                {
-                    ui->checkBox_autoInput->setChecked(true);
-                    ui->textEdit->setText(msg);
-                    send_to_llm();
-                }
-
             }
         }
     });
@@ -463,16 +462,22 @@ void galgamedialog::init_from_main()
         {
             if(!is_record&&!is_in_llm)
             {
-                ui->pushButton_input->pressed();
-                is_record = true;
+                if(settings->value("/speechInput/wake_enable").toBool())
+                {
+                    ui->pushButton_input->pressed();
+                    is_record = true;
+                }
             }
         }
         else
         {
             if(is_record&&!is_in_llm)
             {
-                ui->pushButton_input->released();
-                is_record = false;
+                if(settings->value("/speechInput/wake_enable").toBool())
+                {
+                    ui->pushButton_input->released();
+                    is_record = false;
+                }
             }
         }
     });
