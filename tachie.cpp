@@ -32,7 +32,7 @@ void tachie::init_from_main()
     pixmap.load(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
     ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
     this->setFixedSize(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0));
-    qDebug()<<"立绘缩放为："<<settings->value("tachie/size").toInt()/100.0;
+    qInfo()<<"立绘缩放为："<<settings->value("tachie/size").toInt()/100.0;
 }
 /*重置立绘位置*/
 void tachie::resetlocation_from_main()
@@ -43,13 +43,13 @@ void tachie::resetlocation_from_main()
 void tachie::changetachie_from_galdialog(QString name)
 {
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
-    qDebug()<<"【接收】对话框 --- 修改立绘"+name+" ---> 立绘";
+    qInfo()<<"【接收】对话框 --- 修改立绘"+name+" ---> 立绘";
     QPixmap pixmap;
     pixmap.load(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png");
     if(pixmap.isNull()) pixmap.load(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
     ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
     this->setFixedSize(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0));
-    qDebug()<<"立绘缩放为："<<settings->value("tachie/size").toInt()/100.0;
+    qInfo()<<"立绘缩放为："<<settings->value("tachie/size").toInt()/100.0;
     //动画
     QSettings *config = new QSettings(qApp->applicationDirPath()+"/tachie/"+settings->value("/tachie/name").toString()+"/config.ini",QSettings::IniFormat);
     //创建动画组
@@ -198,7 +198,7 @@ void tachie::mousePressEvent(QMouseEvent *event)
         break;
     case Qt::RightButton:
         emit show_dialogwin_to_main();
-        qDebug()<<"【发送】立绘 --- 打开对话框 ---> 主窗口";
+        qInfo()<<"【发送】立绘 --- 打开对话框 ---> 主窗口";
         break;
     default:
         tachie::mousePressEvent(event);
@@ -219,7 +219,7 @@ void tachie::mouseReleaseEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton)
     {
         emit changeLocation_to_main(this->x(),this->y());
-        qDebug()<<"【发送】立绘 --- 保存位置 ---> 主窗口"<<this->x()<<" "<<this->y();
+        qInfo()<<"【发送】立绘 --- 保存位置 ---> 主窗口"<<this->x()<<" "<<this->y();
         isLeftPressDown = false;
         this->releaseMouse(); //释放鼠标抓取
         this->setCursor(QCursor(Qt::ArrowCursor));

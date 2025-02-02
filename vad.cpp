@@ -1,6 +1,5 @@
 #include "vad.h"
 #include <QSettings>
-#include <QDebug>
 #include <QApplication>
 
 

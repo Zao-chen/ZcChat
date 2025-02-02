@@ -163,7 +163,7 @@ MainWindow::~MainWindow()
 /*对话框显示隐藏*/
 void MainWindow::show_dialogwin_from_tachie()
 {
-    qDebug()<<"【接收】立绘 --- 打开对话框 ---> 主窗口";
+    qInfo()<<"【接收】立绘 --- 打开对话框 ---> 主窗口";
     if(ui->checkBox_dialog_enable->isChecked())
     {
         dialog_win->hide();

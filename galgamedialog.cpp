@@ -84,7 +84,7 @@ QString galgamedialog::UrlpostLLM()
     // rootObject["stream_steps"] = false; //添加其他键值对到rootObject
     // rootObject["stream_tokens"] = false; //创建QJsonDocument并设置其为rootObject
     QJsonDocument jsonDoc(rootObject);
-    qDebug()<<"发送post"<<rootObject;
+    qInfo()<<"发送post："<<rootObject;
     //获取结果
     QEventLoop loop;
     QNetworkReply* reply = naManager->post(request, jsonDoc.toJson());
@@ -347,7 +347,7 @@ void galgamedialog::paintEvent(QPaintEvent *event)
 /*录音相关*/
 void galgamedialog::on_pushButton_input_pressed()
 {
-    qDebug() << "开始录音";
+    qInfo() << "开始录音";
     if(settings->value("/speechInput/interrupt").toBool()) player->stop();
     if (audioRecorder->recorderState() == QMediaRecorder::StoppedState) {
         QMediaFormat format;
@@ -397,7 +397,6 @@ void galgamedialog::init_from_main()
                     send_to_llm();
                     // 遍历 list，检查 msg 是否包含任意一个子字符串
                     for (const QString &str : settings->value("/speechInput/endWord").toString().split("|")) {
-                        qDebug()<<str;
                         if (msg.contains(str)) {
                             containsAny = true;  // 如果包含，设置标志为 true
                             break;               // 找到匹配后立即退出循环
@@ -503,21 +502,16 @@ void galgamedialog::send_to_llm()
     cursor.deletePreviousChar(); //删除前一个字符
     //发送post请求
     QJsonDocument jsonDoc = QJsonDocument::fromJson(UrlpostLLM().toUtf8());
-    qDebug()<<"接收到post信息："<<jsonDoc;
+    qInfo()<<"接收到post信息："<<jsonDoc;
     //获取到的json处理
     QString message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为["+jsonDoc.toJson()+"]|错误error";
     QJsonObject rootObj = jsonDoc.object();
     QJsonArray messages = rootObj["messages"].toArray();
-    //
-
     // 解析 JSON 字符串
     if (jsonDoc.isNull()) {
-        qDebug() << "Failed to create JSON doc.";
-    }
-
-    // 获取 messages 数组
+        qWarning() << "返回值为空";
+    }    // 获取 messages 数组
     QJsonArray messagesArray = rootObj["messages"].toArray();
-
     // 查找 "content" 字段
     for (const QJsonValue &value : messagesArray) {
         QJsonObject messageObject = value.toObject();
@@ -526,12 +520,7 @@ void galgamedialog::send_to_llm()
             break; // 找到第一个匹配的 content 字段后退出
         }
     }
-
-    qDebug()<<"读取message"<<message;
-
-    // 输出 content
-
-    //
+    qInfo()<<"读取到message"<<message;
     //信息判断
     if(message.isNull())
     {
@@ -543,7 +532,7 @@ void galgamedialog::send_to_llm()
         //如果忽略报错
         else message = "正常|"+message+"|";
     }
-    qDebug()<<"【发送】对话框 --- 修改立绘"+message.split("|")[0]+" ---> 立绘";
+    qInfo()<<"【发送】对话框 --- 修改立绘"+message.split("|")[0]+" ---> 立绘";
     //语音合成
     if(settings->value("/vits/enable").toBool())
     {
