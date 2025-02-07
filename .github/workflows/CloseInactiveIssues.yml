@@ -20,4 +20,5 @@ jobs:
           close-issue-message: "此问题已关闭，因为自标记为过时以来，它已处于非活动状态14天。"
           days-before-pr-stale: -1
           days-before-pr-close: -1
+          only-labels: "question"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
