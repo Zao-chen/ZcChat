@@ -627,7 +627,6 @@ void galgamedialog::send_to_llm()
         input.type = INPUT_KEYBOARD;
         input.ki.wVk = VK_MEDIA_PREV_TRACK;  // 切换到上一首音乐
         SendInput(1, &input, sizeof(INPUT));
-        // Release the key
         input.ki.dwFlags = KEYEVENTF_KEYUP;
         SendInput(1, &input, sizeof(INPUT));
         qInfo() << "上一首音乐";
@@ -638,7 +637,6 @@ void galgamedialog::send_to_llm()
         input.type = INPUT_KEYBOARD;
         input.ki.wVk = VK_MEDIA_PLAY_PAUSE;  // 播放/暂停切换
         SendInput(1, &input, sizeof(INPUT));
-        // Release the key
         input.ki.dwFlags = KEYEVENTF_KEYUP;
         SendInput(1, &input, sizeof(INPUT));
         qInfo() << "播放/暂停切换";
@@ -649,7 +647,6 @@ void galgamedialog::send_to_llm()
         input.type = INPUT_KEYBOARD;
         input.ki.wVk = VK_VOLUME_UP;  // 增大音量
         SendInput(1, &input, sizeof(INPUT));
-        // Release the key
         input.ki.dwFlags = KEYEVENTF_KEYUP;
         SendInput(1, &input, sizeof(INPUT));
         qInfo() << "音量增大";
@@ -664,6 +661,11 @@ void galgamedialog::send_to_llm()
         input.ki.dwFlags = KEYEVENTF_KEYUP;
         SendInput(1, &input, sizeof(INPUT));
         qInfo() << "音量减小";
+    }
+    else if(message.contains("{Sleep}"))
+    {
+        SetSystemPowerState(FALSE, TRUE);  // FALSE 表示休眠，TRUE 表示强制休眠
+        qInfo() << "休眠";
     }
 }
 
