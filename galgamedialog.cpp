@@ -23,6 +23,8 @@
 #include <QAudioSource>
 #include <QDebug>
 #include <QUrlQuery>
+#include <QProcess>
+#include <windows.h>
 
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
@@ -597,6 +599,71 @@ void galgamedialog::send_to_llm()
         ui->pushButton->show();
         emit change_tachie_to_tachie(message.split("|")[0]);
     }
-
+    /*发送指令相关*/
+    //读取内容
+    if(message.contains("{Mute}"))
+    {
+        ::SendMessage((HWND)(this->winId()), WM_APPCOMMAND, 0, MAKELPARAM(0, FAPPCOMMAND_KEY << 12 | APPCOMMAND_VOLUME_MUTE));
+        qInfo()<<"切换静音状态";
+    }
+    else if(message.contains("{Shutdown}"))
+    {
+        QProcess::execute("shutdown -h now");  // 立即关机
+        qInfo()<<"关机";
+    }
+    else if(message.contains("{Next_Music}"))
+    {
+        INPUT input = {0};
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = VK_MEDIA_NEXT_TRACK;
+        SendInput(1, &input, sizeof(INPUT));
+        input.ki.dwFlags = KEYEVENTF_KEYUP;
+        SendInput(1, &input, sizeof(INPUT));
+        qInfo()<<"下一首音乐";
+    }
+    else if(message.contains("{Previous_Music}"))
+    {
+        INPUT input = {0};
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = VK_MEDIA_PREV_TRACK;  // 切换到上一首音乐
+        SendInput(1, &input, sizeof(INPUT));
+        // Release the key
+        input.ki.dwFlags = KEYEVENTF_KEYUP;
+        SendInput(1, &input, sizeof(INPUT));
+        qInfo() << "上一首音乐";
+    }
+    else if(message.contains("{Switch_Music_Pause}"))
+    {
+        INPUT input = {0};
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = VK_MEDIA_PLAY_PAUSE;  // 播放/暂停切换
+        SendInput(1, &input, sizeof(INPUT));
+        // Release the key
+        input.ki.dwFlags = KEYEVENTF_KEYUP;
+        SendInput(1, &input, sizeof(INPUT));
+        qInfo() << "播放/暂停切换";
+    }
+    else if(message.contains("{Volume_Up}"))
+    {
+        INPUT input = {0};
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = VK_VOLUME_UP;  // 增大音量
+        SendInput(1, &input, sizeof(INPUT));
+        // Release the key
+        input.ki.dwFlags = KEYEVENTF_KEYUP;
+        SendInput(1, &input, sizeof(INPUT));
+        qInfo() << "音量增大";
+    }
+    else if(message.contains("{Volume_Down}"))
+    {
+        INPUT input = {0};
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = VK_VOLUME_DOWN;  // 减小音量
+        SendInput(1, &input, sizeof(INPUT));
+        // Release the key
+        input.ki.dwFlags = KEYEVENTF_KEYUP;
+        SendInput(1, &input, sizeof(INPUT));
+        qInfo() << "音量减小";
+    }
 }
 
