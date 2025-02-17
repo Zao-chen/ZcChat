@@ -143,7 +143,7 @@ border:none;
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>5</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page_0">
           <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0">
@@ -170,7 +170,7 @@ border:none;
                 <height>654</height>
                </rect>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,1">
+              <layout class="QVBoxLayout" name="verticalLayout_2">
                <property name="leftMargin">
                 <number>0</number>
                </property>
@@ -316,8 +316,8 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>261</width>
-                <height>208</height>
+                <width>1033</width>
+                <height>654</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_18" stretch="0,0,0,0,0,1">
@@ -572,8 +572,8 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>252</width>
-                <height>109</height>
+                <width>1033</width>
+                <height>654</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_19" stretch="0,0,0,1">
@@ -728,8 +728,8 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>247</width>
-                <height>238</height>
+                <width>1033</width>
+                <height>654</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_20" stretch="0,0,0,0,0,0,1">

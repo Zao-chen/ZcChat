@@ -68,6 +68,7 @@ private slots:
     //按钮
     void on_pushButton_reset_clicked();
 
+
 signals:
     void init_to_tachie(); //初始化立绘
     void init_to_dialog(); //初始化对话框

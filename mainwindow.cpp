@@ -418,3 +418,6 @@ void MainWindow::updateEnergyDisplay() {
 }
 
 
+
+
+
