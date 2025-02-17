@@ -51,7 +51,7 @@ void tachie::changetachie_from_galdialog(QString name)
     this->setFixedSize(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0));
     qInfo()<<"立绘缩放为："<<settings->value("tachie/size").toInt()/100.0;
     //动画
-    QSettings *config = new QSettings(qApp->applicationDirPath()+"/tachie/"+settings->value("/tachie/name").toString()+"/config.ini",QSettings::IniFormat);
+    QSettings *config = new QSettings(qApp->applicationDirPath()+"/tachie/"+settings->value("/tachie/name").toString()+"/animation.ini",QSettings::IniFormat);
     //创建动画组
     QSequentialAnimationGroup *animationGroup = new QSequentialAnimationGroup;
     switch (config->value(name+"/animation").toInt()) {
