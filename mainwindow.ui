@@ -143,7 +143,7 @@ border:none;
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="page_0">
           <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0">
@@ -1415,7 +1415,7 @@ border:none;
                <item>
                 <widget class="QStackedWidget" name="stackedWidget_speechInput">
                  <property name="currentIndex">
-                  <number>1</number>
+                  <number>0</number>
                  </property>
                  <widget class="QWidget" name="page_7">
                   <layout class="QVBoxLayout" name="verticalLayout_14" stretch="0,1">

@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowIcon(QIcon(":/img/img/logo.png"));
     /*一些初始项*/
     //立绘列表初始化
-    QDir dir(qApp->applicationDirPath()+"/character");
+    QDir dir(qApp->applicationDirPath()+"/tachie");
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     QStringList folderList = dir.entryList();
     ui->comboBox_tachio_choose->addItems(folderList);
@@ -120,8 +120,6 @@ MainWindow::MainWindow(QWidget *parent)
     model->appendRow(new QStandardItem(QStringLiteral("AI模型设置")));
     model->appendRow(new QStandardItem(QStringLiteral("语音合成设置")));
     model->appendRow(new QStandardItem(QStringLiteral("语音输入设置")));
-    model->appendRow(new QStandardItem(QStringLiteral("角色设置")));
-
     ui->treeView_up->setModel(model);
     QModelIndex modelindex = ui->treeView_up->model()->index(0, 0);
     ui->treeView_up->setCurrentIndex(modelindex);
