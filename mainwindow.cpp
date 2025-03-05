@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowIcon(QIcon(":/img/img/logo.png"));
     /*一些初始项*/
     //立绘列表初始化
-    QDir dir(qApp->applicationDirPath()+"/tachie");
+    QDir dir(qApp->applicationDirPath()+"/characters");
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     QStringList folderList = dir.entryList();
     ui->comboBox_actor_choose->addItems(folderList);
@@ -67,8 +67,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->checkBox_speechInput_wake->setChecked(settings->value("/speechInput/wake_enable").toBool());
     ui->spinBox_energy->setValue(settings->value("/speechInput/energy").toInt());
     ui->spinBox_size->setValue(settings->value("/speechInput/size").toInt());
-    ui->lineEdit_speechInput_url_wakeWord->setText(settings->value("/speechInput/wake_word").toString());
-    ui->lineEdit_speechInput_url_endWord->setText(settings->value("/speechInput/end_word").toString());
+    ui->lineEdit_speechInput_url_wakeWord->setText(settings_actor->value("/speechInput/wake_word").toString());
+    ui->lineEdit_speechInput_url_endWord->setText(settings_actor->value("/speechInput/end_word").toString());
     ui->checkBox_speechInput_interrupt->setChecked(settings->value("/speechInput/interrupt").toBool());
     /*托盘*/
     //初始化托盘
