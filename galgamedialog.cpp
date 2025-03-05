@@ -72,7 +72,8 @@ QString galgamedialog::UrlpostLLM()
     QNetworkAccessManager* naManager = new QNetworkAccessManager(this);
     QNetworkRequest request;
     //头设置
-    request.setUrl(QUrl(settings->value("/llm/url").toString()+"/v1/agents/"+settings->value("/llm/agent").toString()+"/messages"));
+    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
+    request.setUrl(QUrl(settings->value("/llm/url").toString()+"/v1/agents/"+settings_actor->value("/llm/agent").toString()+"/messages"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
     //json处理
     QJsonObject rootObject;
@@ -403,7 +404,8 @@ void galgamedialog::init_from_main()
                     /*结束词检查*/
                     bool containsAny = false;
                     // 遍历 list，检查 msg 是否包含任意一个子字符串
-                    for (const QString &str : settings->value("/speechInput/endWord").toString().split("|")) {
+                    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
+                    for (const QString &str : settings_actor->value("/speechInput/end_word").toString().split("|")) {
                         if (msg.contains(str)) {
                             containsAny = true;  // 如果包含，设置标志为 true
                             break;               // 找到匹配后立即退出循环
@@ -417,7 +419,7 @@ void galgamedialog::init_from_main()
                     /*唤醒词检查*/
                     containsAny = false;  // 初始化标志为 false
                     // 遍历 list，检查 msg 是否包含任意一个子字符串
-                    for (const QString &str : settings->value("/speechInput/wakeWord").toString().split("|")) {
+                    for (const QString &str : settings_actor->value("/speechInput/wake_word").toString().split("|")) {
                         if (msg.contains(str)) {
                             containsAny = true;  // 如果包含，设置标志为 true
                             break;               // 找到匹配后立即退出循环
@@ -546,16 +548,18 @@ void galgamedialog::send_to_llm()
         QNetworkAccessManager* manager = new QNetworkAccessManager(this);
         QNetworkReply* reply;
         QString text;
+        QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
         //语音语言选择
-        if(settings->value("/vits/lan").toString()=="ja")
+        if(settings_actor->value("/vits/lan").toString()=="ja")
             text = message.split("|")[2];
         else
             text = message.split("|")[1];
         //语音api选择
-        if(settings->value("/vits/api").toInt()==1)
-            reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/custom_url").toString().replace("{msg}",text))));
+        if(settings_actor->value("/vits/api").toInt()==1)
+            reply = manager->get(QNetworkRequest(QUrl(settings_actor->value("/vits/custom_url").toString().replace("{msg}",text))));
         else
-            reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings->value("/vits/lan").toString())));
+            qDebug()<<"发送vits请求"<<settings->value("/vits/url").toString()+"/voice/"+settings_actor->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings_actor->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings_actor->value("/vits/lan").toString();
+            reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings_actor->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings_actor->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings_actor->value("/vits/lan").toString())));
 
         //播放返回值
         connect(reply, &QNetworkReply::finished, this, [=]() {
