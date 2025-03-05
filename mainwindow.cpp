@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     QDir dir(qApp->applicationDirPath()+"/tachie");
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     QStringList folderList = dir.entryList();
-    ui->comboBox_tachio_choose->addItems(folderList);
+    ui->comboBox_actor_choose->addItems(folderList);
     //一些combobox初始化
     ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
     ui->comboBox_vits_API->addItems({"vits-simple-api","自定义"});
@@ -39,10 +39,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->checkBox_soft_autostart->setChecked(settings->value("/soft/auto_start").toBool());
     ui->checkBox_soft_autoOpen->setChecked(settings->value("/soft/auto_open").toBool());
     //立绘配置项
-    ui->spinBox_tachie_size->setValue(settings->value("/tachie/size").toInt());
-    ui->comboBox_tachio_choose->setCurrentIndex(folderList.indexOf(settings->value("/tachie/name").toString()));
-    ui->lineEdit_tachi_location_x->setText(settings->value("/tachie/location_x").toString());
-    ui->lineEdit_tachi_location_y->setText(settings->value("/tachie/location_y").toString());
+    ui->spinBox_actor_tachie_size->setValue(settings->value("/tachie/size").toInt());
+    ui->comboBox_actor_choose->setCurrentIndex(folderList.indexOf(settings->value("/tachie/name").toString()));
     //对话框配置项
     ui->spinBox_dialog->setValue(settings->value("/dialog/time").toInt());
     //llm配置项
@@ -114,21 +112,20 @@ MainWindow::MainWindow(QWidget *parent)
     m_sysTrayIcon->show(); //在系统托盘显示此对象
     /*构造菜单*/
     QStandardItemModel* model = new QStandardItemModel(ui->treeView_up);
-    model->appendRow(new QStandardItem(QStringLiteral("软件设置")));
-    model->appendRow(new QStandardItem(QStringLiteral("立绘设置")));
-    model->appendRow(new QStandardItem(QStringLiteral("对话框设置")));
+    model->appendRow(new QStandardItem(QStringLiteral("通用设置")));
     model->appendRow(new QStandardItem(QStringLiteral("AI模型设置")));
     model->appendRow(new QStandardItem(QStringLiteral("语音合成设置")));
     model->appendRow(new QStandardItem(QStringLiteral("语音输入设置")));
+    model->appendRow(new QStandardItem(QStringLiteral("角色配置")));
     ui->treeView_up->setModel(model);
     QModelIndex modelindex = ui->treeView_up->model()->index(0, 0);
     ui->treeView_up->setCurrentIndex(modelindex);
     /*窗口初始化*/
     dialog_win = new galgamedialog;
-    dialog_win->move(ui->lineEdit_tachi_location_x->text().toInt(),ui->lineEdit_tachi_location_y->text().toInt());
+    dialog_win->move(settings->value("/tachie/location_x").toInt(),settings->value("/tachie/location_y").toInt());
     tachie_win = new tachie;
     tachie_win->show();
-    tachie_win->move(ui->lineEdit_tachi_location_x->text().toInt(),ui->lineEdit_tachi_location_y->text().toInt());
+    tachie_win->move(settings->value("/tachie/location_x").toInt(),settings->value("/tachie/location_y").toInt());
     /*信号槽连接*/
     connect(tachie_win, SIGNAL(show_dialogwin_to_main()), this, SLOT(show_dialogwin_from_tachie()));
     connect(tachie_win, SIGNAL(changeLocation_to_main(int,int)), this, SLOT(changeTachieLocation_from_tachie(int,int)));
@@ -212,8 +209,6 @@ QByteArray MainWindow::getUrl(const QString &input)
 void MainWindow::changeTachieLocation_from_tachie(int x,int y)
 {
     qInfo()<<"【接收】立绘移动到："<<this->x()<<" "<<this->y();
-    ui->lineEdit_tachi_location_x->setText(QString::number(x));
-    ui->lineEdit_tachi_location_y->setText(QString::number(y));
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     settings->setValue("/tachie/location_x",x);
     settings->setValue("/tachie/location_y",y);
@@ -241,7 +236,7 @@ void MainWindow::on_checkBox_tachie_enable_clicked(bool checked)
     if(checked) tachie_win->show();
     else tachie_win->hide();
 }
-void MainWindow::on_spinBox_tachie_size_valueChanged(int arg1)
+void MainWindow::on_spinBox_actor_tachie_size_valueChanged(int arg1)
 {
     saveSetting("/tachie/size",arg1);
     emit init_to_tachie();
@@ -274,7 +269,7 @@ void MainWindow::on_spinBox_dialog_valueChanged(int arg1)
 {
     saveSetting("/dialog/time",arg1);
 }
-void MainWindow::on_comboBox_tachio_choose_currentTextChanged(const QString &arg1)
+void MainWindow::on_comboBox_actor_choose_currentTextChanged(const QString &arg1)
 {
     if(already_init) saveSetting("/tachie/name",arg1);
     emit init_to_tachie();
