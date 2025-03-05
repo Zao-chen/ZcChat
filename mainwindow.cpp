@@ -36,8 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
     /*配置项读取*/
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     //软件配置项
-    ui->checkBox_soft_autostart->setChecked(settings->value("/soft/autostart").toBool());
-    ui->checkBox_soft_autoOpen->setChecked(settings->value("/soft/autoOpen").toBool());
+    ui->checkBox_soft_autostart->setChecked(settings->value("/soft/auto_start").toBool());
+    ui->checkBox_soft_autoOpen->setChecked(settings->value("/soft/auto_open").toBool());
     //立绘配置项
     ui->spinBox_tachie_size->setValue(settings->value("/tachie/size").toInt());
     ui->comboBox_tachio_choose->setCurrentIndex(folderList.indexOf(settings->value("/tachie/name").toString()));
@@ -68,8 +68,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->checkBox_speechInput_wake->setChecked(settings->value("/speechInput/wake_enable").toBool());
     ui->spinBox_energy->setValue(settings->value("/speechInput/energy").toInt());
     ui->spinBox_size->setValue(settings->value("/speechInput/size").toInt());
-    ui->lineEdit_speechInput_url_wakeWord->setText(settings->value("/speechInput/wakeWord").toString());
-    ui->lineEdit_speechInput_url_endWord->setText(settings->value("/speechInput/endWord").toString());
+    ui->lineEdit_speechInput_url_wakeWord->setText(settings->value("/speechInput/wake_word").toString());
+    ui->lineEdit_speechInput_url_endWord->setText(settings->value("/speechInput/end_word").toString());
     ui->checkBox_speechInput_interrupt->setChecked(settings->value("/speechInput/interrupt").toBool());
     /*托盘*/
     //初始化托盘
@@ -268,7 +268,7 @@ void MainWindow::on_lineEdit_vits_id_textChanged(const QString &arg1)
 }
 void MainWindow::on_checkBox_soft_autoOpen_clicked(bool checked)
 {
-    saveSetting("/soft/autoOpen",checked);
+    saveSetting("/soft/auto_open",checked);
 }
 void MainWindow::on_spinBox_dialog_valueChanged(int arg1)
 {
@@ -289,7 +289,7 @@ void MainWindow::on_comboBox_vits_model_currentTextChanged(const QString &arg1)
 }
 void MainWindow::on_checkBox_soft_autostart_clicked(bool checked)
 {
-    saveSetting("/soft/autostart",checked);
+    saveSetting("/soft/auto_start",checked);
     QString application_name = QApplication::applicationName(); //获取应用名称
     QSettings *nsettings = new QSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat); //创建QSetting, 需要添加QSetting头文件
     if(checked)
@@ -353,11 +353,11 @@ void MainWindow::on_checkBox_speechInput_wake_clicked(bool checked)
 }
 void MainWindow::on_lineEdit_speechInput_url_wakeWord_textChanged(const QString &arg1)
 {
-    saveSetting("/speechInput/wakeWord",arg1);
+    saveSetting("/speechInput/wake_word",arg1);
 }
 void MainWindow::on_lineEdit_speechInput_url_endWord_textChanged(const QString &arg1)
 {
-    saveSetting("/speechInput/endWord",arg1);
+    saveSetting("/speechInput/end_word",arg1);
 }
 void MainWindow::on_spinBox_energy_valueChanged(int arg1)
 {
