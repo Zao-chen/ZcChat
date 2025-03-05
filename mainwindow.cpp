@@ -35,27 +35,28 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_speechInput_API->addItems({"whisper-asr-webservice","百度语音识别"});
     /*配置项读取*/
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
+    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
     //软件配置项
     ui->checkBox_soft_autostart->setChecked(settings->value("/soft/auto_start").toBool());
     ui->checkBox_soft_autoOpen->setChecked(settings->value("/soft/auto_open").toBool());
     //立绘配置项
-    ui->spinBox_actor_tachie_size->setValue(settings->value("/tachie/size").toInt());
-    ui->comboBox_actor_choose->setCurrentIndex(folderList.indexOf(settings->value("/tachie/name").toString()));
+    ui->spinBox_actor_tachie_size->setValue(settings_actor->value("/tachie/size").toInt());
+    ui->comboBox_actor_choose->setCurrentIndex(folderList.indexOf(settings->value("/actor/name").toString()));
     //对话框配置项
     ui->spinBox_dialog->setValue(settings->value("/dialog/time").toInt());
     //llm配置项
     ui->lineEdit_llm_url->setText(settings->value("/llm/url").toString());
-    ui->lineEdit_llm_agent->setText(settings->value("/llm/agent").toString());
+    ui->lineEdit_llm_agent->setText(settings_actor->value("/llm/agent").toString());
     ui->checkBox_llm_errorfeedback->setChecked(settings->value("/llm/feedback").toBool());
     //语音配置项
     ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
-    ui->lineEdit_vits_customUrl->setText(settings->value("/vits/custom_url").toString());
-    ui->lineEdit_vits_id->setText(settings->value("/vits/id").toString());
-    ui->comboBox_vits_model->setCurrentText(settings->value("/vits/vitsmodel").toString());
-    ui->comboBox_vits_API->setCurrentIndex(settings->value("/vits/api").toInt());
-    ui->comboBox_vits_language->setCurrentIndex(ui->comboBox_vits_language->findText(settings->value("/vits/lan").toString()));
-    ui->stackedWidget_vits->setCurrentIndex(settings->value("/vits/api").toInt());
+    ui->lineEdit_vits_customUrl->setText(settings_actor->value("/vits/custom_url").toString());
+    ui->lineEdit_vits_id->setText(settings_actor->value("/vits/id").toString());
+    ui->comboBox_vits_model->setCurrentText(settings_actor->value("/vits/vitsmodel").toString());
+    ui->comboBox_vits_API->setCurrentIndex(settings_actor->value("/vits/api").toInt());
+    ui->comboBox_vits_language->setCurrentIndex(ui->comboBox_vits_language->findText(settings_actor->value("/vits/lan").toString()));
+    ui->stackedWidget_vits->setCurrentIndex(settings_actor->value("/vits/api").toInt());
     //语音输入配置项
     ui->checkBox_speechInput_enable->setChecked(settings->value("/speechInput/enable").toBool());
     ui->lineEdit_speechInput_url->setText(settings->value("/speechInput/url").toString());
@@ -208,7 +209,6 @@ QByteArray MainWindow::getUrl(const QString &input)
 /*保存立绘位置*/
 void MainWindow::changeTachieLocation_from_tachie(int x,int y)
 {
-    qInfo()<<"【接收】立绘移动到："<<this->x()<<" "<<this->y();
     QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
     settings->setValue("/tachie/location_x",x);
     settings->setValue("/tachie/location_y",y);
@@ -218,12 +218,19 @@ void MainWindow::on_treeView_up_clicked(const QModelIndex &index)
 {
     qInfo()<<"主窗口 翻页到"+QString::number(index.row());
     ui->stackedWidget->setCurrentIndex(index.row());
+    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    ui->label_editActor->setText("当前配置角色: "+settings->value("/actor/name").toString());
     ui->label_title->setText(ui->treeView_up->model()->data(index,Qt::DisplayRole).toString());
 }
 /*保存配置*/
 void MainWindow::saveSetting(const QString &key, const QVariant &value) {
     QScopedPointer<QSettings> settings(new QSettings("Setting.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
     settings->setValue(key, value);
+}
+void MainWindow::saveActorSetting(const QString &key, const QVariant &value) {
+    QScopedPointer<QSettings> settings(new QSettings("Setting.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
+    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
+    settings_actor->setValue(key, value);
 }
 /*配置项修改和保存*/
 void MainWindow::on_checkBox_dialog_enable_clicked(bool checked)
@@ -238,7 +245,7 @@ void MainWindow::on_checkBox_tachie_enable_clicked(bool checked)
 }
 void MainWindow::on_spinBox_actor_tachie_size_valueChanged(int arg1)
 {
-    saveSetting("/tachie/size",arg1);
+    saveActorSetting("/tachie/size",arg1);
     emit init_to_tachie();
 }
 void MainWindow::on_lineEdit_llm_url_textChanged(const QString &arg1)
@@ -247,7 +254,7 @@ void MainWindow::on_lineEdit_llm_url_textChanged(const QString &arg1)
 }
 void MainWindow::on_lineEdit_llm_agent_textChanged(const QString &arg1)
 {
-    saveSetting("/llm/agent",arg1);
+    saveActorSetting("/llm/agent",arg1);
 }
 void MainWindow::on_checkBox_vits_enable_clicked(bool checked)
 {
@@ -259,7 +266,7 @@ void MainWindow::on_lineEdit_vits_url_textChanged(const QString &arg1)
 }
 void MainWindow::on_lineEdit_vits_id_textChanged(const QString &arg1)
 {
-    saveSetting("/vits/id",arg1);
+    saveActorSetting("/vits/id",arg1);
 }
 void MainWindow::on_checkBox_soft_autoOpen_clicked(bool checked)
 {
@@ -271,7 +278,7 @@ void MainWindow::on_spinBox_dialog_valueChanged(int arg1)
 }
 void MainWindow::on_comboBox_actor_choose_currentTextChanged(const QString &arg1)
 {
-    if(already_init) saveSetting("/tachie/name",arg1);
+    if(already_init) saveSetting("/actor/name",arg1);
     emit init_to_tachie();
 }
 void MainWindow::on_checkBox_llm_errorfeedback_clicked(bool checked)
@@ -280,7 +287,7 @@ void MainWindow::on_checkBox_llm_errorfeedback_clicked(bool checked)
 }
 void MainWindow::on_comboBox_vits_model_currentTextChanged(const QString &arg1)
 {
-    if(already_init) saveSetting("/vits/vitsmodel",arg1);
+    if(already_init) saveActorSetting("/vits/vitsmodel",arg1);
 }
 void MainWindow::on_checkBox_soft_autostart_clicked(bool checked)
 {
@@ -302,18 +309,18 @@ void MainWindow::on_comboBox_vits_API_currentIndexChanged(int index)
     if(already_init)
     {
         ui->stackedWidget_vits->setCurrentIndex(index);
-        saveSetting("/vits/api",index);
+        saveActorSetting("/vits/api",index);
     }
 }
 void MainWindow::on_lineEdit_vits_customUrl_textChanged(const QString &arg1)
 {
-    saveSetting("/vits/custom_url",arg1);
+    saveActorSetting("/vits/custom_url",arg1);
 }
 void MainWindow::on_comboBox_vits_language_currentTextChanged(const QString &arg1)
 {
     if(already_init)
     {
-        saveSetting("/vits/lan",arg1);
+        saveActorSetting("/vits/lan",arg1);
     }
 }
 void MainWindow::on_checkBox_speechInput_enable_clicked(bool checked)
@@ -348,11 +355,11 @@ void MainWindow::on_checkBox_speechInput_wake_clicked(bool checked)
 }
 void MainWindow::on_lineEdit_speechInput_url_wakeWord_textChanged(const QString &arg1)
 {
-    saveSetting("/speechInput/wake_word",arg1);
+    saveActorSetting("/speechInput/wake_word",arg1);
 }
 void MainWindow::on_lineEdit_speechInput_url_endWord_textChanged(const QString &arg1)
 {
-    saveSetting("/speechInput/end_word",arg1);
+    saveActorSetting("/speechInput/end_word",arg1);
 }
 void MainWindow::on_spinBox_energy_valueChanged(int arg1)
 {

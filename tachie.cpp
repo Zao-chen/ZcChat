@@ -28,11 +28,12 @@ void tachie::init_from_main()
 {
     ui->label->setScaledContents(true); //确保图片随尺寸缩放
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
+    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
     QPixmap pixmap;
-    pixmap.load(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
-    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
-    this->setFixedSize(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0));
-    qInfo()<<"立绘缩放为："<<settings->value("tachie/size").toInt()/100.0;
+    pixmap.load(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png");
+    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0),pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
+    this->setFixedSize(pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0),pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0));
+    qInfo()<<"立绘缩放为："<<settings_actor->value("tachie/size").toInt()/100.0;
 }
 /*重置立绘位置*/
 void tachie::resetlocation_from_main()
@@ -43,15 +44,16 @@ void tachie::resetlocation_from_main()
 void tachie::changetachie_from_galdialog(QString name)
 {
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
+    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
     qInfo()<<"【接收】对话框 --- 修改立绘"+name+" ---> 立绘";
     QPixmap pixmap;
-    pixmap.load(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/"+name+".png");
-    if(pixmap.isNull()) pixmap.load(qApp->applicationDirPath()+"/tachie/"+settings->value("tachie/name").toString()+"/正常.png");
-    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
-    this->setFixedSize(pixmap.width()*(settings->value("tachie/size").toInt()/100.0),pixmap.height()*(settings->value("tachie/size").toInt()/100.0));
-    qInfo()<<"立绘缩放为："<<settings->value("tachie/size").toInt()/100.0;
+    pixmap.load(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/"+name+".png");
+    if(pixmap.isNull()) pixmap.load(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png");
+    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0),pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
+    this->setFixedSize(pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0),pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0));
+    qInfo()<<"立绘缩放为："<<settings_actor->value("tachie/size").toInt()/100.0;
     //动画
-    QSettings *config = new QSettings(qApp->applicationDirPath()+"/tachie/"+settings->value("/tachie/name").toString()+"/anim.ini",QSettings::IniFormat);
+    QSettings *config = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("/actor/name").toString()+"/anim.ini",QSettings::IniFormat);
     //创建动画组
     QSequentialAnimationGroup *animationGroup = new QSequentialAnimationGroup;
     switch (config->value(name+"/animation").toInt()) {

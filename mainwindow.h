@@ -88,6 +88,7 @@ private:
     QNetworkAccessManager *m_manager;
 
     void saveSetting(const QString &key, const QVariant &value);
+    void saveActorSetting(const QString &key, const QVariant &value);
     void checkForUpdates();
     /*能量显示*/
     QTimer *energyTimer; // 定时器
