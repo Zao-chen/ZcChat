@@ -13,7 +13,7 @@
 #include <QJsonObject>
 #include <QTimer>
 
-QString local_version = "v3.2.0";
+QString local_version = "v3.2.1";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWidget(parent)

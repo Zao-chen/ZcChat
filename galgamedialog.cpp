@@ -503,7 +503,7 @@ void galgamedialog::init_from_main()
 void galgamedialog::send_to_llm()
 {
     //对话框设置
-    ui->label_name->setText(settings->value("/tachie/name").toString());
+    ui->label_name->setText(settings->value("/actor/name").toString());
     ui->textEdit->setEnabled(false);
     ui->pushButton->hide();
     //去除换行
