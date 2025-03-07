@@ -35,19 +35,19 @@
 
 [点击这里观看视频教程](https://www.bilibili.com/video/BV1hA9SYYEbb)
 
-### 📋 Step 0 - 准备工作
+### 📋 Step 1 - 准备工作
 
 1. 在[Release页面](https://github.com/Zao-chen/ZcChat/releases)下载并安装ZcChat。
 2. 在[讨论区](https://github.com/Zao-chen/ZcChat/discussions)找到现成的角色数据，或者自定义你的角色。
 
-### 🎭 Step 1 - 配置角色
+### 🎭 Step 2 - 配置角色
 
 1. 将角色数据中的立绘放入 `/characters/{名称}` 文件夹。
 2. 在 `ZcChat > 通用设置 > 角色选择` 中选中角色。
 
 > 最终的项目结构应为 `/characters/{名称}/正常.png...`
 
-### 🤖 Step 2 - 安装配置Letta
+### 🤖 Step 3- 安装配置Letta
 
 1. [安装Letta](https://github.com/letta-ai/letta?tab=readme-ov-file#-quickstart) 并启动。
 2. 创建agent，并在 `LettaADE > agent > Persona` 中填入角色数据的提示词（核心记忆）。
@@ -55,7 +55,9 @@
    > Letta默认地址为 `http://localhost:8283`
 4. 将agentID填入 `ZcChat > 角色配置 > AI模型 > agentID`。
 
-### 🎙️ Step 3 - （可选）安装配置Vits
+🎉🎉🎉**至此，ZcChat已经可以基本使用了，以下是一些进阶功能的使用：**🎉🎉🎉
+
+### 🎙️ （可选）安装配置语音合成
 
 #### 方式1：vits-simple-api
 
@@ -73,7 +75,7 @@
    ```
 3. `ZcChat > 角色配置 > 语音合成 ` 中配置相关项
 
-### 🎤 Step 4 -（可选）配置语音输入
+### 🎤 （可选）配置语音输入
 
 #### 方式1：whisper-asr-webservice
 
@@ -86,13 +88,14 @@
 1. 在[百度智能云控制台](https://console.bce.baidu.com/ai-engine/old/#/ai/speech/app/list)创建短语音识别应用。
 2. 将API Key和Secret Key填入 `ZcChat > 语言输入设置 > API Key/Secret Key`。
 
-### 🔔 Step 5 -（可选）配置语音唤醒和打断
+### 🔔 （可选）配置语音唤醒和打断
 
-1. 观察 `语言输入设置 > 语音能量赋值`，不说话和说话的能量应该会有较大区别，寻找的适合自己的阈值填入设置。
+1. 先配置好语音输入
+2. 观察 `语言输入设置 > 语音能量赋值`，不说话和说话的能量应该会有较大区别，寻找的适合自己的阈值填入设置。
 
    由于VAD算法较为简单，语音唤醒和打断对环境要求较高，请仔细配置。
 
-### 💻 Step 6 -（可选）配置操控电脑
+### 💻 （可选）给予桌宠操控电脑的接口
 
 1.  将[文档](https://github.com/Zao-chen/ZcChat/wiki)内提示词追加到角色提示词即可。
 
