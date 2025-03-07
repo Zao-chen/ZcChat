@@ -13,7 +13,7 @@
 #include <QJsonObject>
 #include <QTimer>
 
-QString local_version = "v3.2.1";
+QString local_version = "v3.2.2";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWidget(parent)
@@ -125,7 +125,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(dialog_win, SIGNAL(energy_to_main(int)), this, SLOT(getEnergy_from_gal(int)));
     connect(this, SIGNAL(resetlocation_to_tachie()), tachie_win, SLOT(resetlocation_from_main()));
     /*自启动*/
-    //letta自启动
+    //运行自启动脚本
     if(ui->checkBox_soft_autoOpen->isChecked())
     {
         qInfo()<<"运行autoOpen.cmd…";
