@@ -76,7 +76,7 @@ QPushButton:pressed {
    <property name="font">
     <font>
      <family>Microsoft YaHei</family>
-     <pointsize>12</pointsize>
+     <pointsize>14</pointsize>
     </font>
    </property>
    <property name="frameShape">

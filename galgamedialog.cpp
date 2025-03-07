@@ -25,6 +25,7 @@
 #include <QUrlQuery>
 #include <QProcess>
 #include <windows.h>
+#include <QDesktopServices>
 
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
@@ -548,12 +549,21 @@ void galgamedialog::send_to_llm()
         QNetworkAccessManager* manager = new QNetworkAccessManager(this);
         QNetworkReply* reply;
         QString text;
+
+
+
         QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
         //语音语言选择
         if(settings_actor->value("/vits/lan").toString()=="ja")
             text = message.split("|")[2];
         else
             text = message.split("|")[1];
+
+        QRegularExpression regex("\\{(.*?)\\}");
+        QRegularExpressionMatch match = regex.match(message);
+        if (match.hasMatch()) {
+            text = text.replace(match.captured(1),"");
+        }
         //语音api选择
         if(settings_actor->value("/vits/api").toInt()==1)
             reply = manager->get(QNetworkRequest(QUrl(settings_actor->value("/vits/custom_url").toString().replace("{msg}",text))));
@@ -670,6 +680,16 @@ void galgamedialog::send_to_llm()
     {
         SetSystemPowerState(FALSE, TRUE);  // FALSE 表示休眠，TRUE 表示强制休眠
         qInfo() << "休眠";
+    }
+    else if(message.contains("{OpenUrl_"))
+    {
+        QRegularExpression regex("\\{(.*?)\\}");
+        QRegularExpressionMatch match = regex.match(message);
+        if (match.hasMatch()) {
+            qDebug() << "大括号内的内容:" << match.captured(1);
+            QDesktopServices::openUrl(QUrl(match.captured(1).replace("OpenUrl_","")));
+        }
+        qInfo() << "打开url";
     }
 }
 
