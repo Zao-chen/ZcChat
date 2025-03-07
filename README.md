@@ -33,7 +33,7 @@
 
 ### 📺 视频教程
 
-[点击这里观看视频教程](https://www.bilibili.com/video/BV1nYiyYdE9G)
+[点击这里观看视频教程](https://www.bilibili.com/video/BV1hA9SYYEbb/)
 
 ### 📋 Step 0 - 准备工作
 
@@ -62,6 +62,7 @@
 1. [安装vits-simple-api](https://github.com/Artrajz/vits-simple-api/blob/main/README_zh.md) 并启动。
 2. 将URL填入 `ZcChat > 语言合成设置 > vits-simple-api地址`。
    > vits-simple-api默认地址为 `http://localhost:23456`
+3. `ZcChat > 角色配置 > 语音合成 ` 中配置相关项
 
 #### 方式2：其他语音合成工具
 
@@ -70,6 +71,7 @@
    ```
    http://127.0.0.1:23456/voice/vits?id=0&text={msg}&format=mp3
    ```
+3. `ZcChat > 角色配置 > 语音合成 ` 中配置相关项
 
 ### 🎤 Step 4 -（可选）配置语音输入
 
@@ -89,6 +91,10 @@
 1. 观察 `语言输入设置 > 语音能量赋值`，不说话和说话的能量应该会有较大区别，寻找的适合自己的阈值填入设置。
 
    由于VAD算法较为简单，语音唤醒和打断对环境要求较高，请仔细配置。
+
+### 💻 Step 6 -（可选）配置操控电脑
+
+1.  将[文档](https://github.com/Zao-chen/ZcChat/wiki)内提示词追加到角色提示词即可。
 
 ---
 
@@ -111,6 +117,10 @@
 ### 📝 对话不久后会出现格式错误？
 
 可能是AI忘记了或受到误导性词语的影响。尝试改进提示词，或用命令的语气告诉AI使用正确的格式回复。效果取决于所使用的模型。
+
+### ⁉️ 为什么不使用Live2d
+
+本项目的特色就是使用了类Galgame的立绘方式，使得拥有表情和动作变化，并且降低了角色制作成本。如果你在找一个Live2d桌宠，我推荐LogChat。
 
 ---
 
