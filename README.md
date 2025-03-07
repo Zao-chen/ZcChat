@@ -90,6 +90,10 @@
 
    由于VAD算法较为简单，语音唤醒和打断对环境要求较高，请仔细配置。
 
+### 🔔 Step 6 -（可选）配置操控电脑
+
+[文档](https://github.com/Zao-chen/ZcChat/wiki)
+
 ---
 
 ## ❓ 常见问题 (F&Q)
