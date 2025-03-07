@@ -33,7 +33,7 @@
 
 ### 📺 视频教程
 
-[点击这里观看视频教程](https://www.bilibili.com/video/BV1hA9SYYEbb/)
+[点击这里观看视频教程](https://www.bilibili.com/video/BV1hA9SYYEbb)
 
 ### 📋 Step 0 - 准备工作
 
@@ -104,7 +104,7 @@
 
 [Letta使用不同LLM文档](https://docs.letta.com/models/openai)，设置环境变量即可。
 
-### 🌐 如何自定义base url？我想用一些第三方的转发，比如说GPT_API_free
+### 🌐 如何自定义base url？我想用一些第三方内容，比如说DeepSeek、GPT_API_free。
 
 添加环境变量 `OPENAI_API_BASE` 即可。
 
@@ -118,9 +118,13 @@
 
 可能是AI忘记了或受到误导性词语的影响。尝试改进提示词，或用命令的语气告诉AI使用正确的格式回复。效果取决于所使用的模型。
 
-### ⁉️ 为什么不使用Live2d
+### ⁉️ 为什么不使用Live2d？
 
 本项目的特色就是使用了类Galgame的立绘方式，使得拥有表情和动作变化，并且降低了角色制作成本。如果你在找一个Live2d桌宠，我推荐LogChat。
+
+### 🌏 如何纯本地运行
+
+你需要使用Letta Desktop而不是Docker部署，Letta Desktop是一个纯本地运行的ADE。然后连接如ollama等本地LLM。
 
 ---
 
