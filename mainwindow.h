@@ -90,6 +90,7 @@ private:
     void saveSetting(const QString &key, const QVariant &value);
     void saveActorSetting(const QString &key, const QVariant &value);
     void checkForUpdates();
+    void reloadActorSetting();
     /*能量显示*/
     QTimer *energyTimer; // 定时器
     int currentEnergy;   // 当前能量值
