@@ -32,11 +32,8 @@ public:
     setting_vits *setting_vits_win;
     setting_voiceinput *setting_voiceinput_win;
     setting_actor *setting_actor_win;
-
-
     galgamedialog *dialog_win;
     tachie *tachie_win;
-
     //通用设置
     void ChangeSetting_ActorChoose(const QString &arg1);
     void ChangeSetting_AutoStart(bool checked);
@@ -48,9 +45,6 @@ public:
     void ChangeSetting_VitsAPI(int index);
     void ChangeSetting_VitsModel(const QString &arg1);
     void ChangeSetting_VitsLanguage(const QString &arg1);
-
-
-
     ~MainWindow();
 
 private slots:
@@ -58,8 +52,6 @@ private slots:
     void show_dialogwin_from_tachie();
     void changeTachieLocation_from_tachie(int x,int y);
     void on_checkBox_dialog_enable_clicked(bool checked);
-    void on_treeView_up_clicked(const QModelIndex &index);
-
     void getEnergy_from_gal(int energy);
     //托盘slot
     void on_showMainAction();
