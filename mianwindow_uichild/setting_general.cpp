@@ -2,7 +2,8 @@
 #include "ui_setting_general.h"
 #include "../mainwindow.h"
 #include <QDir>
-#include <QSettings>
+
+static QScopedPointer<QSettings> settings(new QSettings("Setting.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
 
 setting_general::setting_general(QWidget *parent)
     : QWidget(parent)
@@ -29,11 +30,11 @@ void setting_general::on_checkBox_autostart_clicked(bool checked)
 //自动运行脚本设置
 void setting_general::on_checkBox_autoopen_clicked(bool checked)
 {
-    mainWin->ChangeSetting_AutoOpen(checked);
+    settings->setValue("/soft/auto_open",checked);
 }
 //逐字显示设置
 void setting_general::on_spinBox_dialogtime_valueChanged(int arg1)
 {
-    mainWin->ChangeSetting_DialogTime(arg1);
+    settings->setValue("/dialog/time",arg1);
 }
 

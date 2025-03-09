@@ -58,15 +58,27 @@ MainWindow::MainWindow(QWidget *parent)
     /*AI模型设置*/
     setting_ai_win->findChild<QLineEdit*>("lineEdit_url")->setText(settings->value("/llm/url").toString());
     setting_ai_win->findChild<QCheckBox*>("checkBox_feedback")->setChecked(settings->value("/llm/feedback").toBool());
-
-
+    /*语音输入设置*/
+    //基础设定
+    //基础设置
+    setting_voiceinput_win->findChild<QComboBox*>("comboBox_api")->addItems({"whisper-asr-webservice","百度语音识别"});
+    setting_voiceinput_win->findChild<QComboBox*>("comboBox_api")->setCurrentIndex(settings->value("/speechInput/api").toInt());
+    setting_voiceinput_win->findChild<QStackedWidget*>("stackedWidget_speechInput")->setCurrentIndex(settings->value("/speechInput/api").toInt());
+    setting_voiceinput_win->findChild<QLineEdit*>("lineEdit_url")->setText(settings->value("/speechInput/url").toString());
+    setting_voiceinput_win->findChild<QLineEdit*>("lineEdit_baiduapikey")->setText(settings->value("/speechInput/baidu_apikey").toString());
+    setting_voiceinput_win->findChild<QLineEdit*>("lineEdit_baidusecretkey")->setText(settings->value("/speechInput/baidu_secretkey").toString());
+    //语音设置
+    setting_voiceinput_win->findChild<QCheckBox*>("checkBox_enable")->setChecked(settings->value("/speechInput/enable").toBool());
+    setting_voiceinput_win->findChild<QCheckBox*>("checkBox_wake")->setChecked(settings->value("/speechInput/wake_enable").toBool());
+    setting_voiceinput_win->findChild<QCheckBox*>("checkBox_interrupt")->setChecked(settings->value("/speechInput/interrupt").toBool());
+    setting_voiceinput_win->findChild<QSpinBox*>("spinBox_energy")->setValue(settings->value("/speechInput/energy").toInt());
+    setting_voiceinput_win->findChild<QSpinBox*>("spinBox_size")->setValue(settings->value("/speechInput/size").toInt());
 
 
     //一些combobox初始化
     ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
     ui->comboBox_vits_API->addItems({"vits-simple-api","自定义"});
     ui->comboBox_vits_language->addItems({"ja","zh"});
-    ui->comboBox_speechInput_API->addItems({"whisper-asr-webservice","百度语音识别"});
 
 
 
@@ -74,17 +86,7 @@ MainWindow::MainWindow(QWidget *parent)
     //语音配置项
     ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
-    //语音输入配置项
-    ui->checkBox_speechInput_enable->setChecked(settings->value("/speechInput/enable").toBool());
-    ui->lineEdit_speechInput_url->setText(settings->value("/speechInput/url").toString());
-    ui->comboBox_speechInput_API->setCurrentIndex(settings->value("/speechInput/api").toInt());
-    ui->stackedWidget_speechInput->setCurrentIndex(settings->value("/speechInput/api").toInt());
-    ui->lineEdit_speechInput_BaiduAPIKey->setText(settings->value("/speechInput/baidu_apikey").toString());
-    ui->lineEdit_speechInput_BaiduSecretKey->setText(settings->value("/speechInput/baidu_secretkey").toString());
-    ui->checkBox_speechInput_wake->setChecked(settings->value("/speechInput/wake_enable").toBool());
-    ui->spinBox_energy->setValue(settings->value("/speechInput/energy").toInt());
-    ui->spinBox_size->setValue(settings->value("/speechInput/size").toInt());
-    ui->checkBox_speechInput_interrupt->setChecked(settings->value("/speechInput/interrupt").toBool());
+
     /*托盘*/
     //初始化托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
@@ -280,10 +282,6 @@ void MainWindow::on_spinBox_actor_tachie_size_valueChanged(int arg1)
     saveActorSetting("/tachie/size",arg1);
     emit init_to_tachie();
 }
-void MainWindow::ChangeSetting_LLMUrl(const QString &arg1)
-{
-    saveSetting("/llm/url",arg1);
-}
 void MainWindow::on_lineEdit_llm_agent_textChanged(const QString &arg1)
 {
     saveActorSetting("/llm/agent",arg1);
@@ -300,22 +298,10 @@ void MainWindow::on_lineEdit_vits_id_textChanged(const QString &arg1)
 {
     saveActorSetting("/vits/id",arg1);
 }
-void MainWindow::ChangeSetting_AutoOpen(bool checked)
-{
-    saveSetting("/soft/auto_open",checked);
-}
-void MainWindow::ChangeSetting_DialogTime(int arg1)
-{
-    saveSetting("/dialog/time",arg1);
-}
 void MainWindow::ChangeSetting_ActorChoose(const QString &arg1)
 {
     if(already_init) saveSetting("/actor/name",arg1);
     emit init_to_tachie();
-}
-void MainWindow::ChangeSetting_LLMFeedback(bool checked)
-{
-    saveSetting("/llm/feedback",checked);
 }
 void MainWindow::on_comboBox_vits_model_currentTextChanged(const QString &arg1)
 {
@@ -355,16 +341,7 @@ void MainWindow::on_comboBox_vits_language_currentTextChanged(const QString &arg
         saveActorSetting("/vits/lan",arg1);
     }
 }
-void MainWindow::on_checkBox_speechInput_enable_clicked(bool checked)
-{
-    saveSetting("/speechInput/enable",checked);
-    emit init_to_dialog();
-}
-void MainWindow::on_lineEdit_speechInput_url_textChanged(const QString &arg1)
-{
-    saveSetting("/speechInput/url",arg1);
-}
-void MainWindow::on_comboBox_speechInput_API_currentIndexChanged(int index)
+void MainWindow::ChangeSetting_speechInputAPI(int index)
 {
     if(already_init)
     {
@@ -372,17 +349,8 @@ void MainWindow::on_comboBox_speechInput_API_currentIndexChanged(int index)
     }
     ui->stackedWidget_speechInput->setCurrentIndex(index);
 }
-void MainWindow::on_lineEdit_speechInput_BaiduAPIKey_textChanged(const QString &arg1)
+void MainWindow::ChangSetting_speechInputWake(bool checked)
 {
-    saveSetting("/speechInput/baidu_apikey",arg1);
-}
-void MainWindow::on_lineEdit_speechInput_BaiduSecretKey_textChanged(const QString &arg1)
-{
-    saveSetting("/speechInput/baidu_secretkey",arg1);
-}
-void MainWindow::on_checkBox_speechInput_wake_clicked(bool checked)
-{
-    saveSetting("/speechInput/wake_enable",checked);
     emit init_to_dialog();
 }
 void MainWindow::on_lineEdit_speechInput_url_wakeWord_textChanged(const QString &arg1)
@@ -392,18 +360,6 @@ void MainWindow::on_lineEdit_speechInput_url_wakeWord_textChanged(const QString 
 void MainWindow::on_lineEdit_speechInput_url_endWord_textChanged(const QString &arg1)
 {
     saveActorSetting("/speechInput/end_word",arg1);
-}
-void MainWindow::on_spinBox_energy_valueChanged(int arg1)
-{
-    saveSetting("/speechInput/energy",arg1);
-}
-void MainWindow::on_spinBox_size_valueChanged(int arg1)
-{
-    saveSetting("/speechInput/size",arg1);
-}
-void MainWindow::on_checkBox_speechInput_interrupt_clicked(bool checked)
-{
-    saveSetting("/speechInput/interrupt",checked);
 }
 /*重置立绘位置*/
 void MainWindow::on_pushButton_reset_clicked()
@@ -450,8 +406,3 @@ void MainWindow::getEnergy_from_gal(int energy)
 void MainWindow::updateEnergyDisplay() {
     ui->lcdNumber->display(currentEnergy);
 }
-
-
-
-
-

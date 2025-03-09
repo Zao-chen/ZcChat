@@ -40,12 +40,9 @@ public:
     //通用设置
     void ChangeSetting_ActorChoose(const QString &arg1);
     void ChangeSetting_AutoStart(bool checked);
-    void ChangeSetting_AutoOpen(bool checked);
-    void ChangeSetting_DialogTime(int arg1);
-    //AI模型设置
-    void ChangeSetting_LLMUrl(const QString &arg1);
-    void ChangeSetting_LLMFeedback(bool checked);
-
+    //语音输入设置
+    void ChangeSetting_speechInputAPI(int index);
+    void ChangSetting_speechInputWake(bool checked);
     ~MainWindow();
 
 private slots:
@@ -64,19 +61,15 @@ private slots:
     void on_comboBox_vits_model_currentTextChanged(const QString &arg1);
     void on_comboBox_vits_API_currentIndexChanged(int index);
     void on_lineEdit_vits_customUrl_textChanged(const QString &arg1);
-    void on_checkBox_speechInput_enable_clicked(bool checked);
-    void on_lineEdit_speechInput_url_textChanged(const QString &arg1);
+
+
     void on_comboBox_vits_language_currentTextChanged(const QString &arg1);
-    void on_comboBox_speechInput_API_currentIndexChanged(int index);
-    void on_lineEdit_speechInput_BaiduAPIKey_textChanged(const QString &arg1);
-    void on_lineEdit_speechInput_BaiduSecretKey_textChanged(const QString &arg1);
-    void on_checkBox_speechInput_wake_clicked(bool checked);
+
+
+
     void on_lineEdit_speechInput_url_wakeWord_textChanged(const QString &arg1);
     void on_lineEdit_speechInput_url_endWord_textChanged(const QString &arg1);
-    void on_spinBox_energy_valueChanged(int arg1);
-    void on_spinBox_size_valueChanged(int arg1);
     void getEnergy_from_gal(int energy);
-    void on_checkBox_speechInput_interrupt_clicked(bool checked);
     //托盘slot
     void on_showMainAction();
     void on_exitAppAction();

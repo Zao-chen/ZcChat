@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>714</width>
-    <height>521</height>
+    <height>533</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0,100">
    <property name="leftMargin">
     <number>20</number>
    </property>
@@ -73,7 +73,7 @@
        </widget>
       </item>
       <item>
-       <widget class="ElaComboBox" name="comboBox_speechInput_API"/>
+       <widget class="ElaComboBox" name="comboBox_api"/>
       </item>
      </layout>
     </widget>
@@ -81,7 +81,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget_speechInput">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_13">
       <layout class="QVBoxLayout" name="verticalLayout_20" stretch="0,1">
@@ -122,7 +122,7 @@
            </widget>
           </item>
           <item>
-           <widget class="ElaLineEdit" name="lineEdit_speechInput_url_4">
+           <widget class="ElaLineEdit" name="lineEdit_url">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -194,7 +194,7 @@
            </widget>
           </item>
           <item>
-           <widget class="ElaLineEdit" name="lineEdit_speechInput_BaiduAPIKey_4">
+           <widget class="ElaLineEdit" name="lineEdit_baiduapikey">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -234,7 +234,7 @@
            </widget>
           </item>
           <item>
-           <widget class="ElaLineEdit" name="lineEdit_speechInput_BaiduSecretKey_4">
+           <widget class="ElaLineEdit" name="lineEdit_baidusecretkey">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -290,7 +290,7 @@
        </widget>
       </item>
       <item>
-       <widget class="ElaCheckBox" name="checkBox_speechInput_enable">
+       <widget class="ElaCheckBox" name="checkBox_enable">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -324,7 +324,7 @@
        </widget>
       </item>
       <item>
-       <widget class="ElaCheckBox" name="checkBox_speechInput_wake">
+       <widget class="ElaCheckBox" name="checkBox_wake">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -358,7 +358,7 @@
        </widget>
       </item>
       <item>
-       <widget class="ElaCheckBox" name="checkBox_speechInput_interrupt">
+       <widget class="ElaCheckBox" name="checkBox_interrupt">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -487,14 +487,14 @@
     </widget>
    </item>
    <item>
-    <spacer name="verticalSpacer_7">
+    <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>1</height>
+       <height>40</height>
       </size>
      </property>
     </spacer>
