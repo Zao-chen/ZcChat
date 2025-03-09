@@ -98,7 +98,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="ElaSpinBox" name="spinBox_actor_tachie_size_2">
+       <widget class="ElaSpinBox" name="spinBox_tachie_size">
         <property name="maximum">
          <number>1000</number>
         </property>
@@ -151,7 +151,7 @@
        </widget>
       </item>
       <item>
-       <widget class="ElaLineEdit" name="lineEdit_llm_agent_2">
+       <widget class="ElaLineEdit" name="lineEdit_llm_agent">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -203,7 +203,7 @@
        </widget>
       </item>
       <item>
-       <widget class="ElaComboBox" name="comboBox_vits_API_2"/>
+       <widget class="ElaComboBox" name="comboBox_vits_api"/>
       </item>
      </layout>
     </widget>
@@ -211,7 +211,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget_vits">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_6">
       <layout class="QVBoxLayout" name="verticalLayout_13" stretch="0,0">
@@ -252,7 +252,7 @@
            </widget>
           </item>
           <item>
-           <widget class="ElaComboBox" name="comboBox_vits_model_2"/>
+           <widget class="ElaComboBox" name="comboBox_vits_model"/>
           </item>
          </layout>
         </widget>
@@ -279,7 +279,7 @@
            </widget>
           </item>
           <item>
-           <widget class="ElaLineEdit" name="lineEdit_vits_id_2">
+           <widget class="ElaLineEdit" name="lineEdit_vits_id">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -335,7 +335,7 @@
            </widget>
           </item>
           <item>
-           <widget class="ElaLineEdit" name="lineEdit_vits_customUrl_2">
+           <widget class="ElaLineEdit" name="lineEdit_vits_customUrl">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -399,7 +399,7 @@
        </widget>
       </item>
       <item>
-       <widget class="ElaComboBox" name="comboBox_vits_language_2"/>
+       <widget class="ElaComboBox" name="comboBox_vits_language"/>
       </item>
      </layout>
     </widget>
@@ -438,7 +438,7 @@
        </widget>
       </item>
       <item>
-       <widget class="ElaLineEdit" name="lineEdit_speechInput_url_wakeWord_2">
+       <widget class="ElaLineEdit" name="lineEdit_speechInput_wakeWord">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -485,7 +485,7 @@
        </widget>
       </item>
       <item>
-       <widget class="ElaLineEdit" name="lineEdit_speechInput_url_endWord_2">
+       <widget class="ElaLineEdit" name="lineEdit_speechInput_endWord">
         <property name="minimumSize">
          <size>
           <width>0</width>

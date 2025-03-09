@@ -43,6 +43,14 @@ public:
     //语音输入设置
     void ChangeSetting_speechInputAPI(int index);
     void ChangSetting_speechInputWake(bool checked);
+    //角色设置
+    void ChangeSetting_tachieSize(int arg1);
+    void ChangeSetting_VitsAPI(int index);
+    void ChangeSetting_VitsModel(const QString &arg1);
+    void ChangeSetting_VitsLanguage(const QString &arg1);
+
+
+
     ~MainWindow();
 
 private slots:
@@ -51,22 +59,7 @@ private slots:
     void changeTachieLocation_from_tachie(int x,int y);
     void on_checkBox_dialog_enable_clicked(bool checked);
     void on_treeView_up_clicked(const QModelIndex &index);
-    void on_spinBox_actor_tachie_size_valueChanged(int arg1);
-    void on_lineEdit_llm_agent_textChanged(const QString &arg1);
-    void on_lineEdit_vits_id_textChanged(const QString &arg1);
 
-
-    void on_comboBox_vits_model_currentTextChanged(const QString &arg1);
-    void on_comboBox_vits_API_currentIndexChanged(int index);
-    void on_lineEdit_vits_customUrl_textChanged(const QString &arg1);
-
-
-    void on_comboBox_vits_language_currentTextChanged(const QString &arg1);
-
-
-
-    void on_lineEdit_speechInput_url_wakeWord_textChanged(const QString &arg1);
-    void on_lineEdit_speechInput_url_endWord_textChanged(const QString &arg1);
     void getEnergy_from_gal(int energy);
     //托盘slot
     void on_showMainAction();

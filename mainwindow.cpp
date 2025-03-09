@@ -35,7 +35,6 @@ MainWindow::MainWindow(QWidget *parent)
     addPageNode("语音输入设置",setting_voiceinput_win,ElaIconType::CircleMicrophone);
     setting_actor_win = new setting_actor(this);
     addPageNode("角色配置",setting_actor_win,ElaIconType::GingerbreadMan);
-
     /*
      * 读取配置
     */
@@ -73,15 +72,14 @@ MainWindow::MainWindow(QWidget *parent)
     setting_voiceinput_win->findChild<QCheckBox*>("checkBox_interrupt")->setChecked(settings->value("/speechInput/interrupt").toBool());
     setting_voiceinput_win->findChild<QSpinBox*>("spinBox_energy")->setValue(settings->value("/speechInput/energy").toInt());
     setting_voiceinput_win->findChild<QSpinBox*>("spinBox_size")->setValue(settings->value("/speechInput/size").toInt());
-    /*语音合成配置*/
+    /*语音合成设置*/
     setting_vits_win->findChild<QCheckBox*>("checkBox_enable")->setChecked(settings->value("/vits/enable").toBool());
     setting_vits_win->findChild<QLineEdit*>("lineEdit_url")->setText(settings->value("/vits/url").toString());
-
-
-    ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
-    ui->comboBox_vits_API->addItems({"vits-simple-api","自定义"});
-    ui->comboBox_vits_language->addItems({"ja","zh"});
-
+    /*角色设置*/
+    setting_actor_win->findChild<QComboBox*>("comboBox_vits_api")->addItems({"vits-simple-api","自定义"});
+    setting_actor_win->findChild<QComboBox*>("comboBox_vits_model")->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
+    setting_actor_win->findChild<QComboBox*>("comboBox_vits_language")->addItems({"ja","zh"});
+    reloadActorSetting();
 
 
 
@@ -170,7 +168,7 @@ MainWindow::MainWindow(QWidget *parent)
     energyTimer = new QTimer(this);
     connect(energyTimer, &QTimer::timeout, this, &MainWindow::updateEnergyDisplay);
     energyTimer->start(100); // 每100毫秒触发一次
-    reloadActorSetting();
+
     qInfo()<<"MainWindows（设置页）加载完成！";
 }
 
@@ -199,16 +197,15 @@ void MainWindow::reloadActorSetting()
 {
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
-    ui->spinBox_actor_tachie_size->setValue(settings_actor->value("/tachie/size").toInt());
-    ui->lineEdit_vits_customUrl->setText(settings_actor->value("/vits/custom_url").toString());
-    ui->lineEdit_vits_id->setText(settings_actor->value("/vits/id").toString());
-    ui->comboBox_vits_model->setCurrentText(settings_actor->value("/vits/vitsmodel").toString());
-    ui->comboBox_vits_API->setCurrentIndex(settings_actor->value("/vits/api").toInt());
-    ui->lineEdit_llm_agent->setText(settings_actor->value("/llm/agent").toString());
-    ui->comboBox_vits_language->setCurrentIndex(ui->comboBox_vits_language->findText(settings_actor->value("/vits/lan").toString()));
-    ui->stackedWidget_vits->setCurrentIndex(settings_actor->value("/vits/api").toInt());
-    ui->lineEdit_speechInput_url_wakeWord->setText(settings_actor->value("/speechInput/wake_word").toString());
-    ui->lineEdit_speechInput_url_endWord->setText(settings_actor->value("/speechInput/end_word").toString());
+    setting_actor_win->findChild<QSpinBox*>("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
+    setting_actor_win->findChild<QLineEdit*>("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
+    setting_actor_win->findChild<QComboBox*>("comboBox_vits_api")->setCurrentIndex(settings_actor->value("/vits/api").toInt());
+    setting_actor_win->findChild<QComboBox*>("comboBox_vits_model")->setCurrentText(settings_actor->value("/vits/vitsmodel").toString());
+    setting_actor_win->findChild<QLineEdit*>("lineEdit_vits_customUrl")->setText(settings_actor->value("/vits/custom_url").toString());
+    setting_actor_win->findChild<QComboBox*>("comboBox_vits_language")->setCurrentText(settings_actor->value("/vits/lan").toString());
+    setting_actor_win->findChild<QLineEdit*>("lineEdit_vits_id")->setText(settings_actor->value("/vits/id").toString());
+    setting_actor_win->findChild<QLineEdit*>("lineEdit_speechInput_wakeWord")->setText(settings_actor->value("/speechInput/wake_word").toString());
+    setting_actor_win->findChild<QLineEdit*>("lineEdit_speechInput_endWord")->setText(settings_actor->value("/speechInput/end_word").toString());
 }
 
 /*检查更新*/
@@ -277,25 +274,18 @@ void MainWindow::on_checkBox_dialog_enable_clicked(bool checked)
     if(checked) dialog_win->show();
     else dialog_win->hide();
 }
-void MainWindow::on_spinBox_actor_tachie_size_valueChanged(int arg1)
+void MainWindow::ChangeSetting_tachieSize(int arg1)
 {
     saveActorSetting("/tachie/size",arg1);
     emit init_to_tachie();
 }
-void MainWindow::on_lineEdit_llm_agent_textChanged(const QString &arg1)
-{
-    saveActorSetting("/llm/agent",arg1);
-}
-void MainWindow::on_lineEdit_vits_id_textChanged(const QString &arg1)
-{
-    saveActorSetting("/vits/id",arg1);
-}
 void MainWindow::ChangeSetting_ActorChoose(const QString &arg1)
 {
     if(already_init) saveSetting("/actor/name",arg1);
+    reloadActorSetting();
     emit init_to_tachie();
 }
-void MainWindow::on_comboBox_vits_model_currentTextChanged(const QString &arg1)
+void MainWindow::ChangeSetting_VitsModel(const QString &arg1)
 {
     if(already_init) saveActorSetting("/vits/vitsmodel",arg1);
 }
@@ -314,19 +304,14 @@ void MainWindow::ChangeSetting_AutoStart(bool checked)
         nsettings->remove(application_name); //从注册表中删除
     }
 }
-void MainWindow::on_comboBox_vits_API_currentIndexChanged(int index)
+void MainWindow::ChangeSetting_VitsAPI(int index)
 {
     if(already_init)
     {
-        ui->stackedWidget_vits->setCurrentIndex(index);
         saveActorSetting("/vits/api",index);
     }
 }
-void MainWindow::on_lineEdit_vits_customUrl_textChanged(const QString &arg1)
-{
-    saveActorSetting("/vits/custom_url",arg1);
-}
-void MainWindow::on_comboBox_vits_language_currentTextChanged(const QString &arg1)
+void MainWindow::ChangeSetting_VitsLanguage(const QString &arg1)
 {
     if(already_init)
     {
@@ -344,14 +329,6 @@ void MainWindow::ChangeSetting_speechInputAPI(int index)
 void MainWindow::ChangSetting_speechInputWake(bool checked)
 {
     emit init_to_dialog();
-}
-void MainWindow::on_lineEdit_speechInput_url_wakeWord_textChanged(const QString &arg1)
-{
-    saveActorSetting("/speechInput/wake_word",arg1);
-}
-void MainWindow::on_lineEdit_speechInput_url_endWord_textChanged(const QString &arg1)
-{
-    saveActorSetting("/speechInput/end_word",arg1);
 }
 /*重置立绘位置*/
 void MainWindow::on_pushButton_reset_clicked()
