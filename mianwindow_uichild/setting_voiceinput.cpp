@@ -32,6 +32,7 @@ void setting_voiceinput::on_lineEdit_url_textChanged(const QString &arg1)
 void setting_voiceinput::on_checkBox_enable_clicked(bool checked)
 {
     settings->setValue("/speechInput/enable",checked);
+    mainWin->init_to_dialog();
 }
 //api修改
 void setting_voiceinput::on_lineEdit_baiduapikey_textChanged(const QString &arg1)

@@ -27,6 +27,8 @@
 #include <windows.h>
 #include <QDesktopServices>
 
+#include <QDialog>
+
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::galgamedialog)
@@ -691,5 +693,11 @@ void galgamedialog::send_to_llm()
         }
         qInfo() << "打开url";
     }
+}
+
+
+void galgamedialog::on_pushButton_log_clicked(bool checked)
+{
+
 }
 

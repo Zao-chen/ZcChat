@@ -27,6 +27,8 @@ private slots:
     void on_pushButton_input_pressed(); //语音输入
     void on_pushButton_input_released(); //语音输入
     void init_from_main();
+    void on_pushButton_log_clicked(bool checked);
+
 signals:
     void change_tachie_to_tachie(QString name);
     void energy_to_main(int energy);
