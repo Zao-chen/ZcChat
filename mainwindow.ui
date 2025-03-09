@@ -64,7 +64,7 @@ QLineEdit {
     <number>5</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,5">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,5">
      <property name="spacing">
       <number>5</number>
      </property>
@@ -80,6 +80,9 @@ QLineEdit {
      <property name="bottomMargin">
       <number>5</number>
      </property>
+     <item>
+      <widget class="ElaNavigationBar" name="widget_Nai" native="true"/>
+     </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_3" stretch="4">
        <property name="rightMargin">
@@ -143,7 +146,7 @@ border:none;
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>4</number>
          </property>
          <widget class="QWidget" name="page_0">
           <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0">
@@ -169,7 +172,7 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1033</width>
+                <width>1029</width>
                 <height>654</height>
                </rect>
               </property>
@@ -513,8 +516,8 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1033</width>
-                <height>663</height>
+                <width>1029</width>
+                <height>654</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_20" stretch="0,0,0,0,0,1">
@@ -720,7 +723,7 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1033</width>
+                <width>1029</width>
                 <height>654</height>
                </rect>
               </property>
@@ -875,7 +878,7 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1033</width>
+                <width>1029</width>
                 <height>654</height>
                </rect>
               </property>
@@ -1372,7 +1375,7 @@ border:none;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1033</width>
+                <width>1029</width>
                 <height>654</height>
                </rect>
               </property>
@@ -1936,6 +1939,12 @@ border:none;
    <class>ElaScrollArea</class>
    <extends>QScrollArea</extends>
    <header>elascrollarea.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ElaNavigationBar</class>
+   <extends>QWidget</extends>
+   <header location="global">elanavigationbar.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

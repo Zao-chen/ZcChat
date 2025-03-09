@@ -3,7 +3,12 @@
 
 #include "galgamedialog.h"
 #include "tachie.h"
-#include "ElaWidget.h"
+#include "mianwindow_uichild/setting_general.h"
+#include "mianwindow_uichild/setting_ai.h"
+#include "mianwindow_uichild/setting_vits.h"
+#include "mianwindow_uichild/setting_voiceinput.h"
+#include "mianwindow_uichild/setting_actor.h"
+#include "ElaWindow.h"
 #include <QSystemTrayIcon>
 #include <QTimer>
 
@@ -13,7 +18,7 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-class MainWindow : public ElaWidget
+class MainWindow : public ElaWindow
 {
     Q_OBJECT
 signals:
@@ -21,6 +26,15 @@ signals:
 public:
     MainWindow(QWidget *parent = nullptr);
     void playAudioFromUrl(const QUrl &url);
+    /*菜单*/
+    setting_general *setting_general_win;
+    setting_ai *setting_ai_win;
+    setting_vits *setting_vits_win;
+    setting_voiceinput *setting_voiceinput_win;
+    setting_actor *setting_actor_win;
+
+
+
     galgamedialog *dialog_win;
     tachie *tachie_win;
     ~MainWindow();
@@ -95,5 +109,6 @@ private:
     QTimer *energyTimer; // 定时器
     int currentEnergy;   // 当前能量值
     void updateEnergyDisplay();
+
 };
 #endif // MAINWINDOW_H

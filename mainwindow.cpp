@@ -16,11 +16,14 @@
 QString local_version = "v3.2.2";
 
 MainWindow::MainWindow(QWidget *parent)
-    : ElaWidget(parent)
+    : ElaWindow(parent)
     , ui(new Ui::MainWindow)
 {
     qInfo()<<"MainWindows（设置页）初始化……";
     ui->setupUi(this);
+
+
+
     setWindowIcon(QIcon(":/img/img/logo.png"));
     /*一些初始项*/
     //立绘列表初始化
@@ -116,6 +119,21 @@ MainWindow::MainWindow(QWidget *parent)
     tachie_win = new tachie;
     tachie_win->show();
     tachie_win->move(settings->value("/tachie/location_x").toInt(),settings->value("/tachie/location_y").toInt());
+
+    setting_general_win = new setting_general;
+    addPageNode("通用设置",setting_general_win,ElaIconType::House);
+    setting_ai_win = new setting_ai;
+    addPageNode("AI模型设置",setting_ai_win,ElaIconType::UserRobot);
+    setting_vits_win = new setting_vits;
+    addPageNode("语音合成设置",setting_vits_win,ElaIconType::Speaker);
+    setting_voiceinput_win = new setting_voiceinput;
+    addPageNode("语音输入设置",setting_voiceinput_win,ElaIconType::CircleMicrophone);
+    setting_actor_win = new setting_actor;
+    addPageNode("角色配置",setting_actor_win,ElaIconType::GingerbreadMan);
+
+    qDebug()<<"添加成功";
+
+
     /*信号槽连接*/
     connect(tachie_win, SIGNAL(show_dialogwin_to_main()), this, SLOT(show_dialogwin_from_tachie()));
     connect(tachie_win, SIGNAL(changeLocation_to_main(int,int)), this, SLOT(changeTachieLocation_from_tachie(int,int)));
