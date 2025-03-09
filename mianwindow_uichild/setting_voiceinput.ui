@@ -14,6 +14,18 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>20</number>
+   </property>
+   <property name="topMargin">
+    <number>20</number>
+   </property>
+   <property name="rightMargin">
+    <number>20</number>
+   </property>
+   <property name="bottomMargin">
+    <number>20</number>
+   </property>
    <item>
     <widget class="ElaText" name="label">
      <property name="font">
@@ -418,6 +430,11 @@
    </item>
    <item>
     <widget class="ElaText" name="label_31">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>当声音能量超过这个值，会认定为有人说话并开始录音知道能量小于这个值，即值越小越灵敏。</string>
      </property>
@@ -459,6 +476,11 @@
    </item>
    <item>
     <widget class="ElaText" name="label_33">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>小于这个数值的录音文件会被判定为噪音，不会进行语音识别</string>
      </property>
@@ -472,7 +494,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>5</height>
+       <height>1</height>
       </size>
      </property>
     </spacer>

@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     qInfo()<<"MainWindows（设置页）初始化……";
     ui->setupUi(this);
 
-
+    setUserInfoCardVisible(false);
 
     setWindowIcon(QIcon(":/img/img/logo.png"));
     /*一些初始项*/
