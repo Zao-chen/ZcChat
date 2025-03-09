@@ -4,15 +4,12 @@
 #include <QDir>
 #include <QSettings>
 
-QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
-
 setting_general::setting_general(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::setting_general)
 {
     ui->setupUi(this);
     mainWin = qobject_cast<MainWindow *>(this->parent());
-
 }
 
 setting_general::~setting_general()

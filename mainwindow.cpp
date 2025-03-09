@@ -27,13 +27,13 @@ MainWindow::MainWindow(QWidget *parent)
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     setting_general_win = new setting_general(this);
     addPageNode("通用设置",setting_general_win,ElaIconType::House);
-    setting_ai_win = new setting_ai;
+    setting_ai_win = new setting_ai(this);
     addPageNode("AI模型设置",setting_ai_win,ElaIconType::UserRobot);
-    setting_vits_win = new setting_vits;
+    setting_vits_win = new setting_vits(this);
     addPageNode("语音合成设置",setting_vits_win,ElaIconType::Speaker);
-    setting_voiceinput_win = new setting_voiceinput;
+    setting_voiceinput_win = new setting_voiceinput(this);
     addPageNode("语音输入设置",setting_voiceinput_win,ElaIconType::CircleMicrophone);
-    setting_actor_win = new setting_actor;
+    setting_actor_win = new setting_actor(this);
     addPageNode("角色配置",setting_actor_win,ElaIconType::GingerbreadMan);
 
     /*
@@ -55,6 +55,13 @@ MainWindow::MainWindow(QWidget *parent)
     setting_general_win->findChild<QCheckBox*>("checkBox_autoopen")->setChecked(settings->value("/soft/auto_open").toBool());
     //窗口配置
     setting_general_win->findChild<QSpinBox*>("spinBox_dialogtime")->setValue(settings->value("/dialog/time").toInt());
+    /*AI模型设置*/
+    setting_ai_win->findChild<QLineEdit*>("lineEdit_url")->setText(settings->value("/llm/url").toString());
+    setting_ai_win->findChild<QCheckBox*>("checkBox_feedback")->setChecked(settings->value("/llm/feedback").toBool());
+
+
+
+
     //一些combobox初始化
     ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
     ui->comboBox_vits_API->addItems({"vits-simple-api","自定义"});
@@ -63,11 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
-    //对话框配置项
 
-    //llm配置项
-    ui->lineEdit_llm_url->setText(settings->value("/llm/url").toString());
-    ui->checkBox_llm_errorfeedback->setChecked(settings->value("/llm/feedback").toBool());
     //语音配置项
     ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
     ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
@@ -277,7 +280,7 @@ void MainWindow::on_spinBox_actor_tachie_size_valueChanged(int arg1)
     saveActorSetting("/tachie/size",arg1);
     emit init_to_tachie();
 }
-void MainWindow::on_lineEdit_llm_url_textChanged(const QString &arg1)
+void MainWindow::ChangeSetting_LLMUrl(const QString &arg1)
 {
     saveSetting("/llm/url",arg1);
 }
@@ -310,7 +313,7 @@ void MainWindow::ChangeSetting_ActorChoose(const QString &arg1)
     if(already_init) saveSetting("/actor/name",arg1);
     emit init_to_tachie();
 }
-void MainWindow::on_checkBox_llm_errorfeedback_clicked(bool checked)
+void MainWindow::ChangeSetting_LLMFeedback(bool checked)
 {
     saveSetting("/llm/feedback",checked);
 }

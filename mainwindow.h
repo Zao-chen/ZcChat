@@ -42,6 +42,10 @@ public:
     void ChangeSetting_AutoStart(bool checked);
     void ChangeSetting_AutoOpen(bool checked);
     void ChangeSetting_DialogTime(int arg1);
+    //AI模型设置
+    void ChangeSetting_LLMUrl(const QString &arg1);
+    void ChangeSetting_LLMFeedback(bool checked);
+
     ~MainWindow();
 
 private slots:
@@ -51,13 +55,12 @@ private slots:
     void on_checkBox_dialog_enable_clicked(bool checked);
     void on_treeView_up_clicked(const QModelIndex &index);
     void on_spinBox_actor_tachie_size_valueChanged(int arg1);
-    void on_lineEdit_llm_url_textChanged(const QString &arg1);
     void on_lineEdit_llm_agent_textChanged(const QString &arg1);
     void on_checkBox_vits_enable_clicked(bool checked);
     void on_lineEdit_vits_url_textChanged(const QString &arg1);
     void on_lineEdit_vits_id_textChanged(const QString &arg1);
 
-    void on_checkBox_llm_errorfeedback_clicked(bool checked);
+
     void on_comboBox_vits_model_currentTextChanged(const QString &arg1);
     void on_comboBox_vits_API_currentIndexChanged(int index);
     void on_lineEdit_vits_customUrl_textChanged(const QString &arg1);
