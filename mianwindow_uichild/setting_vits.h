@@ -15,6 +15,12 @@ public:
     explicit setting_vits(QWidget *parent = nullptr);
     ~setting_vits();
 
+private slots:
+    void on_checkBox_enable_clicked(bool checked);
+
+
+    void on_lineEdit_url_textChanged(const QString &arg1);
+
 private:
     Ui::setting_vits *ui;
 };

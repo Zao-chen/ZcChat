@@ -53,8 +53,6 @@ private slots:
     void on_treeView_up_clicked(const QModelIndex &index);
     void on_spinBox_actor_tachie_size_valueChanged(int arg1);
     void on_lineEdit_llm_agent_textChanged(const QString &arg1);
-    void on_checkBox_vits_enable_clicked(bool checked);
-    void on_lineEdit_vits_url_textChanged(const QString &arg1);
     void on_lineEdit_vits_id_textChanged(const QString &arg1);
 
 

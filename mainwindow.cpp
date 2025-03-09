@@ -73,9 +73,11 @@ MainWindow::MainWindow(QWidget *parent)
     setting_voiceinput_win->findChild<QCheckBox*>("checkBox_interrupt")->setChecked(settings->value("/speechInput/interrupt").toBool());
     setting_voiceinput_win->findChild<QSpinBox*>("spinBox_energy")->setValue(settings->value("/speechInput/energy").toInt());
     setting_voiceinput_win->findChild<QSpinBox*>("spinBox_size")->setValue(settings->value("/speechInput/size").toInt());
+    /*语音合成配置*/
+    setting_vits_win->findChild<QCheckBox*>("checkBox_enable")->setChecked(settings->value("/vits/enable").toBool());
+    setting_vits_win->findChild<QLineEdit*>("lineEdit_url")->setText(settings->value("/vits/url").toString());
 
 
-    //一些combobox初始化
     ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
     ui->comboBox_vits_API->addItems({"vits-simple-api","自定义"});
     ui->comboBox_vits_language->addItems({"ja","zh"});
@@ -83,9 +85,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
-    //语音配置项
-    ui->checkBox_vits_enable->setChecked(settings->value("/vits/enable").toBool());
-    ui->lineEdit_vits_url->setText(settings->value("/vits/url").toString());
+
 
     /*托盘*/
     //初始化托盘
@@ -285,14 +285,6 @@ void MainWindow::on_spinBox_actor_tachie_size_valueChanged(int arg1)
 void MainWindow::on_lineEdit_llm_agent_textChanged(const QString &arg1)
 {
     saveActorSetting("/llm/agent",arg1);
-}
-void MainWindow::on_checkBox_vits_enable_clicked(bool checked)
-{
-    saveSetting("/vits/enable",checked);
-}
-void MainWindow::on_lineEdit_vits_url_textChanged(const QString &arg1)
-{
-    saveSetting("/vits/url",arg1);
 }
 void MainWindow::on_lineEdit_vits_id_textChanged(const QString &arg1)
 {

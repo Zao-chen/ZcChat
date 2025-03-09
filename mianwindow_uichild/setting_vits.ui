@@ -61,7 +61,7 @@
        </widget>
       </item>
       <item>
-       <widget class="ElaCheckBox" name="checkBox_vits_enable">
+       <widget class="ElaCheckBox" name="checkBox_enable">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -113,7 +113,7 @@
        </widget>
       </item>
       <item>
-       <widget class="ElaLineEdit" name="lineEdit_vits_url">
+       <widget class="ElaLineEdit" name="lineEdit_url">
         <property name="minimumSize">
          <size>
           <width>0</width>
