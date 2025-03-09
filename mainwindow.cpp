@@ -19,6 +19,8 @@
 #include <QComboBox>
 #include <QStackedWidget>
 #include <QLabel>
+#include <QGraphicsOpacityEffect>
+#include <qpropertyanimation>
 
 QString local_version = "v4.0.0";
 
@@ -176,13 +178,35 @@ void MainWindow::show_dialogwin_from_tachie()
     qInfo()<<"【接收】立绘 --- 打开对话框 ---> 主窗口";
     if(isDialogOpen)
     {
-        dialog_win->hide();
+        // 设置窗口透明度效果
+        QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(dialog_win);
+        dialog_win->setGraphicsEffect(opacityEffect);
+        // 创建淡出动画
+        QPropertyAnimation *animation = new QPropertyAnimation(opacityEffect, "opacity");
+        animation->setDuration(150);         // 动画持续时间（毫秒）
+        animation->setStartValue(1.0);        // 开始时完全不透明
+        animation->setEndValue(0.0);          // 结束时完全透明
+        // 动画结束后关闭窗口
+        connect(animation, &QPropertyAnimation::finished, dialog_win, &QWidget::close);
+        // 启动动画
+        animation->start();
         isDialogOpen = false;
+
     }
     else
     {
         dialog_win->show();
+        // 设置窗口透明度效果
+        QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(dialog_win);
+        dialog_win->setGraphicsEffect(opacityEffect); // 确保设置到目标窗口
+        // 创建动画，设置属性为 opacity
+        QPropertyAnimation *animation = new QPropertyAnimation(opacityEffect, "opacity");
+        animation->setDuration(150);         // 动画持续时间（毫秒）
+        animation->setStartValue(0.0);        // 起始透明度（0.0 表示完全透明）
+        animation->setEndValue(1.0);          // 结束透明度（1.0 表示完全不透明）
+        animation->start();
         isDialogOpen = true;
+
     }
 }
 /*重载角色配置*/
