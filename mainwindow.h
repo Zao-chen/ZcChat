@@ -34,14 +34,18 @@ public:
     setting_actor *setting_actor_win;
 
 
-
     galgamedialog *dialog_win;
     tachie *tachie_win;
+
+    //通用设置
+    void ChangeSetting_ActorChoose(const QString &arg1);
+    void ChangeSetting_AutoStart(bool checked);
+    void ChangeSetting_AutoOpen(bool checked);
+    void ChangeSetting_DialogTime(int arg1);
     ~MainWindow();
 
 private slots:
     //配置项修改
-    void on_checkBox_tachie_enable_clicked(bool checked);
     void show_dialogwin_from_tachie();
     void changeTachieLocation_from_tachie(int x,int y);
     void on_checkBox_dialog_enable_clicked(bool checked);
@@ -52,11 +56,9 @@ private slots:
     void on_checkBox_vits_enable_clicked(bool checked);
     void on_lineEdit_vits_url_textChanged(const QString &arg1);
     void on_lineEdit_vits_id_textChanged(const QString &arg1);
-    void on_spinBox_dialog_valueChanged(int arg1);
-    void on_comboBox_actor_choose_currentTextChanged(const QString &arg1);
+
     void on_checkBox_llm_errorfeedback_clicked(bool checked);
     void on_comboBox_vits_model_currentTextChanged(const QString &arg1);
-    void on_checkBox_soft_autostart_clicked(bool checked);
     void on_comboBox_vits_API_currentIndexChanged(int index);
     void on_lineEdit_vits_customUrl_textChanged(const QString &arg1);
     void on_checkBox_speechInput_enable_clicked(bool checked);
@@ -72,7 +74,6 @@ private slots:
     void on_spinBox_size_valueChanged(int arg1);
     void getEnergy_from_gal(int energy);
     void on_checkBox_speechInput_interrupt_clicked(bool checked);
-    void on_checkBox_soft_autoOpen_clicked(bool checked);
     //托盘slot
     void on_showMainAction();
     void on_exitAppAction();
@@ -109,6 +110,7 @@ private:
     QTimer *energyTimer; // 定时器
     int currentEnergy;   // 当前能量值
     void updateEnergyDisplay();
+    bool isDialogOpen = false; //用于切换对话框显示和隐藏
 
 };
 #endif // MAINWINDOW_H

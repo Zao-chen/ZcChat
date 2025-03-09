@@ -19,32 +19,52 @@ MainWindow::MainWindow(QWidget *parent)
     : ElaWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    /*窗口初始化*/
     qInfo()<<"MainWindows（设置页）初始化……";
     ui->setupUi(this);
-
     setUserInfoCardVisible(false);
-
     setWindowIcon(QIcon(":/img/img/logo.png"));
-    /*一些初始项*/
-    //立绘列表初始化
+    QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
+    setting_general_win = new setting_general(this);
+    addPageNode("通用设置",setting_general_win,ElaIconType::House);
+    setting_ai_win = new setting_ai;
+    addPageNode("AI模型设置",setting_ai_win,ElaIconType::UserRobot);
+    setting_vits_win = new setting_vits;
+    addPageNode("语音合成设置",setting_vits_win,ElaIconType::Speaker);
+    setting_voiceinput_win = new setting_voiceinput;
+    addPageNode("语音输入设置",setting_voiceinput_win,ElaIconType::CircleMicrophone);
+    setting_actor_win = new setting_actor;
+    addPageNode("角色配置",setting_actor_win,ElaIconType::GingerbreadMan);
+
+    /*
+     * 读取配置
+    */
+    qInfo()<<"读取配置……";
+    /*通用设置*/
+    //角色选择配置
     QDir dir(qApp->applicationDirPath()+"/characters");
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     QStringList folderList = dir.entryList();
     ui->comboBox_actor_choose->addItems(folderList);
+    setting_general_win->findChild<QComboBox*>()->addItems(folderList);
+    qInfo()<<"读取到角色列表："<<folderList;
+    setting_general_win->findChild<QComboBox*>()->setCurrentIndex(folderList.indexOf(settings->value("/actor/name").toString()));
+    //软件配置项
+    qInfo()<<"读取软件设置……";
+    setting_general_win->findChild<QCheckBox*>("checkBox_autostart")->setChecked(settings->value("/soft/auto_start").toBool());
+    setting_general_win->findChild<QCheckBox*>("checkBox_autoopen")->setChecked(settings->value("/soft/auto_open").toBool());
+    //窗口配置
+    setting_general_win->findChild<QSpinBox*>("spinBox_dialogtime")->setValue(settings->value("/dialog/time").toInt());
     //一些combobox初始化
     ui->comboBox_vits_model->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
     ui->comboBox_vits_API->addItems({"vits-simple-api","自定义"});
     ui->comboBox_vits_language->addItems({"ja","zh"});
     ui->comboBox_speechInput_API->addItems({"whisper-asr-webservice","百度语音识别"});
-    /*配置项读取*/
-    QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
-    //软件配置项
-    ui->checkBox_soft_autostart->setChecked(settings->value("/soft/auto_start").toBool());
-    ui->checkBox_soft_autoOpen->setChecked(settings->value("/soft/auto_open").toBool());
-    //立绘配置项
-    ui->comboBox_actor_choose->setCurrentIndex(folderList.indexOf(settings->value("/actor/name").toString()));
+
+
+
     //对话框配置项
-    ui->spinBox_dialog->setValue(settings->value("/dialog/time").toInt());
+
     //llm配置项
     ui->lineEdit_llm_url->setText(settings->value("/llm/url").toString());
     ui->checkBox_llm_errorfeedback->setChecked(settings->value("/llm/feedback").toBool());
@@ -120,18 +140,6 @@ MainWindow::MainWindow(QWidget *parent)
     tachie_win->show();
     tachie_win->move(settings->value("/tachie/location_x").toInt(),settings->value("/tachie/location_y").toInt());
 
-    setting_general_win = new setting_general;
-    addPageNode("通用设置",setting_general_win,ElaIconType::House);
-    setting_ai_win = new setting_ai;
-    addPageNode("AI模型设置",setting_ai_win,ElaIconType::UserRobot);
-    setting_vits_win = new setting_vits;
-    addPageNode("语音合成设置",setting_vits_win,ElaIconType::Speaker);
-    setting_voiceinput_win = new setting_voiceinput;
-    addPageNode("语音输入设置",setting_voiceinput_win,ElaIconType::CircleMicrophone);
-    setting_actor_win = new setting_actor;
-    addPageNode("角色配置",setting_actor_win,ElaIconType::GingerbreadMan);
-
-    qDebug()<<"添加成功";
 
 
     /*信号槽连接*/
@@ -144,7 +152,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, SIGNAL(resetlocation_to_tachie()), tachie_win, SLOT(resetlocation_from_main()));
     /*自启动*/
     //运行自启动脚本
-    if(ui->checkBox_soft_autoOpen->isChecked())
+    if(settings->value("/soft/auto_open").toBool())
     {
         qInfo()<<"运行autoOpen.cmd…";
         QDesktopServices::openUrl(QUrl::fromLocalFile("autoOpen.cmd"));
@@ -170,15 +178,15 @@ MainWindow::~MainWindow()
 void MainWindow::show_dialogwin_from_tachie()
 {
     qInfo()<<"【接收】立绘 --- 打开对话框 ---> 主窗口";
-    if(ui->checkBox_dialog_enable->isChecked())
+    if(isDialogOpen)
     {
         dialog_win->hide();
-        ui->checkBox_dialog_enable->setChecked(false);
+        isDialogOpen = false;
     }
     else
     {
         dialog_win->show();
-        ui->checkBox_dialog_enable->setChecked(true);
+        isDialogOpen = true;
     }
 }
 /*重载角色配置*/
@@ -264,11 +272,6 @@ void MainWindow::on_checkBox_dialog_enable_clicked(bool checked)
     if(checked) dialog_win->show();
     else dialog_win->hide();
 }
-void MainWindow::on_checkBox_tachie_enable_clicked(bool checked)
-{
-    if(checked) tachie_win->show();
-    else tachie_win->hide();
-}
 void MainWindow::on_spinBox_actor_tachie_size_valueChanged(int arg1)
 {
     saveActorSetting("/tachie/size",arg1);
@@ -294,15 +297,15 @@ void MainWindow::on_lineEdit_vits_id_textChanged(const QString &arg1)
 {
     saveActorSetting("/vits/id",arg1);
 }
-void MainWindow::on_checkBox_soft_autoOpen_clicked(bool checked)
+void MainWindow::ChangeSetting_AutoOpen(bool checked)
 {
     saveSetting("/soft/auto_open",checked);
 }
-void MainWindow::on_spinBox_dialog_valueChanged(int arg1)
+void MainWindow::ChangeSetting_DialogTime(int arg1)
 {
     saveSetting("/dialog/time",arg1);
 }
-void MainWindow::on_comboBox_actor_choose_currentTextChanged(const QString &arg1)
+void MainWindow::ChangeSetting_ActorChoose(const QString &arg1)
 {
     if(already_init) saveSetting("/actor/name",arg1);
     emit init_to_tachie();
@@ -315,7 +318,7 @@ void MainWindow::on_comboBox_vits_model_currentTextChanged(const QString &arg1)
 {
     if(already_init) saveActorSetting("/vits/vitsmodel",arg1);
 }
-void MainWindow::on_checkBox_soft_autostart_clicked(bool checked)
+void MainWindow::ChangeSetting_AutoStart(bool checked)
 {
     saveSetting("/soft/auto_start",checked);
     QString application_name = QApplication::applicationName(); //获取应用名称
