@@ -30,10 +30,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowIcon(QIcon(":/img/img/logo.png"));
 
-    setUserInfoCardPixmap(QPixmap(":/img/img/logo.png"));
     setUserInfoCardTitle("ZcChat "+local_version);
     setUserInfoCardSubTitle("检测新版本中……");
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
+    setUserInfoCardPixmap(QPixmap(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png"));
+
     setting_general_win = new setting_general(this);
     addPageNode("通用设置",setting_general_win,ElaIconType::House);
     setting_ai_win = new setting_ai(this);
@@ -186,6 +187,22 @@ void MainWindow::reloadActorSetting()
 {
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
+    QString imagePath = qApp->applicationDirPath() + "/characters/" +
+                        settings->value("actor/name").toString() + "/正常.png";
+    QPixmap originalPixmap(imagePath);
+    if (originalPixmap.isNull()) {
+        qWarning("无法加载图片: %s", qPrintable(imagePath));
+    } else {
+        int x = (originalPixmap.width() - 128) / 2;
+        int y;
+        x = qMax(0, x);
+        y = 0;
+        QPixmap croppedPixmap = originalPixmap.copy(x, y, 128, 128);
+        setUserInfoCardPixmap(croppedPixmap);
+        setUserInfoCardPixmap(croppedPixmap);
+        setUserInfoCardPixmap(croppedPixmap);
+        qDebug()<<"设置图片"<<qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png";
+    }
     setting_actor_win->findChild<QSpinBox*>("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
     setting_actor_win->findChild<QLineEdit*>("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
     setting_actor_win->findChild<QComboBox*>("comboBox_vits_api")->setCurrentIndex(settings_actor->value("/vits/api").toInt());
