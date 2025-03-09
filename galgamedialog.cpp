@@ -1,5 +1,6 @@
 #include "galgamedialog.h"
 #include "ui_galgamedialog.h"
+#include "galgamedialog_uichild/history.h"
 
 #include <QMouseEvent>
 #include <QJsonDocument>
@@ -46,6 +47,8 @@ galgamedialog::galgamedialog(QWidget *parent)
     /*逐字显示*/
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
+    //子窗口
+    history_win = new history(this);
 }
 galgamedialog::~galgamedialog()
 {
@@ -504,6 +507,7 @@ void galgamedialog::init_from_main()
 }
 void galgamedialog::send_to_llm()
 {
+    history_win->addChildWindow("你",ui->textEdit->toPlainText());
     //对话框设置
     ui->label_name->setText(settings->value("/actor/name").toString());
     ui->textEdit->setEnabled(false);
@@ -598,6 +602,7 @@ void galgamedialog::send_to_llm()
                     player->setPosition(0);
                     player->play(); //播放音频
                     changetext(message.split("|")[1]); //逐字显示
+                    history_win->addChildWindow(settings->value("/actor/name").toString(),message.split("|")[1]);
                     ui->pushButton->show();
                     emit change_tachie_to_tachie(message.split("|")[0]);
                 }
@@ -612,6 +617,7 @@ void galgamedialog::send_to_llm()
     else
     {
         changetext(message.split("|")[1]); //逐字显示
+        history_win->addChildWindow(settings->value("/actor/name").toString(),message.split("|")[1]);
         ui->pushButton->show();
         emit change_tachie_to_tachie(message.split("|")[0]);
     }
@@ -696,8 +702,27 @@ void galgamedialog::send_to_llm()
 }
 
 
-void galgamedialog::on_pushButton_log_clicked(bool checked)
+void galgamedialog::on_pushButton_history_clicked()
 {
+    history_win->move(this->x(), this->y() -450);  // 确保子窗口出现在父窗口旁边
+    if (!isHistoryOpen)
+    {
+        history_win->show();
+        isHistoryOpen = true;
+        qInfo() << "打开日志窗口……";
+    }
+    else
+    {
+        history_win->hide();
+        isHistoryOpen = false;
+        qInfo() << "关闭日志窗口……";
+    }
+}
+void galgamedialog::moveEvent(QMoveEvent *event) {
+    if (history_win && history_win->isVisible()) {
+        QPoint offset = event->pos() - lastPos;  // 计算偏移量
+        history_win->move(history_win->pos() + offset);
+    }
+    lastPos = event->pos();  // 更新主窗口位置
 
 }
-

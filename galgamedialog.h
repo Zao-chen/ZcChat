@@ -10,6 +10,8 @@
 #include <QAudioSource>
 #include <QSettings>
 
+class history; // 前向声明子窗口类
+
 namespace Ui {
 class galgamedialog;
 }
@@ -20,6 +22,7 @@ class galgamedialog : public QWidget
 
 public:
     explicit galgamedialog(QWidget *parent = nullptr);
+
     ~galgamedialog();
 private slots:
     void on_pushButton_clicked(); //下一步
@@ -27,13 +30,14 @@ private slots:
     void on_pushButton_input_pressed(); //语音输入
     void on_pushButton_input_released(); //语音输入
     void init_from_main();
-    void on_pushButton_log_clicked(bool checked);
+    void on_pushButton_history_clicked();
 
 signals:
     void change_tachie_to_tachie(QString name);
     void energy_to_main(int energy);
 
-
+protected:
+    void moveEvent(QMoveEvent *event) override;  // 捕获窗口移动事件
 private:
     Ui::galgamedialog *ui;
     //鼠标按下移动及释放事件
@@ -71,6 +75,10 @@ private:
     QMediaPlayer *player = new QMediaPlayer; //创建 QMediaPlayer 对象
     QSettings *settings; // 声明 settings 为成员变量
     bool is_in_llm = false;
+
+    history *history_win; // 子窗口指针
+    QPoint lastPos;       // 记录主窗口上次位置
+    bool isHistoryOpen = false; //用于切换对话框显示和隐藏
 };
 
 #endif // GALGAMEDIALOG_H

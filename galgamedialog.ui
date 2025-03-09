@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>624</width>
-    <height>207</height>
+    <width>650</width>
+    <height>200</height>
    </rect>
   </property>
   <property name="font">
@@ -155,7 +155,7 @@ QPushButton:pressed {
     <string>直接对话</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_input_2">
+  <widget class="QPushButton" name="pushButton_history">
    <property name="geometry">
     <rect>
      <x>560</x>
