@@ -18,6 +18,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QStackedWidget>
+#include <QLabel>
 
 QString local_version = "v4.0.0";
 
@@ -29,9 +30,11 @@ MainWindow::MainWindow(QWidget *parent)
     qInfo()<<"MainWindows（设置页）初始化……";
     ui->setupUi(this);
     setWindowIcon(QIcon(":/img/img/logo.png"));
-
     setUserInfoCardTitle("ZcChat "+local_version);
     setUserInfoCardSubTitle("检测新版本中……");
+
+    window()->resize(1280,720);
+
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     setUserInfoCardPixmap(QPixmap(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png"));
 
@@ -203,6 +206,7 @@ void MainWindow::reloadActorSetting()
         setUserInfoCardPixmap(croppedPixmap);
         qDebug()<<"设置图片"<<qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png";
     }
+    setting_actor_win->findChild<QLabel*>("label_editActor")->setText("当前配置角色："+settings->value("actor/name").toString());
     setting_actor_win->findChild<QSpinBox*>("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
     setting_actor_win->findChild<QLineEdit*>("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
     setting_actor_win->findChild<QComboBox*>("comboBox_vits_api")->setCurrentIndex(settings_actor->value("/vits/api").toInt());
