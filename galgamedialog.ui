@@ -20,28 +20,8 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">
-*{
-	 background-color: #F0F3F4
-}
-QLineEdit {
-    border: 2px solid #F0F3F4;
-    border-radius: 3px;
-    background-color: #F0F3F4;
-    padding: 2px;
-}
-
-QPushButton {
-    background-color:rgba(0,0,0,0);
-    border: none;
-    border-radius: 6px;
-    padding: 6px 2px;
-}
-QPushButton:hover {
-    background-color:rgba(0,0,0,0);
-}
-QPushButton:pressed {
-    background-color:rgba(0,0,0,0);
+   <string notr="true">* {
+    background: transparent;
 }
 </string>
   </property>
@@ -49,7 +29,7 @@ QPushButton:pressed {
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>10</y>
+     <y>15</y>
      <width>291</width>
      <height>20</height>
     </rect>
@@ -68,9 +48,9 @@ QPushButton:pressed {
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>40</y>
+     <y>39</y>
      <width>600</width>
-     <height>120</height>
+     <height>121</height>
     </rect>
    </property>
    <property name="font">
@@ -95,7 +75,7 @@ QPushButton:pressed {
      <x>20</x>
      <y>40</y>
      <width>601</width>
-     <height>141</height>
+     <height>121</height>
     </rect>
    </property>
    <property name="font">
@@ -118,25 +98,13 @@ QPushButton:pressed {
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>175</y>
+     <y>170</y>
      <width>71</width>
      <height>21</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QPushButton {
-    background-color:#F0F3F4 ;
-	font: 9pt ;
-    border: none;
-    border-radius: 6px;
-    padding: 0px 4px;
-}
-QPushButton:hover {
-    background-color: #FFFFFF ;
-}
-QPushButton:pressed {
-    background-color: 	#ECF0F1;
-}</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string>长按输入</string>
@@ -146,7 +114,7 @@ QPushButton:pressed {
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>177</y>
+     <y>170</y>
      <width>80</width>
      <height>19</height>
     </rect>
@@ -165,22 +133,10 @@ QPushButton:pressed {
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QPushButton {
-    background-color:#F0F3F4 ;
-	font: 9pt ;
-    border: none;
-    border-radius: 6px;
-    padding: 0px 4px;
-}
-QPushButton:hover {
-    background-color: #FFFFFF ;
-}
-QPushButton:pressed {
-    background-color: 	#ECF0F1;
-}</string>
+    <string notr="true"/>
    </property>
    <property name="text">
-    <string>日至</string>
+    <string>历史</string>
    </property>
   </widget>
  </widget>

@@ -31,6 +31,8 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 
+#include <QPainterPath>
+
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::galgamedialog)
@@ -40,7 +42,7 @@ galgamedialog::galgamedialog(QWidget *parent)
     ui->setupUi(this);
     /*无边框设置*/
     setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
-    setWindowOpacity(0.9);
+    setWindowOpacity(0.95);
     setAttribute(Qt::WA_TranslucentBackground);
     /*内容初始化*/
     ui->pushButton->hide();
@@ -348,12 +350,26 @@ void galgamedialog::on_pushButton_clicked()
 /*圆角边框*/
 void galgamedialog::paintEvent(QPaintEvent *event)
 {
-    QPainter painter(this); //创建一个QPainter对象并指定绘制设备为this，即当前窗口
-    painter.setRenderHint(QPainter::Antialiasing); //设置绘制选项为反锯齿，使绘制的图形边缘更加平滑
-    painter.setBrush(QBrush(QColor(240,243,244))); //设置画刷颜色,这里为白色
-    painter.setPen(Qt::transparent); //设置画笔颜色为透明，即不绘制边框线
-    QRect rect = this->rect(); //获取当前窗口的矩形区域
-    painter.drawRoundedRect(rect, 15, 15); //绘制一个带有圆角的矩形窗口，圆角半径为15px，如果把窗口设置成正方形，圆角半径设大，就会变成一个圆了
+    QPainterPath path;
+    path.setFillRule(Qt::WindingFill);
+    QRectF rect(5, 5, this->width() - 10, this->height() - 10);
+    path.addRoundedRect(rect, 15, 15);
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.fillPath(path, QBrush(Qt::white));
+    QColor color(0, 0, 0, 50);
+    for (int i = 0; i < 5; i++)
+    {
+        QPainterPath shadowPath;
+        shadowPath.setFillRule(Qt::WindingFill);
+        // 使用圆角矩形而不是普通矩形绘制阴影
+        QRectF shadowRect((5 - i), (5 - i) , this->width() - (5 - i) * 2, this->height() - (5 - i) * 2);
+        shadowPath.addRoundedRect(shadowRect, 15, 15);  // 添加圆角矩形路径
+        // 增加透明度效果，模拟阴影逐渐变淡
+        color.setAlpha(50 - qSqrt(i) * 22);
+        painter.setPen(color);
+        painter.drawPath(shadowPath);  // 绘制阴影路径
+    }
 }
 /*录音相关*/
 void galgamedialog::on_pushButton_input_pressed()
