@@ -21,12 +21,13 @@ QT_END_NAMESPACE
 class MainWindow : public ElaWindow
 {
     Q_OBJECT
+
 signals:
     void resetlocation_to_tachie();
+
 public:
     MainWindow(QWidget *parent = nullptr);
-    void playAudioFromUrl(const QUrl &url);
-    /*菜单*/
+    /*菜单窗口创建*/
     setting_general *setting_general_win;
     setting_ai *setting_ai_win;
     setting_vits *setting_vits_win;
@@ -34,6 +35,7 @@ public:
     setting_actor *setting_actor_win;
     galgamedialog *dialog_win;
     tachie *tachie_win;
+    /*设置时候的一些传递*/
     //通用设置
     void ChangeSetting_ActorChoose(const QString &arg1);
     void ChangeSetting_AutoStart(bool checked);
@@ -48,16 +50,16 @@ public:
     ~MainWindow();
 
 private slots:
-    //配置项修改
-    void show_dialogwin_from_tachie();
-    void changeTachieLocation_from_tachie(int x,int y);
-    void on_checkBox_dialog_enable_clicked(bool checked);
+    /*信号的一些传递*/
+    void show_dialogwin_from_tachie(); //右键立绘显示对话框
+    void changeTachieLocation_from_tachie(int x,int y); //立绘移动后显示
     void getEnergy_from_gal(int energy);
-    //托盘slot
+    /*托盘*/
     void on_showMainAction();
     void on_exitAppAction();
     void on_openGithub();
     void on_restartAppAction();
+    void on_resetTachie();
     void hideWindow();
     //按钮
     void on_pushButton_reset_clicked();
@@ -76,6 +78,7 @@ private:
     QAction *m_exitAppAction; //托盘动作
     QAction *m_restartAppAction; //托盘动作
     QAction *m_openGithub; //托盘动作
+    QAction *m_resetTachie; //托盘动作
     bool already_init=false; //是否已经初始化了
     /*网络相关*/
     QByteArray getUrl(const QString &input); //网络

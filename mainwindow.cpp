@@ -127,10 +127,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_exitAppAction,SIGNAL(triggered()),this,SLOT(on_exitAppAction()));
     m_restartAppAction = new QAction("重启", this);
     connect(m_restartAppAction,SIGNAL(triggered()),this,SLOT(on_restartAppAction()));
+    m_resetTachie = new QAction("重置立绘", this);
+    connect(m_resetTachie,SIGNAL(triggered()),this,SLOT(on_resetTachie()));
     m_menu = new QMenu(this);
     m_menu->addAction(m_showMainAction); //新增菜单项
     m_menu->addAction(m_openGithub); //新增菜单项--打开github
     m_menu->addSeparator(); //增加分隔符
+    m_menu->addAction(m_resetTachie); //新增菜单项---退出程序
     m_menu->addAction(m_restartAppAction); //新增菜单项---重启
     m_menu->addAction(m_exitAppAction); //新增菜单项---退出程序
     m_sysTrayIcon->setContextMenu(m_menu); //把QMenu赋给QSystemTrayIcon对象
@@ -291,11 +294,6 @@ void MainWindow::saveActorSetting(const QString &key, const QVariant &value) {
     settings_actor->setValue(key, value);
 }
 /*配置项修改和保存*/
-void MainWindow::on_checkBox_dialog_enable_clicked(bool checked)
-{
-    if(checked) dialog_win->show();
-    else dialog_win->hide();
-}
 void MainWindow::ChangeSetting_tachieSize(int arg1)
 {
     saveActorSetting("/tachie/size",arg1);
@@ -373,6 +371,10 @@ void MainWindow::on_restartAppAction()
 void MainWindow::on_openGithub()
 {
     QDesktopServices::openUrl(QUrl("https://github.com/Zao-chen/ZcChat"));
+}
+void MainWindow::on_resetTachie()
+{
+    emit resetlocation_to_tachie();
 }
 /*隐藏窗口*/
 void MainWindow::hideWindow()

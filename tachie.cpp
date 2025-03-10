@@ -38,7 +38,7 @@ void tachie::init_from_main()
 /*重置立绘位置*/
 void tachie::resetlocation_from_main()
 {
-    this->move(QCursor::pos());
+    this->move(0,0);
 }
 /*立绘修改*/
 void tachie::changetachie_from_galdialog(QString name)
