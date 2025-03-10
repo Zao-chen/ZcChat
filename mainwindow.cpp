@@ -22,24 +22,22 @@
 #include <QGraphicsOpacityEffect>
 #include <qpropertyanimation>
 
-QString local_version = "v4.0.0";
+QString local_version = "v4.1.0-beta";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWindow(parent)
     , ui(new Ui::MainWindow)
 {
     /*窗口初始化*/
-    qInfo()<<"MainWindows（设置页）初始化……";
+    qInfo()<<"MainWindow初始化……";
     ui->setupUi(this);
     setWindowIcon(QIcon(":/img/img/logo.png"));
     setUserInfoCardTitle("ZcChat "+local_version);
     setUserInfoCardSubTitle("检测新版本中……");
-
     window()->resize(1280,720);
-
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     setUserInfoCardPixmap(QPixmap(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png"));
-
+    /*子页面初始化*/
     setting_general_win = new setting_general(this);
     addPageNode("通用设置",setting_general_win,ElaIconType::House);
     setting_ai_win = new setting_ai(this);
@@ -63,7 +61,6 @@ MainWindow::MainWindow(QWidget *parent)
     qInfo()<<"读取到角色列表："<<folderList;
     setting_general_win->findChild<QComboBox*>()->setCurrentIndex(folderList.indexOf(settings->value("/actor/name").toString()));
     //软件配置项
-    qInfo()<<"读取软件设置……";
     setting_general_win->findChild<QCheckBox*>("checkBox_autostart")->setChecked(settings->value("/soft/auto_start").toBool());
     setting_general_win->findChild<QCheckBox*>("checkBox_autoopen")->setChecked(settings->value("/soft/auto_open").toBool());
     //窗口配置
@@ -72,7 +69,6 @@ MainWindow::MainWindow(QWidget *parent)
     setting_ai_win->findChild<QLineEdit*>("lineEdit_url")->setText(settings->value("/llm/url").toString());
     setting_ai_win->findChild<QCheckBox*>("checkBox_feedback")->setChecked(settings->value("/llm/feedback").toBool());
     /*语音输入设置*/
-    //基础设定
     //基础设置
     setting_voiceinput_win->findChild<QComboBox*>("comboBox_api")->addItems({"whisper-asr-webservice","百度语音识别"});
     setting_voiceinput_win->findChild<QComboBox*>("comboBox_api")->setCurrentIndex(settings->value("/speechInput/api").toInt());
@@ -95,6 +91,7 @@ MainWindow::MainWindow(QWidget *parent)
     setting_actor_win->findChild<QComboBox*>("comboBox_vits_language")->addItems({"ja","zh"});
     reloadActorSetting();
     /*托盘*/
+    qInfo()<<"初始化托盘……";
     //初始化托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
     QIcon icon = QIcon(":/img/img/logo.png"); //资源文件添加的图标
@@ -139,6 +136,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_sysTrayIcon->setContextMenu(m_menu); //把QMenu赋给QSystemTrayIcon对象
     m_sysTrayIcon->show(); //在系统托盘显示此对象
     /*窗口初始化*/
+    qInfo()<<"初始化窗口……";
     dialog_win = new galgamedialog;
     dialog_win->move(settings->value("/tachie/location_x").toInt(),settings->value("/tachie/location_y").toInt());
     tachie_win = new tachie;
@@ -156,72 +154,100 @@ MainWindow::MainWindow(QWidget *parent)
     //运行自启动脚本
     if(settings->value("/soft/auto_open").toBool())
     {
-        qInfo()<<"运行autoOpen.cmd…";
+        qInfo()<<"运行autoOpen.cmd……";
         QDesktopServices::openUrl(QUrl::fromLocalFile("autoOpen.cmd"));
     }
     /*获取能量定时器*/
     energyTimer = new QTimer(this);
     connect(energyTimer, &QTimer::timeout, this, &MainWindow::updateEnergyDisplay);
-    energyTimer->start(100); // 每100毫秒触发一次
-    qInfo()<<"MainWindows（设置页）加载完成！";
+    energyTimer->start(100); //每100毫秒触发一次
     /*新版本获取*/
-    m_manager = new QNetworkAccessManager(this);//新建QNetworkAccessManager对象
-    checkForUpdates();
+    qInfo()<<"获取新版本消息……";
+    m_manager = new QNetworkAccessManager(this); //新建QNetworkAccessManager对象
     already_init = true;
+    QString reply = getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest");
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply.toUtf8());
+    QJsonObject jsonObj = jsonDoc.object();
+    QString tagName = jsonObj.value("tag_name").toString();
+    if (local_version.contains("beta"))
+    {
+        qInfo()<<"正在运行beta版"+local_version+"，最新正式版"+tagName;
+        setUserInfoCardSubTitle("你正在运行beta版，遇到问题请提issue。最新正式版："+tagName);
+    }
+    else if (reply == "error" || tagName.isEmpty())
+    {
+        qWarning()<<"获取新版本失败："<<reply;
+        setUserInfoCardSubTitle("获取新版本失败");
+    }
+    else if (local_version != tagName)
+    {
+        qInfo()<<"发现新版本"+tagName;
+        setUserInfoCardSubTitle("发现新版本" + tagName);
+    }
+    else
+    {
+        qInfo()<<"当前为最新版本"+local_version;
+        setUserInfoCardSubTitle("当前为最新版本^_^");
+    }
+    qInfo()<<"MainWindow加载完成！";
 }
 
 MainWindow::~MainWindow()
 {
+    qInfo()<<"MainWindow关闭……";
     delete ui;
 }
 
 /*对话框显示隐藏*/
 void MainWindow::show_dialogwin_from_tachie()
 {
-    qInfo()<<"【接收】立绘 --- 打开对话框 ---> 主窗口";
     if(isDialogOpen)
     {
-        // 设置窗口透明度效果
+        qInfo()<<"隐藏对话框……";
+        //设置窗口透明度效果
         QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(dialog_win);
         dialog_win->setGraphicsEffect(opacityEffect);
-        // 创建淡出动画
+        //创建淡出动画
         QPropertyAnimation *animation = new QPropertyAnimation(opacityEffect, "opacity");
-        animation->setDuration(150);         // 动画持续时间（毫秒）
-        animation->setStartValue(1.0);        // 开始时完全不透明
-        animation->setEndValue(0.0);          // 结束时完全透明
-        // 动画结束后关闭窗口
+        animation->setDuration(150); //动画持续时间（毫秒）
+        animation->setStartValue(1.0); //开始时完全不透明
+        animation->setEndValue(0.0); //结束时完全透明
+        //动画结束后关闭窗口
         connect(animation, &QPropertyAnimation::finished, dialog_win, &QWidget::close);
-        // 启动动画
+        //启动动画
         animation->start();
         isDialogOpen = false;
     }
     else
     {
+        qInfo()<<"显示对话框……";
         dialog_win->show();
-        // 设置窗口透明度效果
+        //设置窗口透明度效果
         QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(dialog_win);
-        dialog_win->setGraphicsEffect(opacityEffect); // 确保设置到目标窗口
-        // 创建动画，设置属性为 opacity
+        dialog_win->setGraphicsEffect(opacityEffect); //确保设置到目标窗口
+        //创建动画，设置属性为 opacity
         QPropertyAnimation *animation = new QPropertyAnimation(opacityEffect, "opacity");
-        animation->setDuration(150);         // 动画持续时间（毫秒）
-        animation->setStartValue(0.0);        // 起始透明度（0.0 表示完全透明）
-        animation->setEndValue(1.0);          // 结束透明度（1.0 表示完全不透明）
+        animation->setDuration(150); //动画持续时间（毫秒）
+        animation->setStartValue(0.0); //起始透明度（0.0 表示完全透明）
+        animation->setEndValue(1.0); //结束透明度（1.0 表示完全不透明）
         animation->start();
         isDialogOpen = true;
-
     }
 }
 /*重载角色配置*/
 void MainWindow::reloadActorSetting()
 {
+    qInfo()<<"重载角色配置……";
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
-    QString imagePath = qApp->applicationDirPath() + "/characters/" +
-                        settings->value("actor/name").toString() + "/正常.png";
+    QString imagePath = qApp->applicationDirPath() +"/characters/"+settings->value("actor/name").toString()+"/正常.png";
     QPixmap originalPixmap(imagePath);
-    if (originalPixmap.isNull()) {
+    if (originalPixmap.isNull())
+    {
         qWarning("无法加载图片: %s", qPrintable(imagePath));
-    } else {
+    }
+    else
+    {
         int x = (originalPixmap.width() - 128) / 2;
         int y;
         x = qMax(0, x);
@@ -230,7 +256,7 @@ void MainWindow::reloadActorSetting()
         setUserInfoCardPixmap(croppedPixmap);
         setUserInfoCardPixmap(croppedPixmap);
         setUserInfoCardPixmap(croppedPixmap);
-        qDebug()<<"设置图片"<<qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png";
+        qInfo()<<"设置主页图片"<<qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png";
     }
     setting_actor_win->findChild<QLabel*>("label_editActor")->setText("当前配置角色："+settings->value("actor/name").toString());
     setting_actor_win->findChild<QSpinBox*>("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
@@ -243,26 +269,6 @@ void MainWindow::reloadActorSetting()
     setting_actor_win->findChild<QLineEdit*>("lineEdit_speechInput_wakeWord")->setText(settings_actor->value("/speechInput/wake_word").toString());
     setting_actor_win->findChild<QLineEdit*>("lineEdit_speechInput_endWord")->setText(settings_actor->value("/speechInput/end_word").toString());
 }
-/*检查更新*/
-void MainWindow::checkForUpdates() {
-    QString reply = getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest");
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply.toUtf8());
-    QJsonObject jsonObj = jsonDoc.object();
-    QString tagName = jsonObj.value("tag_name").toString();
-    qInfo()<<"获取最新版，返回值："<<reply;
-    if (reply == "error" || tagName.isEmpty())
-    {
-        setUserInfoCardSubTitle("获取新版本失败");
-    }
-    else if (local_version != tagName)
-    {
-        setUserInfoCardSubTitle("发现新版本" + tagName);
-    }
-    else
-    {
-        setUserInfoCardSubTitle("当前为最新版本^_^");
-    }
-}
 /*get请求（用于获取版本）*/
 QByteArray MainWindow::getUrl(const QString &input)
 {
@@ -270,11 +276,8 @@ QByteArray MainWindow::getUrl(const QString &input)
     QNetworkReply *reply = m_manager->get(QNetworkRequest(QUrl(input)));
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
     loop.exec();
-    if (reply->error() == QNetworkReply::NoError) {
-        return reply->readAll();
-    } else {
-        return "error";
-    }
+    if (reply->error() == QNetworkReply::NoError) return reply->readAll();
+    else return "error";
 }
 /*保存立绘位置*/
 void MainWindow::changeTachieLocation_from_tachie(int x,int y)
@@ -283,7 +286,7 @@ void MainWindow::changeTachieLocation_from_tachie(int x,int y)
     settings->setValue("/tachie/location_x",x);
     settings->setValue("/tachie/location_y",y);
 }
-/*保存配置*/
+/*保存配置函数*/
 void MainWindow::saveSetting(const QString &key, const QVariant &value) {
     QScopedPointer<QSettings> settings(new QSettings("Setting.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
     settings->setValue(key, value);
@@ -294,21 +297,25 @@ void MainWindow::saveActorSetting(const QString &key, const QVariant &value) {
     settings_actor->setValue(key, value);
 }
 /*配置项修改和保存*/
+//立绘大小修改
 void MainWindow::ChangeSetting_tachieSize(int arg1)
 {
     saveActorSetting("/tachie/size",arg1);
     emit init_to_tachie();
 }
+//角色选择修改
 void MainWindow::ChangeSetting_ActorChoose(const QString &arg1)
 {
     if(already_init) saveSetting("/actor/name",arg1);
     reloadActorSetting();
     emit init_to_tachie();
 }
+//vits模型修改
 void MainWindow::ChangeSetting_VitsModel(const QString &arg1)
 {
     if(already_init) saveActorSetting("/vits/vitsmodel",arg1);
 }
+//开机自启修改
 void MainWindow::ChangeSetting_AutoStart(bool checked)
 {
     saveSetting("/soft/auto_start",checked);
@@ -324,64 +331,61 @@ void MainWindow::ChangeSetting_AutoStart(bool checked)
         nsettings->remove(application_name); //从注册表中删除
     }
 }
+//vitsAPI修改
 void MainWindow::ChangeSetting_VitsAPI(int index)
 {
     if(already_init) saveActorSetting("/vits/api",index);
 }
+//vits语言修改
 void MainWindow::ChangeSetting_VitsLanguage(const QString &arg1)
 {
     if(already_init) saveActorSetting("/vits/lan",arg1);
 }
+//语言输入API修改
 void MainWindow::ChangeSetting_speechInputAPI(int index)
 {
     if(already_init) saveSetting("/speechInput/api",index);
 }
+//语言唤醒修改
 void MainWindow::ChangSetting_speechInputWake(bool checked)
 {
     emit init_to_dialog();
 }
-/*重置立绘位置*/
-void MainWindow::on_pushButton_reset_clicked()
-{
-    emit resetlocation_to_tachie();
-}
-/*托盘主界面*/
+/*托盘*/
+//托盘主界面
 void MainWindow::on_showMainAction()
 {
     this->show();
 }
-/*托盘退出*/
+//托盘退出
 void MainWindow::on_exitAppAction()
 {
     qApp->exit();
 }
-/*托盘重启*/
+//托盘重启
 void MainWindow::on_restartAppAction()
 {
-    // 获取当前程序的路径
-    QString program = QCoreApplication::applicationFilePath();
-    // 获取当前程序的启动参数
-    QStringList arguments = QCoreApplication::arguments();
-    // 启动新进程
-    QProcess::startDetached(program, arguments);
-    // 退出当前程序
-    QCoreApplication::quit();
+    QString program = QCoreApplication::applicationFilePath(); //获取当前程序的路径
+    QStringList arguments = QCoreApplication::arguments(); //获取当前程序的启动参数
+    QProcess::startDetached(program, arguments); //启动新进程
+    QCoreApplication::quit(); //退出当前程序
 }
-/*托盘打开github*/
+//托盘ithub
 void MainWindow::on_openGithub()
 {
     QDesktopServices::openUrl(QUrl("https://github.com/Zao-chen/ZcChat"));
 }
+//托盘重置立绘
 void MainWindow::on_resetTachie()
 {
     emit resetlocation_to_tachie();
 }
-/*隐藏窗口*/
+/*窗口隐藏重写*/
 void MainWindow::hideWindow()
 {
     this->hide();
 }
-//能量显示
+/*能量显示*/
 void MainWindow::getEnergy_from_gal(int energy)
 {
     currentEnergy = energy; // 更新当前能量值

@@ -61,9 +61,6 @@ private slots:
     void on_restartAppAction();
     void on_resetTachie();
     void hideWindow();
-    //按钮
-    void on_pushButton_reset_clicked();
-
 
 signals:
     void init_to_tachie(); //初始化立绘
@@ -71,6 +68,7 @@ signals:
 
 private:
     Ui::MainWindow *ui;
+    bool already_init=false; //是否已经初始化了
     /*托盘相关*/
     QSystemTrayIcon *m_sysTrayIcon; //系统托盘
     QMenu *m_menu; //菜单
@@ -79,20 +77,18 @@ private:
     QAction *m_restartAppAction; //托盘动作
     QAction *m_openGithub; //托盘动作
     QAction *m_resetTachie; //托盘动作
-    bool already_init=false; //是否已经初始化了
     /*网络相关*/
     QByteArray getUrl(const QString &input); //网络
     QNetworkAccessManager *m_manager;
-
+    /*保存配置的函数*/
     void saveSetting(const QString &key, const QVariant &value);
     void saveActorSetting(const QString &key, const QVariant &value);
-    void checkForUpdates();
+    /*一些函数*/
     void reloadActorSetting();
     /*能量显示*/
     QTimer *energyTimer; // 定时器
     int currentEnergy;   // 当前能量值
     void updateEnergyDisplay();
     bool isDialogOpen = false; //用于切换对话框显示和隐藏
-
 };
 #endif // MAINWINDOW_H

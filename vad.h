@@ -15,7 +15,7 @@ public:
 
 signals:
     void voiceDetected(bool detected);
-    void energy_to_main(int energy);
+    void energy_to_main(int energy); //传递能量值到主界面
 
 private:
     double calculateEnergy(const QVector<double> &samples);

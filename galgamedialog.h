@@ -10,7 +10,7 @@
 #include <QAudioSource>
 #include <QSettings>
 
-class history; // 前向声明子窗口类
+class history; //前向声明子窗口类
 
 namespace Ui {
 class galgamedialog;
@@ -22,67 +22,70 @@ class galgamedialog : public QWidget
 
 public:
     explicit galgamedialog(QWidget *parent = nullptr);
-
     ~galgamedialog();
+
 private slots:
+    /*界面上的一些按钮*/
     void on_pushButton_clicked(); //下一步
-    void updateText(); //逐字显示-更新
     void on_pushButton_input_pressed(); //语音输入
     void on_pushButton_input_released(); //语音输入
-    void init_from_main();
-    void on_pushButton_history_clicked();
+    void on_pushButton_history_clicked(); //历史
+    /*一些槽*/
+    void updateText(); //逐字显示-更新
+    void init_from_main(); //来自主界面的初始化请求
 
 signals:
-    void change_tachie_to_tachie(QString name);
-    void energy_to_main(int energy);
+    void change_tachie_to_tachie(QString name); //修改立绘
+    void energy_to_main(int energy); //给主界面发送能力值
 
 protected:
-    void moveEvent(QMoveEvent *event) override;  // 捕获窗口移动事件
-    void wheelEvent(QWheelEvent *event) override; // 滚轮事件声明
+    /*鼠标事件重写*/
+    void moveEvent(QMoveEvent *event) override;  //捕获窗口移动事件
+    void wheelEvent(QWheelEvent *event) override; //滚轮事件声明
+
 private:
     Ui::galgamedialog *ui;
-    //鼠标按下移动及释放事件
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    //键盘事件
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+    /*鼠标按下移动及释放事件*/
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    /*键盘事件*/
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
     QList<int> keys; //按键按键获取
     QPoint m_movePoint; //鼠标的位置
     bool isLeftPressDown; // 判断左键是否按下
-    //网络
+    /*网络*/
     QNetworkAccessManager *m_manager;
     QString UrlpostLLM();
     QString UrlpostWithFile();
     QByteArray getUrl(const QString &input);
-    //逐字显示
+    /*逐字显示*/
     QTimer *timer;
     QString fullText;
     int currentIndex;
     void changetext(QString text);
-    //重绘
+    /*重绘*/
     virtual void paintEvent(QPaintEvent *event) override;
-    //录音
+    /*录音*/
     QMediaRecorder *audioRecorder = nullptr;
     QMediaCaptureSession captureSession;
-    //vad
+    /*vad*/
     VAD *vad; // VAD 对象
     QAudioSource *audioSource; // 音频输入对象
     QIODevice *audioDevice; // 音频设备
     QAudioFormat format; // 音频格式
-    void send_to_llm();
-    bool is_record = false;
-    QMediaPlayer *player = new QMediaPlayer; //创建 QMediaPlayer 对象
-    QSettings *settings; // 声明 settings 为成员变量
-    bool is_in_llm = false;
-
-    history *history_win; // 子窗口指针
-    QPoint lastPos;       // 记录主窗口上次位置
-    bool isHistoryOpen = false; //用于切换对话框显示和隐藏
+    /*一些函数*/
+    void send_to_llm(); //发送llm请求
+    bool is_record = false; //正在录音？
+    QMediaPlayer *player = new QMediaPlayer; //创建QMediaPlayer 对象
+    QSettings *settings; //声明 settings 为成员变量
+    bool is_in_llm = false; //是否正在llm请求中
+    history *history_win; //子窗口指针
+    QPoint lastPos; //记录主窗口上次位置
+    bool isHistoryOpen = false;//用于切换对话框显示和隐藏
     /*滚轮事件*/
     void handleWheelUp();   // 处理向上滚轮
     void handleWheelDown(); // 处理向下滚轮
 };
-
 #endif // GALGAMEDIALOG_H

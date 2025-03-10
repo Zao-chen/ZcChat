@@ -14,13 +14,13 @@ tachie::tachie(QWidget *parent) :
     ui(new Ui::tachie)
 {
     ui->setupUi(this);
-    //无边框设置
+    /*无边框设置*/
     this->setWindowFlags(Qt::Tool); //当前窗口的构造函数下调用
     this->setWindowFlags(Qt::ToolTip); //同时隐藏任务栏图标和标题栏图标
     setWindowFlag(Qt::FramelessWindowHint);
     setWindowFlags (windowFlags () | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground);
-    //初始化
+    /*初始化*/
     init_from_main();
 }
 /*初始化*/
