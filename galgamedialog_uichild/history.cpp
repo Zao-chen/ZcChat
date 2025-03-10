@@ -11,8 +11,10 @@ history::history(QWidget *parent)
     ui->setupUi(this);
     qInfo() << "history 窗口创建...";
     // 设置窗口属性
-    setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::Tool);
-    setAttribute(Qt::WA_ShowWithoutActivating); // 显示不抢占焦点
+    /*无边框设置*/
+    setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
+    setWindowOpacity(0.9);
+    setAttribute(Qt::WA_TranslucentBackground);
     // 获取 scrollAreaWidgetContents 的布局，如果没有，创建一个布局
     QVBoxLayout *layout = qobject_cast<QVBoxLayout *>(ui->scrollAreaWidgetContents->layout());
     ui->scrollArea->setWidgetResizable(true);

@@ -28,7 +28,10 @@
 #include <windows.h>
 #include <QDesktopServices>
 
-#include <QDialog>
+
+#include <QGraphicsOpacityEffect>
+#include <QPropertyAnimation>
+#include <QParallelAnimationGroup>
 
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
@@ -707,15 +710,77 @@ void galgamedialog::on_pushButton_history_clicked()
     history_win->move(this->x(), this->y() -450);  // 确保子窗口出现在父窗口旁边
     if (!isHistoryOpen)
     {
+        // 显示窗口
         history_win->show();
         isHistoryOpen = true;
         qInfo() << "打开日志窗口……";
+        // 设置窗口透明度效果
+        auto *opacityEffect = new QGraphicsOpacityEffect(history_win);
+        history_win->setGraphicsEffect(opacityEffect);
+        // 获取窗口初始和目标位置
+        QRect startRect = history_win->geometry();
+        QRect endRect = startRect;
+        startRect.moveTop(startRect.top() + 20);  // 初始位置向下偏移 100 像素
+        // 设置窗口起始位置（下方 + 透明）
+        history_win->setGeometry(startRect);
+        opacityEffect->setOpacity(0.0);
+        // 创建透明度动画（淡入）
+        auto *opacityAnim = new QPropertyAnimation(opacityEffect, "opacity");
+        opacityAnim->setDuration(150);
+        opacityAnim->setStartValue(0.0);
+        opacityAnim->setEndValue(1.0);
+        // 创建位置动画（向上移动）
+        auto *moveAnim = new QPropertyAnimation(history_win, "geometry");
+        moveAnim->setDuration(150);
+        moveAnim->setStartValue(startRect);
+        moveAnim->setEndValue(endRect);
+        // 并行动画组，确保两种动画同时进行
+        auto *group = new QParallelAnimationGroup(history_win);
+        group->addAnimation(opacityAnim);
+        group->addAnimation(moveAnim);
+        // 防止动画被回收
+        group->start(QAbstractAnimation::DeleteWhenStopped);
     }
     else
     {
-        history_win->hide();
         isHistoryOpen = false;
         qInfo() << "关闭日志窗口……";
+
+        // 获取窗口的当前位置和目标位置
+        QRect startRect = history_win->geometry();
+        QRect endRect = startRect;
+        endRect.moveTop(endRect.top() + 20);  // 目标位置向上偏移 100 像素
+
+        // 确保窗口可见且透明度效果已设置
+        QGraphicsOpacityEffect *opacityEffect = qobject_cast<QGraphicsOpacityEffect *>(history_win->graphicsEffect());
+        if (!opacityEffect) {
+            opacityEffect = new QGraphicsOpacityEffect(history_win);
+            history_win->setGraphicsEffect(opacityEffect);
+        }
+
+        // 创建透明度动画（淡出）
+        QPropertyAnimation *opacityAnim = new QPropertyAnimation(opacityEffect, "opacity");
+        opacityAnim->setDuration(150);        // 动画时间 1 秒
+        opacityAnim->setStartValue(1.0);       // 从完全不透明
+        opacityAnim->setEndValue(0.0);         // 到完全透明
+
+        // 创建位置动画（向上移动）
+        QPropertyAnimation *moveAnim = new QPropertyAnimation(history_win, "geometry");
+        moveAnim->setDuration(150);           // 动画时间 1 秒
+        moveAnim->setStartValue(startRect);    // 从当前窗口位置
+        moveAnim->setEndValue(endRect);        // 向上移动 100 像素
+
+        // 并行动画组（确保透明度和位置同时变化）
+        QParallelAnimationGroup *group = new QParallelAnimationGroup(history_win);
+        group->addAnimation(opacityAnim);
+        group->addAnimation(moveAnim);
+
+        // 动画完成后隐藏窗口
+        connect(group, &QParallelAnimationGroup::finished, history_win, &QWidget::hide);
+
+        // 启动动画，确保动画执行完再释放内存
+        group->start(QAbstractAnimation::DeleteWhenStopped);
+
     }
 }
 void galgamedialog::moveEvent(QMoveEvent *event) {
