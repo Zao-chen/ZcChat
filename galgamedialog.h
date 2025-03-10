@@ -38,6 +38,7 @@ signals:
 
 protected:
     void moveEvent(QMoveEvent *event) override;  // 捕获窗口移动事件
+    void wheelEvent(QWheelEvent *event) override; // 滚轮事件声明
 private:
     Ui::galgamedialog *ui;
     //鼠标按下移动及释放事件
@@ -79,6 +80,9 @@ private:
     history *history_win; // 子窗口指针
     QPoint lastPos;       // 记录主窗口上次位置
     bool isHistoryOpen = false; //用于切换对话框显示和隐藏
+    /*滚轮事件*/
+    void handleWheelUp();   // 处理向上滚轮
+    void handleWheelDown(); // 处理向下滚轮
 };
 
 #endif // GALGAMEDIALOG_H

@@ -191,7 +191,6 @@ void MainWindow::show_dialogwin_from_tachie()
         // 启动动画
         animation->start();
         isDialogOpen = false;
-
     }
     else
     {

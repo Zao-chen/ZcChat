@@ -791,3 +791,23 @@ void galgamedialog::moveEvent(QMoveEvent *event) {
     lastPos = event->pos();  // 更新主窗口位置
 
 }
+// 重写滚轮事件
+void galgamedialog::wheelEvent(QWheelEvent *event) {
+    if (event->angleDelta().y() > 0) {
+        handleWheelUp(); // 向上滚轮
+    } else if (event->angleDelta().y() < 0) {
+        handleWheelDown(); // 向下滚轮
+    }
+}
+
+// 向上滚轮处理
+void galgamedialog::handleWheelUp() {
+    if(!isHistoryOpen) ui->pushButton_history->click();
+    qDebug() << "向上滚轮触发";
+}
+
+// 向下滚轮处理
+void galgamedialog::handleWheelDown() {
+    if(isHistoryOpen) ui->pushButton_history->click();
+    qDebug() << "向下滚轮触发";
+}
