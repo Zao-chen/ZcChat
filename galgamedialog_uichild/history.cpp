@@ -3,6 +3,8 @@
 #include "historychild.h"
 #include <QScrollBar>  // 需要显式包含此头文件
 #include <QTimer>
+#include <QPainterPath>
+#include <QPainter>
 
 history::history(QWidget *parent)
     : QWidget(parent)
@@ -38,4 +40,28 @@ void history::addChildWindow(QString name,QString msg) {
     // 等待布局更新后滑动到最底部
     qInfo() << "添加日志：" << msg;
 
+}
+/*圆角边框*/
+void history::paintEvent(QPaintEvent *event)
+{
+    QPainterPath path;
+    path.setFillRule(Qt::WindingFill);
+    QRectF rect(5, 5, this->width() - 10, this->height() - 10);
+    path.addRoundedRect(rect, 15, 15);
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.fillPath(path, QBrush(Qt::white));
+    QColor color(0, 0, 0, 50);
+    for (int i = 0; i < 5; i++)
+    {
+        QPainterPath shadowPath;
+        shadowPath.setFillRule(Qt::WindingFill);
+        // 使用圆角矩形而不是普通矩形绘制阴影
+        QRectF shadowRect((5 - i), (5 - i) , this->width() - (5 - i) * 2, this->height() - (5 - i) * 2);
+        shadowPath.addRoundedRect(shadowRect, 15, 15);  // 添加圆角矩形路径
+        // 增加透明度效果，模拟阴影逐渐变淡
+        color.setAlpha(50 - qSqrt(i) * 22);
+        painter.setPen(color);
+        painter.drawPath(shadowPath);  // 绘制阴影路径
+    }
 }

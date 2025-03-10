@@ -21,6 +21,8 @@ public:
 private:
     Ui::history *ui;
     QVBoxLayout *scrollLayout;         // 子窗口布局
+    /*重绘*/
+    virtual void paintEvent(QPaintEvent *event) override;
 };
 
 #endif // HISTORY_H

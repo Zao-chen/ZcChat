@@ -13,6 +13,49 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QScrollArea {
+    border: none; /* 去除边框 */
+    background: transparent; /* 背景透明 */
+}
+
+QScrollBar:vertical, QScrollBar:horizontal {
+    border: none; /* 去除边框 */
+    background: transparent; /* 背景透明 */
+    width: 8px; /* 设置滚动条的宽度 */
+    height: 8px; /* 设置滚动条的高度 */
+}
+
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background: rgba(136, 136, 136, 0.5); /* 设置滚动条滑块的淡灰色 */
+    border-radius: 4px; /* 设置滑块的圆角 */
+}
+
+QScrollBar::handle:vertical:hover, QScrollBar::handle:horizontal:hover {
+    background: rgba(136, 136, 136, 0.8); /* 滑块悬停时的颜色 */
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical,
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    background: transparent; /* 去除上下箭头 */
+    border: none; /* 去除箭头边框 */
+    height: 0px; /* 强制去除箭头按钮 */
+    width: 0px; /* 强制去除箭头按钮 */
+}
+
+QProgressBar {
+    border: none; /* 去除进度条边框 */
+    background: #f0f0f0; /* 进度条的背景颜色 */
+    height: 8px; /* 设置进度条的高度 */
+    margin-bottom: 10px; /* 为进度条下方留出空间 */
+}
+
+QProgressBar::chunk {
+    background: rgba(76, 175, 80, 0.5); /* 设置淡绿色的进度条颜色 */
+    border-radius: 4px; /* 设置进度条块的圆角 */
+}
+</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QScrollArea" name="scrollArea">
@@ -24,24 +67,26 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>630</width>
-        <height>430</height>
+        <width>632</width>
+        <height>432</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>6</number>
+       </property>
+       <property name="topMargin">
+        <number>50</number>
+       </property>
+       <property name="rightMargin">
+        <number>20</number>
+       </property>
+       <property name="bottomMargin">
+        <number>50</number>
+       </property>
       </layout>
      </widget>
     </widget>
