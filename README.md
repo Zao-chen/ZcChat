@@ -6,8 +6,10 @@
 
 **视频演示**：
 
-- [基础功能演示](https://www.bilibili.com/video/BV1YUUaYgEgC/)
-- [立绘动画演示](https://www.bilibili.com/video/BV1aFCKYJEy4/)
+- [3.0 操控电脑功能演示](https://www.bilibili.com/video/BV1hA9SYYEbb)
+- [2.0 语音输入功能演示](https://www.bilibili.com/video/BV1KWccegEkv)
+- [1.0 立绘动画功能演示](https://www.bilibili.com/video/BV1aFCKYJEy4/)
+- [0.0 基础功能演示](https://www.bilibili.com/video/BV1YUUaYgEgC/)
 
 ---
 
@@ -37,7 +39,7 @@
 
 ### 📋 Step 1 - 准备工作
 
-1. 在[Release页面](https://github.com/Zao-chen/ZcChat/releases)下载并安装ZcChat。
+1. 在[Release页面](https://github.com/Zao-chen/ZcChat/releases)下载并安装ZcChat。**请尽量避免中文路径，以免产生一些列问题！**
 2. 在[讨论区](https://github.com/Zao-chen/ZcChat/discussions)找到现成的角色数据，或者自定义你的角色。
 
 ### 🎭 Step 2 - 配置角色
@@ -55,7 +57,7 @@
    > Letta默认地址为 `http://localhost:8283`
 4. 将agentID填入 `ZcChat > 角色配置 > AI模型 > agentID`。
 
-🎉🎉🎉**至此，ZcChat已经可以基本使用了，以下是一些进阶功能的使用：**🎉🎉🎉
+**🎉🎉🎉至此，ZcChat已经可以基本使用了，以下是一些进阶功能的使用：🎉🎉🎉**
 
 ### 🎙️ （可选）安装配置语音合成
 
@@ -133,7 +135,9 @@
 
 ## 🔗 相关链接
 
-- [LogChat](https://github.com/log159/LogChat)
-- [Letta](https://github.com/letta-ai/letta)
-- [vits-simple-api](https://github.com/Artrajz/vits-simple-api)
-- [whisper-asr-webservice](https://github.com/ahmetoner/whisper-asr-webservice)
+- [log159/LogChat: 一个开源免费的AI聊天客户端！](https://github.com/log159/LogChat)
+- [letta-ai/letta: Letta (formerly MemGPT) is a framework for creating LLM services with memory.](https://github.com/letta-ai/letta)
+- [Artrajz/vits-simple-api: A simple VITS HTTP API, developed by extending Moegoe with additional features.](https://github.com/Artrajz/vits-simple-api)
+- [ahmetoner/whisper-asr-webservice: OpenAI Whisper ASR Webservice API](https://github.com/ahmetoner/whisper-asr-webservice)
+- [Liniyous/ElaWidgetTools: Fluent-UI For QT-Widget](https://github.com/Liniyous/ElaWidgetTools)
+- [nlohmann/json: JSON for Modern C++](https://github.com/nlohmann/json)
