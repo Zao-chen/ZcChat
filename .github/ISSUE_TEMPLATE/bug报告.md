@@ -1,6 +1,6 @@
 ---
 name: BUG报告
-about: 提交一个bug反馈
+about: 提交一个bug反馈/遇到程序计划外错误（如崩溃闪退等）
 title: ''
 labels: bug
 assignees: ''
@@ -8,8 +8,8 @@ assignees: ''
 ---
 
 **确认在反馈bug前尝试过以下办法（在[]内输入x确认）**
-- [ ] 我确认我使用的是最新版本的ZcChat
-- [ ] 我已经认真阅读过README和WIKI
+- [ ] 尝试过最新测试版的ZcChat，依然有这个问题
+- [ ] 我已经认真阅读过README和WIKI，以及issue里没有重复问题
 - [ ] 我认为ZcChat的问题，而不是Letta或者是Vits的
 
 **bug描述**
@@ -20,7 +20,7 @@ assignees: ''
 1. 打开 '...'
 2. 点击 '....'
 3. 滑动 '....'
-4. 看到error
+4. 看到error/闪退
 
 **预期行为**
 对你期望发生的事情的清晰简洁的描述。
@@ -35,3 +35,4 @@ assignees: ''
 
 **附加信息**
 在此处添加有关该问题的任何其他上下文。
+请添加ZcChat根目录下的log.txt文件。
