@@ -3,8 +3,6 @@
 #include "galgamedialog_uichild/history.h"
 
 #include <QMouseEvent>
-#include <QJsonDocument>
-#include <QJsonObject>
 #include <QJsonArray>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
@@ -30,8 +28,11 @@
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
-
 #include <QPainterPath>
+#include <QNetworkInterface>
+
+#include "third_party/json/json.hpp"
+using json_t = nlohmann::json;
 
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
@@ -87,25 +88,26 @@ QString galgamedialog::UrlpostLLM()
     QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
     request.setUrl(QUrl(settings->value("/llm/url").toString()+"/v1/agents/"+settings_actor->value("/llm/agent").toString()+"/messages"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
-    //json处理
-    QJsonObject rootObject;
-    QJsonArray messagesArray;
-    QJsonObject messageObject;
-    messageObject["role"] = "user";
-    messageObject["content"] = ui->textEdit->toPlainText();
+    // 直接解析 JSON 字符串，嵌入动态内容
+    json_t rootObject = {
+        {"messages", {
+                         {
+                             {"role", "user"},
+                             {"content", ui->textEdit->toPlainText().toStdString()}
+                         }
+                     }}
+    };
+    rootObject["messages"][0]["content"] = ui->textEdit->toPlainText().toStdString();
     ui->textEdit->setText("...");
-    messagesArray.append(messageObject); //将messageObject添加到messagesArray
-    rootObject["messages"] = messagesArray; //将messagesArray添加到rootObject
-    QJsonDocument jsonDoc(rootObject);
-    qInfo()<<"发送post："<<rootObject;
-    //获取结果
+    // 输出发送的 JSON
+    qInfo() << "发送post：" << QString::fromStdString(rootObject.dump());
+    // 获取结果
     QEventLoop loop;
-    QNetworkReply* reply = naManager->post(request, jsonDoc.toJson());
+    QNetworkReply* reply = naManager->post(request, QByteArray::fromStdString(rootObject.dump()));
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
     QString read;
     read = reply->readAll();
-    read = read.replace(" ","");
     reply->deleteLater(); //记得释放内存
     qInfo()<<"获取到llmPost请求结果："<<read;
     is_in_llm = false;
@@ -187,20 +189,20 @@ QString galgamedialog::UrlpostWithFile()
         QNetworkReply *reply = manager.post(request, QByteArray());
         //当请求完成时，退出事件循环
         QString accessToken;
-        QObject::connect(reply, &QNetworkReply::finished, [&]() {
-            if (reply->error() == QNetworkReply::NoError) {
+        QObject::connect(reply, &QNetworkReply::finished, [&]()
+        {
+            if (reply->error() == QNetworkReply::NoError)
+            {
                 QByteArray response = reply->readAll();
-                QJsonDocument doc = QJsonDocument::fromJson(response);
-                if (!doc.isNull()) {
-                    QJsonObject jsonObj = doc.object();
-                    //获取access_token
-                    accessToken = jsonObj.value("access_token").toString();
-                    qInfo()<<"语音识别-百度-token-获取到token:"<<accessToken;
-                } else {
-                    qWarning()<<"语音识别-百度-token-Json解析错误";
-                }
-            } else {
+                auto jsonObj = nlohmann::json::parse(response.toStdString());
+                // 获取 access_token 并转换为 QString
+                accessToken = QString::fromStdString(jsonObj["access_token"].get<std::string>());
+                qInfo() << "语音识别-百度-token-获取到token:" << accessToken;
+            }
+            else
+            {
                 qWarning()<<"语音识别-百度-token-请求失败"<<reply->errorString();
+                return;
             }
             reply->deleteLater();
             loop.quit(); //退出事件循环
@@ -221,58 +223,60 @@ QString galgamedialog::UrlpostWithFile()
         if (!audioData.isEmpty()) {
             // 将音频数据进行 Base64 编码
             QString base64AudioData = audioData.toBase64();
-            // 创建 JSON 请求体
-            QJsonObject json;
-            json["format"] = "m4a"; //音频格式
-            json["rate"] = 16000; //采样率
-            json["channel"] = 1; //单声道
-            json["token"] = accessToken; //使用获取的access_token
-            json["cuid"] = "WVqcZK3Tv7iX0kjI4aYuGg4VDUwjZ7k5";// 替换为设备 ID
-            json["speech"] = base64AudioData; //音频数据的 Base64 编码
-            json["len"] = audioData.size(); //音频文件原始大小（字节数）
-            //将 JSON 数据转换为字节流
-            QJsonDocument doc(json);
-            QByteArray jsonData = doc.toJson();
-            //创建 POST 请求
+            // 创建 JSON 请求体，严格保持原有格式
+            nlohmann::json json;
+            json["format"] = "m4a";                          // 音频格式
+            json["rate"] = 16000;                             // 采样率
+            json["channel"] = 1;                              // 单声道
+            json["token"] = accessToken.toStdString();        // access_token
+            json["cuid"] = QNetworkInterface::allInterfaces().first().hardwareAddress().toStdString(); // 设备ID
+            json["speech"] = base64AudioData.toStdString();   // 音频数据 (Base64)
+            json["len"] = audioData.size();                   // 音频长度 (字节数)
+            // 将 JSON 转换为 QByteArray，注意使用 json.dump() 生成紧凑格式
+            QByteArray jsonData = QByteArray::fromStdString(json.dump());
+            // 创建 POST 请求
             QUrl url("https://vop.baidu.com/server_api");
             QNetworkRequest request(url);
-            //设置请求头部
             request.setRawHeader("Content-Type", "application/json");
             request.setRawHeader("Accept", "application/json");
-            //创建事件循环
+            // 创建事件循环
             QEventLoop loop;
-            //发送 POST 请求
-            QNetworkReply *reply_api= manager_api.post(request, jsonData);
-            //连接请求的 finished 信号
+            QNetworkReply *reply_api = manager_api.post(request, jsonData);
+            qInfo()<<"语音识别-百度-识别-发送post";
+            // 处理响应
             QObject::connect(reply_api, &QNetworkReply::finished, [&]() {
                 if (reply_api->error() == QNetworkReply::NoError) {
-                    //处理响应结果
-                    resultJson= reply_api->readAll();
-                    qInfo()<<"语音识别-百度-识别-识别成功："<<resultJson;
+                    resultJson = reply_api->readAll();
+                    qInfo() << "语音识别-百度-识别成功：" << resultJson;
                 } else {
-                    qWarning()<<"语音识别-百度-识别-请求失败："<<reply_api->errorString();
+                    qWarning() << "语音识别-百度-识别失败：" << reply_api->errorString();
                 }
-                loop.quit(); //请求完成后退出事件循环
+                loop.quit();
                 reply_api->deleteLater();
             });
-            //启动事件循环，等待回复
+            // 启动事件循环，等待回复
             loop.exec();
         } else {
-            qWarning()<<"语音识别-百度-识别-音频文件为空，跳过请求";
+            qWarning() << "语音识别-百度-识别-音频文件为空，跳过请求";
         }
         //解析 JSON 数据
         QString result;
-        QJsonDocument doc = QJsonDocument::fromJson(resultJson.toUtf8());
-        if (doc.isObject()) {
-            QJsonObject obj = doc.object();
-            //获取 "result" 字段
-            if (obj.contains("result") && obj["result"].isArray()) {
-                QJsonArray resultArray = obj["result"].toArray();
-                for (const QJsonValue &value : resultArray) {
-                    qInfo() <<"语音识别-百度-识别-获取到结果："<< value.toString();
-                    result=value.toString();
+        try
+        {
+            nlohmann::json doc = nlohmann::json::parse(resultJson.toStdString());
+            if (doc.contains("result") && doc["result"].is_array())
+            {
+                for (const auto& value : doc["result"])
+                {
+                    qInfo() << "语音识别-百度-识别-获取到结果：" << QString::fromStdString(value.get<std::string>());
+                    result = QString::fromStdString(value.get<std::string>());
                 }
             }
+        }
+        catch (const nlohmann::json::exception& e)
+        {
+            qWarning() << "Json解析错误: " << e.what();
+            result.clear();  // 如果解析失败，设置为空
         }
         return result;
     }
@@ -534,31 +538,29 @@ void galgamedialog::send_to_llm()
     QTextCursor cursor=ui->textEdit->textCursor(); //得到当前text的光标
     if(cursor.hasSelection()) cursor.clearSelection();
     cursor.deletePreviousChar(); //删除前一个字符
-    //发送post请求
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(UrlpostLLM().toUtf8());
-    qInfo()<<"接收到post信息："<<jsonDoc;
-    //获取到的json处理
-    QString message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为["+jsonDoc.toJson()+"]|错误error";
-    QJsonObject rootObj = jsonDoc.object();
-    QJsonArray messages = rootObj["messages"].toArray();
-    //解析 JSON 字符串
-    if (jsonDoc.isNull()) {
+    // 发送post请求
+    nlohmann::json jsonDoc = nlohmann::json::parse(UrlpostLLM().toStdString(), nullptr, false);
+    qInfo() << "接收到post信息：" << QString::fromStdString(jsonDoc.dump());
+    // 获取到的json处理
+    QString message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为[" + QString::fromStdString(jsonDoc.dump()) + "]|错误error";
+    // 解析 JSON 字符串
+    if (jsonDoc.is_discarded()) {
         qWarning() << "返回值为空";
-    } //获取 messages 数组
-    QJsonArray messagesArray = rootObj["messages"].toArray();
-    //查找 "content" 字段
-    for (const QJsonValue &value : messagesArray) {
-        QJsonObject messageObject = value.toObject();
-        if (messageObject.contains("content")) {
-            message = messageObject["content"].toString();
-            break; //找到第一个匹配的 content 字段后退出
+    }
+    else if (jsonDoc.contains("messages") && jsonDoc["messages"].is_array()) // 查找 "content" 字段
+    {
+        for (const auto& value : jsonDoc["messages"]) {
+            if (value.contains("content")) {
+                message = QString::fromStdString(value["content"].get<std::string>());
+                break; // 找到第一个匹配的 content 字段后退出
+            }
         }
     }
-    qInfo()<<"读取到message"<<message;
+    qInfo() << "读取到message" << message;
     //信息判断
     if(message.isNull())
     {
-        message = "正常|[error] Letta返回了["+jsonDoc.toJson()+"]，可能是Letta未启动/agent配置错误|错误error";
+        message = "正常|[error] Letta返回了["+QString::fromStdString(jsonDoc.dump())+"]，可能是Letta未启动/agent配置错误|错误error";
     }
     else if(message.split("|").size()!=3)
     {
@@ -612,7 +614,7 @@ void galgamedialog::send_to_llm()
                     audioOutput->setVolume(1); //0.0 为最小音量，1.0 为最大音量
                     player->setPosition(0);
                     player->play(); //播放音频
-                    changetext(message.split("|")[1]); //逐字显示
+                    changetext(message.split("|")[1].replace(" ","")); //逐字显示
                     history_win->addChildWindow(settings->value("/actor/name").toString(),message.split("|")[1]);
                     ui->pushButton->show();
                     emit change_tachie_to_tachie(message.split("|")[0]);
@@ -627,7 +629,7 @@ void galgamedialog::send_to_llm()
     }
     else
     {
-        changetext(message.split("|")[1]); //逐字显示
+        changetext(message.split("|")[1].replace(" ","")); //逐字显示
         history_win->addChildWindow(settings->value("/actor/name").toString(),message.split("|")[1]);
         ui->pushButton->show();
         emit change_tachie_to_tachie(message.split("|")[0]);

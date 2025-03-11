@@ -9,8 +9,6 @@
 #include <QDesktopServices>
 #include <Qdir>
 #include <QNetworkReply>
-#include <QJsonDocument>
-#include <QJsonObject>
 #include <QTimer>
 #include <QLCDNumber>
 #include <QLineEdit>
@@ -22,7 +20,10 @@
 #include <QGraphicsOpacityEffect>
 #include <qpropertyanimation>
 
-QString local_version = "v4.1.0-beta";
+#include "third_party/json/json.hpp"
+using json_t = nlohmann::json;
+
+QString local_version = "v4.2.0-beta";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWindow(parent)
@@ -94,8 +95,7 @@ MainWindow::MainWindow(QWidget *parent)
     qInfo()<<"初始化托盘……";
     //初始化托盘
     m_sysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
-    QIcon icon = QIcon(":/img/img/logo.png"); //资源文件添加的图标
-    m_sysTrayIcon->setIcon(icon);
+    m_sysTrayIcon->setIcon(QIcon(":/img/img/logo.png"));
     m_sysTrayIcon->setToolTip("ZcChat"); //当鼠标移动到托盘上的图标时，会显示此处设置的内容
     connect(m_sysTrayIcon, &QSystemTrayIcon::activated, //给QSystemTrayIcon添加槽函数
         [=](QSystemTrayIcon::ActivationReason reason)
@@ -115,7 +115,7 @@ MainWindow::MainWindow(QWidget *parent)
                 break;
             }
         });
-    //托盘菜单
+    //托盘连接
     m_showMainAction = new QAction("主界面", this);
     connect(m_showMainAction,SIGNAL(triggered()),this,SLOT(on_showMainAction()));
     m_openGithub = new QAction("Github", this);
@@ -126,14 +126,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_restartAppAction,SIGNAL(triggered()),this,SLOT(on_restartAppAction()));
     m_resetTachie = new QAction("重置立绘", this);
     connect(m_resetTachie,SIGNAL(triggered()),this,SLOT(on_resetTachie()));
+    //托盘创建
     m_menu = new QMenu(this);
-    m_menu->addAction(m_showMainAction); //新增菜单项
+    m_menu->addAction(m_showMainAction); //新增菜单项--打开主界面
     m_menu->addAction(m_openGithub); //新增菜单项--打开github
     m_menu->addSeparator(); //增加分隔符
-    m_menu->addAction(m_resetTachie); //新增菜单项---退出程序
+    m_menu->addAction(m_resetTachie); //新增菜单项---重置立绘
     m_menu->addAction(m_restartAppAction); //新增菜单项---重启
     m_menu->addAction(m_exitAppAction); //新增菜单项---退出程序
-    m_sysTrayIcon->setContextMenu(m_menu); //把QMenu赋给QSystemTrayIcon对象
+    m_sysTrayIcon->setContextMenu(m_menu);
     m_sysTrayIcon->show(); //在系统托盘显示此对象
     /*窗口初始化*/
     qInfo()<<"初始化窗口……";
@@ -166,9 +167,16 @@ MainWindow::MainWindow(QWidget *parent)
     m_manager = new QNetworkAccessManager(this); //新建QNetworkAccessManager对象
     already_init = true;
     QString reply = getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest");
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply.toUtf8());
-    QJsonObject jsonObj = jsonDoc.object();
-    QString tagName = jsonObj.value("tag_name").toString();
+    QString tagName;
+    try {
+        auto jsonData = json_t::parse(reply.toUtf8());
+        if (jsonData.contains("tag_name")) {
+            tagName = QString::fromStdString(jsonData["tag_name"]);
+        }
+    } catch (const std::exception& e) {
+        qWarning() << "版本获取失败，json解析错误: " << e.what();
+        tagName.clear();  // 如果解析失败，设置为空
+    }
     if (local_version.contains("beta"))
     {
         qInfo()<<"正在运行beta版"+local_version+"，最新正式版"+tagName;

@@ -39,7 +39,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         mianwindow_uichild/setting_actor.h mianwindow_uichild/setting_actor.cpp mianwindow_uichild/setting_actor.ui
         galgamedialog_uichild/history.h galgamedialog_uichild/history.cpp galgamedialog_uichild/history.ui
         galgamedialog_uichild/historychild.h galgamedialog_uichild/historychild.cpp galgamedialog_uichild/historychild.ui
-
     )
 else()
     if(ANDROID)
@@ -54,8 +53,10 @@ else()
     endif()
 endif()
 
+# 添加 nlohmann/json 头文件路径
 include_directories(
     include
+    ${CMAKE_SOURCE_DIR}/third_party/json
 )
 
 # 链接 winmm.lib
