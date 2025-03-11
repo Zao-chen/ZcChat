@@ -9,6 +9,8 @@
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
 
+#include <QGraphicsOpacityEffect>
+
 tachie::tachie(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::tachie)
@@ -26,12 +28,17 @@ tachie::tachie(QWidget *parent) :
 /*初始化*/
 void tachie::init_from_main()
 {
-    ui->label->setScaledContents(true); //确保图片随尺寸缩放
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
     QPixmap pixmap;
     pixmap.load(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png");
-    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0),pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
+    // 缩放新图片并设置到 label
+    QPixmap scaledPixmap = pixmap.scaled(
+        pixmap.width() * (settings_actor->value("tachie/size").toInt() / 100.0),
+        pixmap.height() * (settings_actor->value("tachie/size").toInt() / 100.0),
+        Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
+    ui->label->setPixmap(scaledPixmap);
     this->setFixedSize(pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0),pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0));
     qInfo()<<"立绘缩放为："<<settings_actor->value("tachie/size").toInt()/100.0;
 }
@@ -46,11 +53,38 @@ void tachie::changetachie_from_galdialog(QString name)
     QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
     QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
     qInfo()<<"【接收】对话框 --- 修改立绘"+name+" ---> 立绘";
+
     QPixmap pixmap;
-    pixmap.load(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/"+name+".png");
-    if(pixmap.isNull()) pixmap.load(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png");
-    ui->label->setPixmap(pixmap.scaled(pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0),pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0),Qt::KeepAspectRatio,Qt::SmoothTransformation));
-    this->setFixedSize(pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0),pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0));
+    pixmap.load(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/"+name.replace(" ","")+".png");
+    // 将 label_2 设置为原有图片
+    ui->label_2->setPixmap(ui->label->pixmap());
+    ui->label->hide();
+    // 缩放新图片并设置到 label
+    QPixmap scaledPixmap = pixmap.scaled(
+        pixmap.width() * (settings_actor->value("tachie/size").toInt() / 100.0),
+        pixmap.height() * (settings_actor->value("tachie/size").toInt() / 100.0),
+        Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
+    ui->label->setPixmap(scaledPixmap);
+    // 设置 label_1 的淡入效果
+    QGraphicsOpacityEffect *effect1 = new QGraphicsOpacityEffect(ui->label);
+    ui->label->setGraphicsEffect(effect1);
+    QPropertyAnimation *animation1 = new QPropertyAnimation(effect1, "opacity");
+    animation1->setDuration(200);  // 动画持续时间（毫秒）
+    animation1->setStartValue(0.5);
+    animation1->setEndValue(1.0);
+    // 设置 label_2 的淡出效果
+    QGraphicsOpacityEffect *effect2 = new QGraphicsOpacityEffect(ui->label_2);
+    ui->label_2->setGraphicsEffect(effect2);
+    QPropertyAnimation *animation2 = new QPropertyAnimation(effect2, "opacity");
+    animation2->setDuration(500);
+    animation2->setStartValue(1.0);
+    animation2->setEndValue(0.0);
+    // 同步动画播放
+    animation1->start();
+    animation2->start();
+    ui->label->show();
+
     qInfo()<<"立绘缩放为："<<settings_actor->value("tachie/size").toInt()/100.0;
     //动画
     QSettings *config = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("/actor/name").toString()+"/anim.ini",QSettings::IniFormat);
@@ -60,11 +94,11 @@ void tachie::changetachie_from_galdialog(QString name)
     switch (config->value(name+"/animation").toInt()) {
     case 1: //左右晃动
     {
-        QPropertyAnimation *moveUp = new QPropertyAnimation(ui->label, "geometry");
+        QPropertyAnimation *moveUp = new QPropertyAnimation(ui->widget, "geometry");
         moveUp->setDuration(250); //持续时间 1 秒
         moveUp->setStartValue(QRect(0, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 起始位置
         moveUp->setEndValue(QRect(0, -15, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 结束位置
-        QPropertyAnimation *moveDown = new QPropertyAnimation(ui->label, "geometry");
+        QPropertyAnimation *moveDown = new QPropertyAnimation(ui->widget, "geometry");
         moveDown->setDuration(250); //持续时间 1 秒
         moveDown->setStartValue(QRect(0, -15, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 起始位置
         moveDown->setEndValue(QRect(0, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 结束位置
@@ -75,15 +109,15 @@ void tachie::changetachie_from_galdialog(QString name)
     }
     case 2: //上下晃动
     {
-        QPropertyAnimation *moveleft = new QPropertyAnimation(ui->label, "geometry");
+        QPropertyAnimation *moveleft = new QPropertyAnimation(ui->widget, "geometry");
         moveleft->setDuration(250); //持续时间 1 秒
         moveleft->setStartValue(QRect(0, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 起始位置
         moveleft->setEndValue(QRect(-15, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 结束位置
-        QPropertyAnimation *moveright = new QPropertyAnimation(ui->label, "geometry");
+        QPropertyAnimation *moveright = new QPropertyAnimation(ui->widget, "geometry");
         moveright->setDuration(500); //持续时间 1 秒
         moveright->setStartValue(QRect(-15, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 起始位置
         moveright->setEndValue(QRect(15, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 结束位置
-        QPropertyAnimation *moveleft2 = new QPropertyAnimation(ui->label, "geometry");
+        QPropertyAnimation *moveleft2 = new QPropertyAnimation(ui->widget, "geometry");
         moveleft2->setDuration(250); //持续时间 1 秒
         moveleft2->setStartValue(QRect(15, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 起始位置
         moveleft2->setEndValue(QRect(0, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 结束位置
@@ -95,10 +129,8 @@ void tachie::changetachie_from_galdialog(QString name)
     }
     case 3: //放大
     {
-        //确保图片随尺寸缩放
-        ui->label->setScaledContents(true);
         //获取 QLabel 的原始几何和宽高比
-        QRect originalGeometry = ui->label->geometry();
+        QRect originalGeometry = ui->widget->geometry();
         qreal aspectRatio = static_cast<qreal>(originalGeometry.width()) / originalGeometry.height();
         //计算目标尺寸，保持宽高比
         int delta = -50; //缩小的总大小
@@ -110,7 +142,7 @@ void tachie::changetachie_from_galdialog(QString name)
                              newWidth,
                              newHeight);
         //使用 QPropertyAnimation 创建放大动画
-        QPropertyAnimation *animation = new QPropertyAnimation(ui->label, "geometry");
+        QPropertyAnimation *animation = new QPropertyAnimation(ui->widget, "geometry");
         animation->setDuration(500); //动画时长 500 毫秒
         animation->setStartValue(originalGeometry);
         animation->setEndValue(targetGeometry);
@@ -119,10 +151,8 @@ void tachie::changetachie_from_galdialog(QString name)
     }
     case 4: //缩小
     {
-        //确保图片随尺寸缩放
-        ui->label->setScaledContents(true);
         //获取 QLabel 的原始几何和宽高比
-        QRect originalGeometry = ui->label->geometry();
+        QRect originalGeometry = ui->widget->geometry();
         qreal aspectRatio = static_cast<qreal>(originalGeometry.width()) / originalGeometry.height();
         //计算目标尺寸，保持宽高比
         int delta = 50; // 缩小的总大小
@@ -134,7 +164,7 @@ void tachie::changetachie_from_galdialog(QString name)
                              newWidth,
                              newHeight);
         //使用 QPropertyAnimation 创建放大动画
-        QPropertyAnimation *animation = new QPropertyAnimation(ui->label, "geometry");
+        QPropertyAnimation *animation = new QPropertyAnimation(ui->widget, "geometry");
         animation->setDuration(500); //动画时长 500 毫秒
         animation->setStartValue(originalGeometry);
         animation->setEndValue(targetGeometry);
@@ -145,27 +175,27 @@ void tachie::changetachie_from_galdialog(QString name)
     {
         for(int i=0;i!=10;i++)
         {
-            QPropertyAnimation *moveUp = new QPropertyAnimation(ui->label, "geometry");
+            QPropertyAnimation *moveUp = new QPropertyAnimation(ui->widget, "geometry");
             moveUp->setDuration(20); //持续时间 1 秒
             moveUp->setStartValue(QRect(0, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 起始位置
             moveUp->setEndValue(QRect(0, -4, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 结束位置
-            QPropertyAnimation *moveDown = new QPropertyAnimation(ui->label, "geometry");
+            QPropertyAnimation *moveDown = new QPropertyAnimation(ui->widget, "geometry");
             moveDown->setDuration(40); //持续时间 1 秒
             moveDown->setStartValue(QRect(0, -4, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 起始位置
             moveDown->setEndValue(QRect(0, 4, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 结束位置
-            QPropertyAnimation *moveUp2 = new QPropertyAnimation(ui->label, "geometry");
+            QPropertyAnimation *moveUp2 = new QPropertyAnimation(ui->widget, "geometry");
             moveUp2->setDuration(20); //持续时间 1 秒
             moveUp2->setStartValue(QRect(0, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 起始位置
             moveUp2->setEndValue(QRect(0, -4, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 结束位置
-            QPropertyAnimation *moveleft = new QPropertyAnimation(ui->label, "geometry");
+            QPropertyAnimation *moveleft = new QPropertyAnimation(ui->widget, "geometry");
             moveleft->setDuration(20); //持续时间 1 秒
             moveleft->setStartValue(QRect(0, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 起始位置
             moveleft->setEndValue(QRect(-4, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 结束位置
-            QPropertyAnimation *moveright = new QPropertyAnimation(ui->label, "geometry");
+            QPropertyAnimation *moveright = new QPropertyAnimation(ui->widget, "geometry");
             moveright->setDuration(40); //持续时间 1 秒
             moveright->setStartValue(QRect(-4, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 起始位置
             moveright->setEndValue(QRect(4, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 结束位置
-            QPropertyAnimation *moveleft2 = new QPropertyAnimation(ui->label, "geometry");
+            QPropertyAnimation *moveleft2 = new QPropertyAnimation(ui->widget, "geometry");
             moveleft2->setDuration(20); //持续时间 1 秒
             moveleft2->setStartValue(QRect(4, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 起始位置
             moveleft2->setEndValue(QRect(0, 0, pixmap.width()*(settings_actor->value("tachie/size").toInt()/100.0), pixmap.height()*(settings_actor->value("tachie/size").toInt()/100.0))); // 结束位置
