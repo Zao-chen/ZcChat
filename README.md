@@ -2,7 +2,8 @@
 
 🌟 **一个有长期记忆、表情动作立绘显示、操控电脑和语音功能，更适合Galgame角色的AI桌宠** 🌟
 
-![ZcChat预览](https://github.com/user-attachments/assets/1d11ea82-5279-4c92-be02-30d6e65816fb)
+![ZcChat预览](https://github.com/user-attachments/assets/c03ceb8f-b0cc-46a8-bb50-07433c630048)
+
 
 **视频演示**：
 
@@ -45,9 +46,11 @@
 ### 🎭 Step 2 - 配置角色
 
 1. 将角色数据中的立绘放入 `/characters/{名称}` 文件夹。
+   > 最终的项目结构应为 `/characters/{名称}/正常.png...`
 2. 在 `ZcChat > 通用设置 > 角色选择` 中选中角色。
-
-> 最终的项目结构应为 `/characters/{名称}/正常.png...`
+3. 在 `ZcChat > 角色配置` 设置立绘大小。
+4. 右键托盘重置立绘位置。
+   > Tips：右键立绘可以打开和关闭对话框，在对话框滚轮可以打开和关闭历史。
 
 ### 🤖 Step 3- 安装配置Letta
 
