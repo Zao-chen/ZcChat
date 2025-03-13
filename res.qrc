@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/img">
         <file>img/logo.png</file>
-        <file>img/notice-fill.svg</file>
+        <file>img/microphone-solid.svg</file>
+        <file>img/volume-fill.svg</file>
     </qresource>
 </RCC>

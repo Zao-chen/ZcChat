@@ -68,12 +68,30 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: transparent;  /* 无背景 */
+    border: none;                   /* 无边框 */
+    border-radius: 5px;            /* 圆角 */
+}
+
+/* 鼠标悬停时（仅有圆角变化） */
+QPushButton:hover {
+    border: 2px solid #CCCCCC;      /* 悬停时增加边框 */
+}
+
+/* 按下时（加深边框颜色） */
+QPushButton:pressed {
+    border: 2px solid #AAAAAA;      /* 按下时边框加深 */
+}
+</string>
+   </property>
    <property name="text">
     <string/>
    </property>
    <property name="icon">
     <iconset resource="../res.qrc">
-     <normaloff>:/img/img/notice-fill.svg</normaloff>:/img/img/notice-fill.svg</iconset>
+     <normaloff>:/img/img/volume-fill.svg</normaloff>:/img/img/volume-fill.svg</iconset>
    </property>
   </widget>
  </widget>

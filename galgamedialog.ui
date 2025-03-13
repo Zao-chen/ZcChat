@@ -97,49 +97,107 @@
   <widget class="QPushButton" name="pushButton_input">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>170</y>
-     <width>71</width>
+     <width>21</width>
      <height>21</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">QPushButton {
+    background-color: transparent;  /* 无背景 */
+    border: none;                   /* 无边框 */
+    border-radius: 5px;            /* 圆角 */
+}
+
+/* 鼠标悬停时（仅有圆角变化） */
+QPushButton:hover {
+    border: 2px solid #CCCCCC;      /* 悬停时增加边框 */
+}
+
+/* 按下时（加深边框颜色） */
+QPushButton:pressed {
+    border: 2px solid #AAAAAA;      /* 按下时边框加深 */
+}
+</string>
    </property>
    <property name="text">
-    <string>长按输入</string>
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/img/microphone-solid.svg</normaloff>:/img/img/microphone-solid.svg</iconset>
    </property>
   </widget>
   <widget class="QCheckBox" name="checkBox_autoInput">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>170</y>
-     <width>80</width>
-     <height>19</height>
+     <x>50</x>
+     <y>164</y>
+     <width>91</width>
+     <height>31</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QCheckBox {
+    background-color: transparent;  /* 无背景 */
+    border: none;                   /* 无边框 */
+    padding: 5px 10px;              /* 内边距，调整文本位置 */
+}
+
+/* 选中状态时 */
+QCheckBox::indicator:checked {
+    border: 2px solid #CCCCCC;      /* 选中时显示边框 */
+    background-color: #CCCCCC;      /* 选中时背景颜色 */
+    border-radius: 5px;            /* 圆角 */
+}
+
+/* 未选中状态时 */
+QCheckBox::indicator:unchecked {
+    border: 2px solid #BBBBBB;      /* 未选中时显示浅灰色边框 */
+    background-color: transparent;  /* 背景透明 */
+    border-radius: 5px;            /* 圆角 */
+}
+</string>
+   </property>
    <property name="text">
-    <string>直接对话</string>
+    <string>直接发送</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_history">
    <property name="geometry">
     <rect>
-     <x>560</x>
+     <x>570</x>
      <y>170</y>
-     <width>71</width>
+     <width>61</width>
      <height>21</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">QPushButton {
+    background-color: transparent;  /* 无背景 */
+    border: none;                   /* 无边框 */
+    border-radius: 5px;            /* 圆角 */
+}
+
+/* 鼠标悬停时（仅有圆角变化） */
+QPushButton:hover {
+    border: 2px solid #CCCCCC;      /* 悬停时增加边框 */
+}
+
+/* 按下时（加深边框颜色） */
+QPushButton:pressed {
+    border: 2px solid #AAAAAA;      /* 按下时边框加深 */
+}
+</string>
    </property>
    <property name="text">
     <string>历史</string>
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>
