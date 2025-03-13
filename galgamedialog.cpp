@@ -248,7 +248,9 @@ QString galgamedialog::UrlpostWithFile()
                 if (reply_api->error() == QNetworkReply::NoError) {
                     resultJson = reply_api->readAll();
                     qInfo() << "语音识别-百度-识别成功：" << resultJson;
-                } else {
+                }
+                else
+                {
                     qWarning() << "语音识别-百度-识别失败：" << reply_api->errorString();
                 }
                 loop.quit();
@@ -263,20 +265,32 @@ QString galgamedialog::UrlpostWithFile()
         QString result;
         try
         {
+            if (resultJson.isEmpty()) {
+                qWarning() << "输入的 JSON 为空";
+                result.clear();
+            }
             nlohmann::json doc = nlohmann::json::parse(resultJson.toStdString());
-            if (doc.contains("result") && doc["result"].is_array())
+            qInfo() << "解析的 JSON 内容: " << resultJson;
+            if (doc.contains("result") && doc["result"].is_array() && !doc["result"].empty())
             {
                 for (const auto& value : doc["result"])
                 {
-                    qInfo() << "语音识别-百度-识别-获取到结果：" << QString::fromStdString(value.get<std::string>());
-                    result = QString::fromStdString(value.get<std::string>());
+                    if (value.is_string()) {
+                        result = QString::fromStdString(value.get<std::string>());
+                        qInfo() << "语音识别-百度-识别-获取到结果：" << result;
+                    }
                 }
+            }
+            else
+            {
+                qWarning() << "JSON 中没有有效的 'result' 字段";
             }
         }
         catch (const nlohmann::json::exception& e)
         {
             qWarning() << "Json解析错误: " << e.what();
-            result.clear();  // 如果解析失败，设置为空
+            qWarning() << "解析失败的 JSON: " << resultJson;
+            result.clear();
         }
         return result;
     }

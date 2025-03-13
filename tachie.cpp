@@ -55,7 +55,11 @@ void tachie::changetachie_from_galdialog(QString name)
     qInfo()<<"【接收】对话框 --- 修改立绘"+name+" ---> 立绘";
 
     QPixmap pixmap;
-    pixmap.load(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/"+name.replace(" ","")+".png");
+    if (!pixmap.load(qApp->applicationDirPath() + "/characters/" + settings->value("actor/name").toString() + "/" + name.replace(" ", "") + ".png")) {
+        qWarning()<<"未找到立绘，使用默认立绘";
+        pixmap.load(qApp->applicationDirPath() + "/characters/" + settings->value("actor/name").toString() + "/正常.png");
+    }
+
     // 将 label_2 设置为原有图片
     ui->label_2->setPixmap(ui->label->pixmap());
     ui->label->hide();
