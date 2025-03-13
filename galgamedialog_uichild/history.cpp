@@ -33,13 +33,11 @@ history::~history()
 void history::addChildWindow(QString name,QString msg) {
     QVBoxLayout *layout = qobject_cast<QVBoxLayout *>(ui->scrollAreaWidgetContents->layout());
     if (!layout) return;
-
-    historychild *newChild = new historychild(name,msg);
+    historychild *newChild = new historychild(name,msg,this);
     layout->addWidget(newChild);
     // 添加子窗口后，滑动到最底部
     // 等待布局更新后滑动到最底部
     qInfo() << "添加日志：" << msg;
-
 }
 /*圆角边框*/
 void history::paintEvent(QPaintEvent *event)

@@ -572,65 +572,12 @@ void galgamedialog::send_to_llm()
     //语音合成
     if(settings->value("/vits/enable").toBool())
     {
-        QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-        QNetworkReply* reply;
-        QString text;
-        QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
-        //语音语言选择
-        if(settings_actor->value("/vits/lan").toString()=="ja")
-            text = message.split("|")[2];
-        else
-            text = message.split("|")[1];
-        QRegularExpression regex("\\{(.*?)\\}");
-        QRegularExpressionMatch match = regex.match(message);
-        if (match.hasMatch()) {
-            text = text.replace(match.captured(1),"");
-        }
-        //语音api选择
-        if(settings_actor->value("/vits/api").toInt()==1)
-            reply = manager->get(QNetworkRequest(QUrl(settings_actor->value("/vits/custom_url").toString().replace("{msg}",text))));
-        else
-            qDebug()<<"发送vits请求"<<settings->value("/vits/url").toString()+"/voice/"+settings_actor->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings_actor->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings_actor->value("/vits/lan").toString();
-            reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings_actor->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings_actor->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings_actor->value("/vits/lan").toString())));
-        //播放返回值
-        connect(reply, &QNetworkReply::finished, this, [=]() {
-            if (reply->error() == QNetworkReply::NoError) {
-                if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200)
-                {
-                    QFile outputFile(qApp->applicationDirPath()+"/temp.mp3");
-                    if (outputFile.open(QIODevice::WriteOnly))
-                    {
-                        outputFile.write(reply->readAll());
-                        outputFile.close();
-                    }
-                    // 停止并释放之前的播放资源
-                    if (player) {
-                        player->stop();
-                        player->setSource(QUrl()); // 清空源文件
-                    }
-                    QAudioOutput *audioOutput = new QAudioOutput; //创建 QAudioOutput 对象来控制音量
-                    player->setAudioOutput(audioOutput); //将 QAudioOutput 连接到 QMediaPlayer
-                    player->setSource(QUrl::fromLocalFile(qApp->applicationDirPath()+"/temp.mp3")); //设置媒体源文件
-                    audioOutput->setVolume(1); //0.0 为最小音量，1.0 为最大音量
-                    player->setPosition(0);
-                    player->play(); //播放音频
-                    changetext(message.split("|")[1].replace(" ","")); //逐字显示
-                    history_win->addChildWindow(settings->value("/actor/name").toString(),message.split("|")[1]);
-                    ui->pushButton->show();
-                    emit change_tachie_to_tachie(message.split("|")[0]);
-                }
-            }
-            else
-            {
-                ui->textEdit->setText("[error] Vits错误，请检查Vits配置或者关闭语言输出");
-                ui->pushButton->show();
-            }
-        });
+        spawnVoice(message,false);
     }
     else
     {
         changetext(message.split("|")[1].replace(" ","")); //逐字显示
-        history_win->addChildWindow(settings->value("/actor/name").toString(),message.split("|")[1]);
+        history_win->addChildWindow(settings->value("/actor/name").toString(),message);
         ui->pushButton->show();
         emit change_tachie_to_tachie(message.split("|")[0]);
     }
@@ -712,6 +659,70 @@ void galgamedialog::send_to_llm()
         }
         qInfo() << "打开url";
     }
+}
+/*语言合成函数*/
+void galgamedialog::spawnVoice(QString message,bool onlySound)
+{
+    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+    QNetworkReply* reply;
+    QString text;
+    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
+    //语音语言选择
+    if(settings_actor->value("/vits/lan").toString()=="ja")
+        text = message.split("|")[2];
+    else
+        text = message.split("|")[1];
+    QRegularExpression regex("\\{(.*?)\\}");
+    QRegularExpressionMatch match = regex.match(message);
+    if (match.hasMatch()) {
+        text = text.replace(match.captured(1),"");
+    }
+    //语音api选择
+    if(settings_actor->value("/vits/api").toInt()==1)
+        reply = manager->get(QNetworkRequest(QUrl(settings_actor->value("/vits/custom_url").toString().replace("{msg}",text))));
+    else
+        qDebug()<<"发送vits请求"<<settings->value("/vits/url").toString()+"/voice/"+settings_actor->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings_actor->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings_actor->value("/vits/lan").toString();
+    reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings_actor->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings_actor->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings_actor->value("/vits/lan").toString())));
+    //播放返回值
+    connect(reply, &QNetworkReply::finished, this, [=]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200)
+            {
+                QFile outputFile(qApp->applicationDirPath()+"/temp.mp3");
+                if (outputFile.open(QIODevice::WriteOnly))
+                {
+                    outputFile.write(reply->readAll());
+                    outputFile.close();
+                }
+                // 停止并释放之前的播放资源
+                if (player) {
+                    player->stop();
+                    player->setSource(QUrl()); // 清空源文件
+                }
+                QAudioOutput *audioOutput = new QAudioOutput; //创建 QAudioOutput 对象来控制音量
+                player->setAudioOutput(audioOutput); //将 QAudioOutput 连接到 QMediaPlayer
+                player->setSource(QUrl::fromLocalFile(qApp->applicationDirPath()+"/temp.mp3")); //设置媒体源文件
+                audioOutput->setVolume(1); //0.0 为最小音量，1.0 为最大音量
+                player->setPosition(0);
+                player->play(); //播放音频
+                if(!onlySound)
+                {
+                    changetext(message.split("|")[1].replace(" ","")); //逐字显示
+                    history_win->addChildWindow(settings->value("/actor/name").toString(),message);
+                    ui->pushButton->show();
+                    emit change_tachie_to_tachie(message.split("|")[0]);
+                }
+            }
+        }
+        else
+        {
+            if(!onlySound)
+            {
+                ui->textEdit->setText("[error] Vits错误，请检查Vits配置或者关闭语言输出");
+                ui->pushButton->show();
+            }
+        }
+    });
 }
 /*历史按钮*/
 void galgamedialog::on_pushButton_history_clicked()

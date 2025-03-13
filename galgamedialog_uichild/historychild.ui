@@ -28,10 +28,10 @@
   <widget class="QLabel" name="label_name">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>40</x>
      <y>10</y>
-     <width>53</width>
-     <height>15</height>
+     <width>181</width>
+     <height>16</height>
     </rect>
    </property>
    <property name="font">
@@ -46,9 +46,9 @@
   <widget class="QLabel" name="label_msg">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>40</x>
      <y>30</y>
-     <width>531</width>
+     <width>501</width>
      <height>61</height>
     </rect>
    </property>
@@ -59,7 +59,26 @@
     <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
    </property>
   </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>8</y>
+     <width>23</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="../res.qrc">
+     <normaloff>:/img/img/notice-fill.svg</normaloff>:/img/img/notice-fill.svg</iconset>
+   </property>
+  </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+class galgamedialog;
+
 namespace Ui {
 class historychild;
 }
@@ -15,8 +17,13 @@ public:
     explicit historychild(const QString &name,const QString &msg,QWidget *parent = nullptr);
     ~historychild();
 
+private slots:
+    void on_pushButton_clicked(bool checked);
+
 private:
     Ui::historychild *ui;
+    QString msg_l;
+    galgamedialog *galWin;
 };
 
 #endif // HISTORYCHILD_H

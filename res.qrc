@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/img">
         <file>img/logo.png</file>
+        <file>img/notice-fill.svg</file>
     </qresource>
 </RCC>
