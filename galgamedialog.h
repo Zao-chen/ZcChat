@@ -66,6 +66,7 @@ private:
     QString fullText;
     int currentIndex;
     void changetext(QString text);
+    bool isInChangetext;
     /*重绘*/
     virtual void paintEvent(QPaintEvent *event) override;
     /*录音*/
@@ -88,7 +89,5 @@ private:
     /*滚轮事件*/
     void handleWheelUp();   // 处理向上滚轮
     void handleWheelDown(); // 处理向下滚轮
-
-
 };
 #endif // GALGAMEDIALOG_H

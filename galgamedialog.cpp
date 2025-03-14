@@ -69,12 +69,8 @@ void galgamedialog::keyPressEvent(QKeyEvent* event)
 void galgamedialog::keyReleaseEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Return)
-    {
-        if (!keys.contains(Qt::Key_Shift)) //过滤换行
-        {
+        if (!keys.contains(Qt::Key_Shift)) //过滤Shift换行
             send_to_llm();
-        }
-    }
     keys.removeAll(event->key());
 }
 /*LLMpost请求*/
@@ -309,6 +305,7 @@ QByteArray galgamedialog::getUrl(const QString &input)
 //开始逐字显示
 void galgamedialog::changetext(QString text)
 {
+    isInChangetext = true;
     timer->stop();
     fullText = text;
     currentIndex = 0;
@@ -318,6 +315,10 @@ void galgamedialog::changetext(QString text)
 void galgamedialog::updateText() {
     if (currentIndex <= fullText.length()) {
         ui->textEdit->setText(fullText.left(++currentIndex));
+    }
+    else
+    {
+        isInChangetext = false;
     }
     return;
 }
@@ -360,10 +361,19 @@ void galgamedialog::mouseReleaseEvent(QMouseEvent *event)
 /*点击继续*/
 void galgamedialog::on_pushButton_clicked()
 {
-    ui->label_name->setText("你");
-    ui->textEdit->clear();
-    ui->textEdit->setEnabled(true);
-    ui->pushButton->hide();
+    if(isInChangetext)
+    {
+        timer->stop();
+        ui->textEdit->setText(fullText);
+        isInChangetext = false;
+    }
+    else
+    {
+        ui->label_name->setText("你");
+        ui->textEdit->clear();
+        ui->textEdit->setEnabled(true);
+        ui->pushButton->hide();
+    }
 }
 /*圆角边框*/
 void galgamedialog::paintEvent(QPaintEvent *event)
@@ -558,15 +568,13 @@ void galgamedialog::send_to_llm()
     // 获取到的json处理
     QString message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为[" + QString::fromStdString(jsonDoc.dump()) + "]|错误error";
     // 解析 JSON 字符串
-    if (jsonDoc.is_discarded()) {
-        qWarning() << "返回值为空";
-    }
+    if (jsonDoc.is_discarded()) qWarning() << "返回值为空";
     else if (jsonDoc.contains("messages") && jsonDoc["messages"].is_array()) // 查找 "content" 字段
     {
         for (const auto& value : jsonDoc["messages"]) {
             if (value.contains("content")) {
                 message = QString::fromStdString(value["content"].get<std::string>());
-                break; // 找到第一个匹配的 content 字段后退出
+                break; //找到第一个匹配的 content 字段后退出
             }
         }
     }
