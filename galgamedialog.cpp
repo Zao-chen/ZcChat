@@ -54,6 +54,126 @@ galgamedialog::galgamedialog(QWidget *parent)
     connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
     /*子窗口*/
     history_win = new history(this);
+    /**/
+    qInfo()<<"dialog初始化";
+    /*录音*/
+    audioRecorder = new QMediaRecorder(this);
+    captureSession.setRecorder(audioRecorder);
+    captureSession.setAudioInput(new QAudioInput(this));
+    QAudioInput *audioInput = captureSession.audioInput();
+    if (audioInput)
+    {
+        audioInput->setDevice(QMediaDevices::defaultAudioInput());
+        qInfo() << "使用的音频输入设备:" << QMediaDevices::defaultAudioInput().description();
+    }
+    else
+    {
+        qWarning() << "无法初始化音频输入设备";
+    }
+    connect(audioRecorder, &QMediaRecorder::recorderStateChanged, this, [=](QMediaRecorder::RecorderState state) {
+        if (state == QMediaRecorder::StoppedState) {
+            qInfo()<<"结束录音->识别";
+            QString msg = UrlpostWithFile();
+            if(msg!="")
+            {
+                ui->textEdit->setText(msg);
+                if(ui->checkBox_autoInput->isChecked())
+                {
+                    qInfo() << "自动发送！";
+                    send_to_llm();
+                }
+                if(settings->value("/speechInput/wake_enable").toBool()) //开启的语音唤醒
+                {
+                    /*结束词检查*/
+                    bool containsAny = false;
+                    // 遍历 list，检查 msg 是否包含任意一个子字符串
+                    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
+                    for (const QString &str : settings_actor->value("/speechInput/end_word").toString().split("|")) {
+                        if (msg.contains(str)) {
+                            containsAny = true;  // 如果包含，设置标志为 true
+                            break;               // 找到匹配后立即退出循环
+                        }
+                    }
+                    if(containsAny)
+                    {
+                        qInfo() << "发现结束词";
+                        ui->checkBox_autoInput->setChecked(false);
+                    }
+                    /*唤醒词检查*/
+                    containsAny = false;  // 初始化标志为 false
+                    // 遍历 list，检查 msg 是否包含任意一个子字符串
+                    for (const QString &str : settings_actor->value("/speechInput/wake_word").toString().split("|")) {
+                        if (msg.contains(str)) {
+                            containsAny = true;  // 如果包含，设置标志为 true
+                            break;               // 找到匹配后立即退出循环
+                        }
+                    }
+                    if(containsAny)
+                    {
+                        qInfo() << "发现唤醒词";
+                        ui->checkBox_autoInput->setChecked(true);
+                        send_to_llm();
+                    }
+                }
+            }
+        }
+    });
+    /*VAD*/
+    /*录音*/
+    // 设置音频格式
+    format.setSampleRate(16000); //设置采样率
+    format.setChannelCount(1); //设置通道数
+    format.setSampleFormat(QAudioFormat::Int16); //设置采样格式为 16 位整数
+    //获取默认的音频输入设备
+    QAudioDevice inputDevice = QMediaDevices::defaultAudioInput();
+    if (!inputDevice.isFormatSupported(format)) {
+        qWarning() << "Default format not supported, trying to use the nearest.";
+        format = inputDevice.preferredFormat();
+    }
+    //创建 VAD 对象
+    vad = new VAD(this);
+    //连接 VAD 的信号到槽函数
+    connect(vad,&VAD::energy_to_main,this,[=](int energy)
+            {
+                emit energy_to_main(energy);
+            });
+    connect(vad, &VAD::voiceDetected, this, [&](bool detected) {
+        if (detected)
+        {
+            if(!is_record&&!is_in_llm)
+            {
+                if(settings->value("/speechInput/wake_enable").toBool())
+                {
+                    ui->pushButton_input->pressed();
+                    is_record = true;
+                }
+            }
+        }
+        else
+        {
+            if(is_record&&!is_in_llm)
+            {
+                if(settings->value("/speechInput/wake_enable").toBool())
+                {
+                    ui->pushButton_input->released();
+                    is_record = false;
+                }
+            }
+        }
+    });
+    //创建音频输入对象
+    audioSource = new QAudioSource(inputDevice, format, this);
+    //启动音频输入
+    audioDevice = audioSource->start();
+    if (!audioDevice) {
+        qWarning() << "Failed to start audio input!";
+    }
+    //当有音频数据可用时，调用 VAD 进行处理
+    connect(audioDevice, &QIODevice::readyRead, this, [=]() {
+        QByteArray audioData = audioDevice->readAll();
+        vad->processAudio(audioData, format);
+    });
+
     qInfo()<<"galgamedialog加载完成！";
 }
 galgamedialog::~galgamedialog()
@@ -422,133 +542,19 @@ void galgamedialog::on_pushButton_input_released()
 }
 void galgamedialog::init_from_main()
 {
-    qInfo()<<"dialog初始化";
-    /*录音*/
-    ui->pushButton_input->show();
-    ui->checkBox_autoInput->show();
-    audioRecorder = new QMediaRecorder(this);
-    captureSession.setRecorder(audioRecorder);
-    captureSession.setAudioInput(new QAudioInput(this));
-    QAudioInput *audioInput = captureSession.audioInput();
-    if (audioInput)
-    {
-        audioInput->setDevice(QMediaDevices::defaultAudioInput());
-        qInfo() << "使用的音频输入设备:" << QMediaDevices::defaultAudioInput().description();
-    }
-    else
-    {
-        qWarning() << "无法初始化音频输入设备";
-    }
-    connect(audioRecorder, &QMediaRecorder::recorderStateChanged, this, [=](QMediaRecorder::RecorderState state) {
-        if (state == QMediaRecorder::StoppedState) {
-            qInfo()<<"结束录音->识别";
-            QString msg = UrlpostWithFile();
-            if(msg!="")
-            {
-                ui->textEdit->setText(msg);
-                if(ui->checkBox_autoInput->isChecked())
-                {
-                    qInfo() << "自动发送！";
-                    send_to_llm();
-                }
-                if(settings->value("/speechInput/wake_enable").toBool()) //开启的语音唤醒
-                {
-                    /*结束词检查*/
-                    bool containsAny = false;
-                    // 遍历 list，检查 msg 是否包含任意一个子字符串
-                    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
-                    for (const QString &str : settings_actor->value("/speechInput/end_word").toString().split("|")) {
-                        if (msg.contains(str)) {
-                            containsAny = true;  // 如果包含，设置标志为 true
-                            break;               // 找到匹配后立即退出循环
-                        }
-                    }
-                    if(containsAny)
-                    {
-                        qInfo() << "发现结束词";
-                        ui->checkBox_autoInput->setChecked(false);
-                    }
-                    /*唤醒词检查*/
-                    containsAny = false;  // 初始化标志为 false
-                    // 遍历 list，检查 msg 是否包含任意一个子字符串
-                    for (const QString &str : settings_actor->value("/speechInput/wake_word").toString().split("|")) {
-                        if (msg.contains(str)) {
-                            containsAny = true;  // 如果包含，设置标志为 true
-                            break;               // 找到匹配后立即退出循环
-                        }
-                    }
-                    if(containsAny)
-                    {
-                        qInfo() << "发现唤醒词";
-                        ui->checkBox_autoInput->setChecked(true);
-                        send_to_llm();
-                    }
-                }
-            }
-        }
-    });
-
     if(!settings->value("/speechInput/enable").toBool()) //不开启语言输入
     {
         qInfo()<<"不使用语音输入";
         ui->pushButton_input->hide();
         ui->checkBox_autoInput->hide();
     }
-    /*VAD*/
-    /*录音*/
-    // 设置音频格式
-    format.setSampleRate(16000); //设置采样率
-    format.setChannelCount(1); //设置通道数
-    format.setSampleFormat(QAudioFormat::Int16); //设置采样格式为 16 位整数
-    //获取默认的音频输入设备
-    QAudioDevice inputDevice = QMediaDevices::defaultAudioInput();
-    if (!inputDevice.isFormatSupported(format)) {
-        qWarning() << "Default format not supported, trying to use the nearest.";
-        format = inputDevice.preferredFormat();
+    else
+    {
+        qInfo()<<"使用语言输入";
+        ui->pushButton_input->show();
+        ui->checkBox_autoInput->show();
     }
-    //创建 VAD 对象
-    vad = new VAD(this);
-    //连接 VAD 的信号到槽函数
-    connect(vad,&VAD::energy_to_main,this,[=](int energy)
-            {
-                emit energy_to_main(energy);
-            });
-    connect(vad, &VAD::voiceDetected, this, [&](bool detected) {
-        if (detected)
-        {
-            if(!is_record&&!is_in_llm)
-            {
-                if(settings->value("/speechInput/wake_enable").toBool())
-                {
-                    ui->pushButton_input->pressed();
-                    is_record = true;
-                }
-            }
-        }
-        else
-        {
-            if(is_record&&!is_in_llm)
-            {
-                if(settings->value("/speechInput/wake_enable").toBool())
-                {
-                    ui->pushButton_input->released();
-                    is_record = false;
-                }
-            }
-        }
-    });
-    //创建音频输入对象
-    audioSource = new QAudioSource(inputDevice, format, this);
-    //启动音频输入
-    audioDevice = audioSource->start();
-    if (!audioDevice) {
-        qWarning() << "Failed to start audio input!";
-    }
-    //当有音频数据可用时，调用 VAD 进行处理
-    connect(audioDevice, &QIODevice::readyRead, this, [=]() {
-        QByteArray audioData = audioDevice->readAll();
-        vad->processAudio(audioData, format);
-    });
+
 }
 //发送llm消息
 void galgamedialog::send_to_llm()
