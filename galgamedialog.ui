@@ -25,86 +25,97 @@
 }
 </string>
   </property>
-  <widget class="QLabel" name="label_name">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>15</y>
-     <width>291</width>
-     <height>20</height>
-    </rect>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>20</number>
    </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei</family>
-     <pointsize>14</pointsize>
-    </font>
+   <property name="topMargin">
+    <number>15</number>
    </property>
-   <property name="text">
-    <string>TextLabel</string>
+   <property name="rightMargin">
+    <number>20</number>
    </property>
-  </widget>
-  <widget class="QTextEdit" name="textEdit">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>39</y>
-     <width>600</width>
-     <height>121</height>
-    </rect>
+   <property name="bottomMargin">
+    <number>10</number>
    </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei</family>
-     <pointsize>14</pointsize>
-    </font>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::Shape::NoFrame</enum>
-   </property>
-   <property name="acceptRichText">
-    <bool>true</bool>
-   </property>
-   <property name="placeholderText">
-    <string>说点什么吧（Shift+Enter回车 Enter发送）</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>40</y>
-     <width>601</width>
-     <height>121</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei</family>
-     <pointsize>30</pointsize>
-    </font>
-   </property>
-   <property name="toolTip">
-    <string/>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="flat">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_input">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>170</y>
-     <width>21</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton {
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_name">
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei</family>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+     <property name="indent">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QTextEdit" name="textEdit">
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei</family>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::NoFrame</enum>
+     </property>
+     <property name="acceptRichText">
+      <bool>true</bool>
+     </property>
+     <property name="placeholderText">
+      <string>说点什么吧（Shift+Enter回车 Enter发送）</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="pushButton">
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei</family>
+       <pointsize>30</pointsize>
+      </font>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="pushButton_input">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
     background-color: transparent;  /* 无背景 */
     border: none;                   /* 无边框 */
     border-radius: 5px;            /* 圆角 */
@@ -120,26 +131,25 @@ QPushButton:pressed {
     border: 2px solid #AAAAAA;      /* 按下时边框加深 */
 }
 </string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/img/img/microphone-solid.svg</normaloff>:/img/img/microphone-solid.svg</iconset>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox_autoInput">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>164</y>
-     <width>91</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QCheckBox {
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="res.qrc">
+         <normaloff>:/img/img/microphone-solid.svg</normaloff>:/img/img/microphone-solid.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_autoInput">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QCheckBox {
     background-color: transparent;  /* 无背景 */
     border: none;                   /* 无边框 */
     padding: 5px 10px;              /* 内边距，调整文本位置 */
@@ -159,22 +169,29 @@ QCheckBox::indicator:unchecked {
     border-radius: 5px;            /* 圆角 */
 }
 </string>
-   </property>
-   <property name="text">
-    <string>直接发送</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_history">
-   <property name="geometry">
-    <rect>
-     <x>570</x>
-     <y>170</y>
-     <width>61</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton {
+       </property>
+       <property name="text">
+        <string>直接发送</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_history">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
     background-color: transparent;  /* 无背景 */
     border: none;                   /* 无边框 */
     border-radius: 5px;            /* 圆角 */
@@ -190,11 +207,15 @@ QPushButton:pressed {
     border: 2px solid #AAAAAA;      /* 按下时边框加深 */
 }
 </string>
-   </property>
-   <property name="text">
-    <string>历史</string>
-   </property>
-  </widget>
+       </property>
+       <property name="text">
+        <string>历史</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources>
   <include location="res.qrc"/>

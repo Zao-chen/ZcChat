@@ -23,6 +23,8 @@ private slots:
     void on_checkBox_autoopen_clicked(bool checked);
     void on_spinBox_dialogtime_valueChanged(int arg1);
 
+    void on_spinBox_dialogscale_valueChanged(int arg1);
+
 private:
     Ui::setting_general *ui;
     MainWindow *mainWin;

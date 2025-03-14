@@ -546,15 +546,24 @@ void galgamedialog::init_from_main()
     {
         qInfo()<<"不使用语音输入";
         ui->pushButton_input->hide();
+        ui->pushButton_input->setEnabled(false);
         ui->checkBox_autoInput->hide();
     }
     else
     {
         qInfo()<<"使用语言输入";
         ui->pushButton_input->show();
+        ui->pushButton_input->setEnabled(true);
         ui->checkBox_autoInput->show();
     }
 
+
+
+    // 设置窗口和子控件缩放比例
+    qreal scaleFactor = settings->value("/dialog/size").toDouble()/100;
+    qDebug()<<"调整dialog窗口缩放为"<<scaleFactor;
+    // 调整窗口大小
+    this->resize(650*scaleFactor,200*scaleFactor);
 }
 //发送llm消息
 void galgamedialog::send_to_llm()
@@ -618,7 +627,9 @@ void galgamedialog::send_to_llm()
     }
     else if(message.contains("{Shutdown}"))
     {
-        QProcess::execute("shutdown -h now");  // 立即关机
+        QProcess::startDetached("shutdown", QStringList() << "/s" << "/t" << "0" << "/f");
+        qInfo() << "正在尝试强制关机...";
+
         qInfo()<<"关机";
     }
     else if(message.contains("{Next_Music}"))

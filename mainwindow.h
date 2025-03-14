@@ -44,6 +44,7 @@ public:
     void ChangSetting_speechInputWake(bool checked);
     //角色设置
     void ChangeSetting_tachieSize(int arg1);
+    void ChangeSetting_dialogSize(int arg1);
     void ChangeSetting_VitsAPI(int index);
     void ChangeSetting_VitsModel(const QString &arg1);
     void ChangeSetting_VitsLanguage(const QString &arg1);

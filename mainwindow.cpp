@@ -23,7 +23,7 @@
 #include "third_party/json/json.hpp"
 using json_t = nlohmann::json;
 
-QString local_version = "v4.2.0-beta";
+QString local_version = "v4.3.0-beta";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWindow(parent)
@@ -66,6 +66,8 @@ MainWindow::MainWindow(QWidget *parent)
     setting_general_win->findChild<QCheckBox*>("checkBox_autoopen")->setChecked(settings->value("/soft/auto_open").toBool());
     //窗口配置
     setting_general_win->findChild<QSpinBox*>("spinBox_dialogtime")->setValue(settings->value("/dialog/time").toInt());
+        qDebug()<<"1";
+    setting_general_win->findChild<QSpinBox*>("spinBox_dialogscale")->setValue(settings->value("/dialog/size").toInt());
     /*AI模型设置*/
     setting_ai_win->findChild<QLineEdit*>("lineEdit_url")->setText(settings->value("/llm/url").toString());
     setting_ai_win->findChild<QCheckBox*>("checkBox_feedback")->setChecked(settings->value("/llm/feedback").toBool());
@@ -348,6 +350,12 @@ void MainWindow::ChangeSetting_VitsAPI(int index)
 void MainWindow::ChangeSetting_VitsLanguage(const QString &arg1)
 {
     if(already_init) saveActorSetting("/vits/lan",arg1);
+}
+//dialog大小设置
+void MainWindow::ChangeSetting_dialogSize(int arg1)
+{
+    saveSetting("/dialog/size",arg1);
+    emit init_to_dialog();
 }
 //语言输入API修改
 void MainWindow::ChangeSetting_speechInputAPI(int index)

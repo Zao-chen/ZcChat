@@ -37,4 +37,9 @@ void setting_general::on_spinBox_dialogtime_valueChanged(int arg1)
 {
     settings->setValue("/dialog/time",arg1);
 }
+//修改对话框缩放
+void setting_general::on_spinBox_dialogscale_valueChanged(int arg1)
+{
+    mainWin->ChangeSetting_dialogSize(arg1);
+}
 
