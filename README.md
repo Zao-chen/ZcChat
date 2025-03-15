@@ -144,7 +144,7 @@
 
 ZcChat是一个开源项目。参与ZcChat项目的方法有很多！
 
-- **为项目做出贡献**：有兴趣做出贡献吗？欢迎[Pull Request]([Pull requests · Zao-chen/ZcChat](https://github.com/Zao-chen/ZcChat/pulls))！~~（如果你看得懂我写的垃圾代码的话）~~
+- **为项目做出贡献**：有兴趣做出贡献吗？欢迎[Pull Request](https://github.com/Zao-chen/ZcChat/pulls)！~~（如果能读懂我的垃圾代码的话）~~
 - **报告BUG、建议**：有BUG或有功能请求？请通过[Issues](https://github.com/Zao-chen/ZcChat/issues)提交它们。
 - **分享自己制作的模板**：制作了自己的角色？不妨在[Discussions](https://github.com/Zao-chen/ZcChat/discussions)分享一下！
 - **或者……**：给项目来一个star⭐怎么样？
