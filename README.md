@@ -102,7 +102,11 @@
 
 ### 💻 （可选）给予桌宠操控电脑的接口
 
-1.  将[文档](https://github.com/Zao-chen/ZcChat/wiki)内提示词追加到角色提示词即可。
+1.  将[文档]([电脑操控 · Zao-chen/ZcChat Wiki](https://github.com/Zao-chen/ZcChat/wiki/电脑操控))内提示词追加到角色提示词即可。
+
+### 🦊 （可选）制作自己的角色
+
+1.  见[角色制作文档](https://github.com/Zao-chen/ZcChat/wiki/角色制作)
 
 ---
 
@@ -135,6 +139,15 @@
 你需要使用Letta Desktop而不是Docker部署，Letta Desktop是一个纯本地运行的ADE。然后连接如ollama等本地LLM。
 
 ---
+
+## 🤗 如何贡献
+
+ZcChat是一个开源项目。参与ZcChat项目的方法有很多！
+
+- **为项目做出贡献**：有兴趣做出贡献吗？欢迎[Pull Request]([Pull requests · Zao-chen/ZcChat](https://github.com/Zao-chen/ZcChat/pulls))！~~（如果你看得懂我写的垃圾代码的话）~~
+- **报告BUG、建议**：有BUG或有功能请求？请通过[Issues](https://github.com/Zao-chen/ZcChat/issues)提交它们。
+- **分享自己制作的模板**：制作了自己的角色？不妨在[Discussions](https://github.com/Zao-chen/ZcChat/discussions)分享一下！
+- **或者……**：给项目来一个star⭐怎么样？
 
 ## 🔗 相关链接
 
