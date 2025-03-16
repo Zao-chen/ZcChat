@@ -1,9 +1,10 @@
 # ZcChat
 
 🌟 **一个有长期记忆、表情动作立绘显示、操控电脑和语音功能，更适合Galgame角色的AI桌宠** 🌟
-
 ![ZcChat预览](https://github.com/user-attachments/assets/c03ceb8f-b0cc-46a8-bb50-07433c630048)
 
+[![GitHub Release](https://img.shields.io/github/v/release/Zao-chen/ZcChat?include_prereleases&style=for-the-badge)](https://github.com/Zao-chen/ZcChat/releases)![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Zao-chen/ZcChat/total?style=for-the-badge)[![GitHub Repo stars](https://img.shields.io/github/stars/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/stargazers)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/commits)[![GitHub Discussions](https://img.shields.io/github/discussions/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/discussions)[![GitHub License](https://img.shields.io/github/license/Zao-chen/ZcChat?style=for-the-badge)](LICENSE)
 
 **视频演示**：
 
@@ -102,7 +103,7 @@
 
 ### 💻 （可选）给予桌宠操控电脑的接口
 
-1.  将[文档]([电脑操控 · Zao-chen/ZcChat Wiki](https://github.com/Zao-chen/ZcChat/wiki/电脑操控))内提示词追加到角色提示词即可。
+1.  将[文档](https://github.com/Zao-chen/ZcChat/wiki/电脑操控)内提示词追加到角色提示词即可。
 
 ### 🦊 （可选）制作自己的角色
 
@@ -157,3 +158,5 @@ ZcChat是一个开源项目。参与ZcChat项目的方法有很多！
 - [ahmetoner/whisper-asr-webservice: OpenAI Whisper ASR Webservice API](https://github.com/ahmetoner/whisper-asr-webservice)
 - [Liniyous/ElaWidgetTools: Fluent-UI For QT-Widget](https://github.com/Liniyous/ElaWidgetTools)
 - [nlohmann/json: JSON for Modern C++](https://github.com/nlohmann/json)
+
+[![Stargazers over time](https://starchart.cc/Zao-chen/ZcChat.svg?variant=adaptive)](https://starchart.cc/Zao-chen/ZcChat)
