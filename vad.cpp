@@ -18,7 +18,9 @@ void VAD::processAudio(const QByteArray &audioData, const QAudioFormat &format)
     {
         silentFrameCount = 0;
         emit voiceDetected(true);
-    } else {
+    }
+    else
+    {
         silentFrameCount++;
         if (silentFrameCount > 15) //连续 15 帧静音
         {
@@ -43,8 +45,6 @@ QVector<double> VAD::convertToPCM(const QByteArray &audioData, const QAudioForma
     const int16_t *data = reinterpret_cast<const int16_t*>(audioData.constData());
     int numSamples = audioData.size() / format.bytesPerFrame();
 
-    for (int i = 0; i < numSamples; ++i) {
-        samples.append(static_cast<double>(data[i]));
-    }
+    for (int i = 0; i < numSamples; ++i) samples.append(static_cast<double>(data[i]));
     return samples;
 }

@@ -3,8 +3,8 @@
 🌟 **一个有长期记忆、表情动作立绘显示、操控电脑和语音功能，更适合Galgame角色的AI桌宠** 🌟
 ![ZcChat预览](https://github.com/user-attachments/assets/c03ceb8f-b0cc-46a8-bb50-07433c630048)
 
-[![GitHub Release](https://img.shields.io/github/v/release/Zao-chen/ZcChat?include_prereleases&style=for-the-badge)](https://github.com/Zao-chen/ZcChat/releases)![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Zao-chen/ZcChat/total?style=for-the-badge)[![GitHub Repo stars](https://img.shields.io/github/stars/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/stargazers)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/commits)[![GitHub Discussions](https://img.shields.io/github/discussions/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/discussions)[![GitHub License](https://img.shields.io/github/license/Zao-chen/ZcChat?style=for-the-badge)](LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/Zao-chen/ZcChat?include_prereleases&style=for-the-badge)](https://github.com/Zao-chen/ZcChat/releases)[![GitHub License](https://img.shields.io/github/license/Zao-chen/ZcChat?style=for-the-badge)](LICENSE)[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/commits)
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Zao-chen/ZcChat/total?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/releases)[![GitHub Repo stars](https://img.shields.io/github/stars/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/stargazers)[![GitHub Discussions](https://img.shields.io/github/discussions/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/discussions)[![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/issues)
 
 **视频演示**：
 

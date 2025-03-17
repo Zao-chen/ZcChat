@@ -8,9 +8,7 @@ historychild::historychild(const QString &name,const QString &msg,QWidget *paren
 {
     ui->setupUi(this);
     msg_l=msg;
-
     galWin = qobject_cast<galgamedialog *>(this->parent()->parent());
-
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::Tool);
     setAttribute(Qt::WA_ShowWithoutActivating); // 显示不抢占焦点
     qInfo() << "子窗口创建：" << msg;

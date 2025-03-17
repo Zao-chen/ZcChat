@@ -20,7 +20,6 @@
 #include <QHttpPart>
 #include <QAudioFormat>
 #include <QAudioSource>
-#include <QDebug>
 #include <QUrlQuery>
 #include <QProcess>
 #include <windows.h>
@@ -54,7 +53,6 @@ galgamedialog::galgamedialog(QWidget *parent)
     connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
     /*子窗口*/
     history_win = new history(this);
-    /**/
     qInfo()<<"dialog初始化";
     /*录音*/
     audioRecorder = new QMediaRecorder(this);
@@ -88,8 +86,10 @@ galgamedialog::galgamedialog(QWidget *parent)
                     bool containsAny = false;
                     // 遍历 list，检查 msg 是否包含任意一个子字符串
                     QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
-                    for (const QString &str : settings_actor->value("/speechInput/end_word").toString().split("|")) {
-                        if (msg.contains(str)) {
+                    for (const QString &str : settings_actor->value("/speechInput/end_word").toString().split("|"))
+                    {
+                        if (msg.contains(str))
+                        {
                             containsAny = true;  // 如果包含，设置标志为 true
                             break;               // 找到匹配后立即退出循环
                         }
@@ -100,12 +100,14 @@ galgamedialog::galgamedialog(QWidget *parent)
                         ui->checkBox_autoInput->setChecked(false);
                     }
                     /*唤醒词检查*/
-                    containsAny = false;  // 初始化标志为 false
+                    containsAny = false; // 初始化标志为 false
                     // 遍历 list，检查 msg 是否包含任意一个子字符串
-                    for (const QString &str : settings_actor->value("/speechInput/wake_word").toString().split("|")) {
-                        if (msg.contains(str)) {
-                            containsAny = true;  // 如果包含，设置标志为 true
-                            break;               // 找到匹配后立即退出循环
+                    for (const QString &str : settings_actor->value("/speechInput/wake_word").toString().split("|"))
+                    {
+                        if (msg.contains(str))
+                        {
+                            containsAny = true; // 如果包含，设置标志为 true
+                            break; // 找到匹配后立即退出循环
                         }
                     }
                     if(containsAny)
@@ -126,8 +128,9 @@ galgamedialog::galgamedialog(QWidget *parent)
     format.setSampleFormat(QAudioFormat::Int16); //设置采样格式为 16 位整数
     //获取默认的音频输入设备
     QAudioDevice inputDevice = QMediaDevices::defaultAudioInput();
-    if (!inputDevice.isFormatSupported(format)) {
-        qWarning() << "Default format not supported, trying to use the nearest.";
+    if (!inputDevice.isFormatSupported(format))
+    {
+        qWarning() << "不支持默认格式，正在尝试使用最接近的格式。";
         format = inputDevice.preferredFormat();
     }
     //创建 VAD 对象
@@ -165,15 +168,13 @@ galgamedialog::galgamedialog(QWidget *parent)
     audioSource = new QAudioSource(inputDevice, format, this);
     //启动音频输入
     audioDevice = audioSource->start();
-    if (!audioDevice) {
-        qWarning() << "Failed to start audio input!";
-    }
+    if (!audioDevice) qWarning() << "启动音频输入失败！";
     //当有音频数据可用时，调用 VAD 进行处理
-    connect(audioDevice, &QIODevice::readyRead, this, [=]() {
+    connect(audioDevice, &QIODevice::readyRead, this, [=]()
+    {
         QByteArray audioData = audioDevice->readAll();
         vad->processAudio(audioData, format);
     });
-
     qInfo()<<"galgamedialog加载完成！";
 }
 galgamedialog::~galgamedialog()
@@ -204,7 +205,7 @@ QString galgamedialog::UrlpostLLM()
     QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
     request.setUrl(QUrl(settings->value("/llm/url").toString()+"/v1/agents/"+settings_actor->value("/llm/agent").toString()+"/messages"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
-    // 直接解析 JSON 字符串，嵌入动态内容
+    //直接解析 JSON 字符串，嵌入动态内容
     json_t rootObject = {
         {"messages", {
                          {
@@ -215,9 +216,9 @@ QString galgamedialog::UrlpostLLM()
     };
     rootObject["messages"][0]["content"] = ui->textEdit->toPlainText().toStdString();
     ui->textEdit->setText("...");
-    // 输出发送的 JSON
+    //输出发送的 JSON
     qInfo() << "发送post：" << QString::fromStdString(rootObject.dump());
-    // 获取结果
+    //获取结果
     QEventLoop loop;
     QNetworkReply* reply = naManager->post(request, QByteArray::fromStdString(rootObject.dump()));
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -250,7 +251,8 @@ QString galgamedialog::UrlpostWithFile()
         //创建 QHttpMultiPart 对象
         QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
         //添加文件字段
-        if (!file->open(QIODevice::ReadOnly)) {
+        if (!file->open(QIODevice::ReadOnly))
+        {
             qWarning()<<"语音识别-whisper-打开文件失败";
             return "无法打开文件!";
         }
@@ -330,7 +332,8 @@ QString galgamedialog::UrlpostWithFile()
         // 读取本地音频文件为二进制数据
         QString audioFilePath = QDir::currentPath() + "/output.m4a"; // 音频文件路径
         QFile file(audioFilePath);
-        if (!file.open(QIODevice::ReadOnly)) {
+        if (!file.open(QIODevice::ReadOnly))
+        {
             qWarning()<<"语音识别-百度-识别-打开文件失败" << audioFilePath;
         }
         QByteArray audioData = file.readAll();
@@ -374,14 +377,17 @@ QString galgamedialog::UrlpostWithFile()
             });
             // 启动事件循环，等待回复
             loop.exec();
-        } else {
+        }
+        else
+        {
             qWarning() << "语音识别-百度-识别-音频文件为空，跳过请求";
         }
         //解析 JSON 数据
         QString result;
         try
         {
-            if (resultJson.isEmpty()) {
+            if (resultJson.isEmpty())
+            {
                 qWarning() << "输入的 JSON 为空";
                 result.clear();
             }
@@ -524,7 +530,8 @@ void galgamedialog::on_pushButton_input_pressed()
 {
     qInfo()<<"开始录音";
     if(settings->value("/speechInput/interrupt").toBool()) player->stop();
-    if (audioRecorder->recorderState() == QMediaRecorder::StoppedState) {
+    if (audioRecorder->recorderState() == QMediaRecorder::StoppedState)
+    {
         QMediaFormat format;
         format.setAudioCodec(QMediaFormat::AudioCodec::AAC); //对应编码器
         audioRecorder->setMediaFormat(format);
@@ -556,12 +563,8 @@ void galgamedialog::init_from_main()
         ui->pushButton_input->setEnabled(true);
         ui->checkBox_autoInput->show();
     }
-
-
-
     // 设置窗口和子控件缩放比例
     qreal scaleFactor = settings->value("/dialog/size").toDouble()/100;
-    qDebug()<<"调整dialog窗口缩放为"<<scaleFactor;
     // 调整窗口大小
     this->resize(650*scaleFactor,200*scaleFactor);
 }
@@ -586,8 +589,10 @@ void galgamedialog::send_to_llm()
     if (jsonDoc.is_discarded()) qWarning() << "返回值为空";
     else if (jsonDoc.contains("messages") && jsonDoc["messages"].is_array()) // 查找 "content" 字段
     {
-        for (const auto& value : jsonDoc["messages"]) {
-            if (value.contains("content")) {
+        for (const auto& value : jsonDoc["messages"])
+        {
+            if (value.contains("content"))
+            {
                 message = QString::fromStdString(value["content"].get<std::string>());
                 break; //找到第一个匹配的 content 字段后退出
             }
@@ -628,8 +633,6 @@ void galgamedialog::send_to_llm()
     else if(message.contains("{Shutdown}"))
     {
         QProcess::startDetached("shutdown", QStringList() << "/s" << "/t" << "0" << "/f");
-        qInfo() << "正在尝试强制关机...";
-
         qInfo()<<"关机";
     }
     else if(message.contains("{Next_Music}"))
@@ -678,7 +681,6 @@ void galgamedialog::send_to_llm()
         input.type = INPUT_KEYBOARD;
         input.ki.wVk = VK_VOLUME_DOWN;  // 减小音量
         SendInput(1, &input, sizeof(INPUT));
-        // Release the key
         input.ki.dwFlags = KEYEVENTF_KEYUP;
         SendInput(1, &input, sizeof(INPUT));
         qInfo() << "音量减小";
@@ -692,10 +694,8 @@ void galgamedialog::send_to_llm()
     {
         QRegularExpression regex("\\{(.*?)\\}");
         QRegularExpressionMatch match = regex.match(message);
-        if (match.hasMatch()) {
-            qDebug() << "大括号内的内容:" << match.captured(1);
+        if (match.hasMatch())
             QDesktopServices::openUrl(QUrl(match.captured(1).replace("OpenUrl_","")));
-        }
         qInfo() << "打开url";
     }
 }
@@ -713,15 +713,13 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
         text = message.split("|")[1];
     QRegularExpression regex("\\{(.*?)\\}");
     QRegularExpressionMatch match = regex.match(message);
-    if (match.hasMatch()) {
+    if (match.hasMatch())
         text = text.replace(match.captured(1),"");
-    }
     //语音api选择
     if(settings_actor->value("/vits/api").toInt()==1)
         reply = manager->get(QNetworkRequest(QUrl(settings_actor->value("/vits/custom_url").toString().replace("{msg}",text))));
     else
-        qDebug()<<"发送vits请求"<<settings->value("/vits/url").toString()+"/voice/"+settings_actor->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings_actor->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings_actor->value("/vits/lan").toString();
-    reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings_actor->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings_actor->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings_actor->value("/vits/lan").toString())));
+        reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings_actor->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings_actor->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings_actor->value("/vits/lan").toString())));
     //播放返回值
     connect(reply, &QNetworkReply::finished, this, [=]() {
         if (reply->error() == QNetworkReply::NoError) {
@@ -734,7 +732,8 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
                     outputFile.close();
                 }
                 // 停止并释放之前的播放资源
-                if (player) {
+                if (player)
+                {
                     player->stop();
                     player->setSource(QUrl()); // 清空源文件
                 }
@@ -804,67 +803,61 @@ void galgamedialog::on_pushButton_history_clicked()
     {
         isHistoryOpen = false;
         qInfo() << "关闭日志窗口……";
-
         // 获取窗口的当前位置和目标位置
         QRect startRect = history_win->geometry();
         QRect endRect = startRect;
         endRect.moveTop(endRect.top() + 20);  // 目标位置向上偏移 100 像素
-
         // 确保窗口可见且透明度效果已设置
         QGraphicsOpacityEffect *opacityEffect = qobject_cast<QGraphicsOpacityEffect *>(history_win->graphicsEffect());
         if (!opacityEffect) {
             opacityEffect = new QGraphicsOpacityEffect(history_win);
             history_win->setGraphicsEffect(opacityEffect);
         }
-
         // 创建透明度动画（淡出）
         QPropertyAnimation *opacityAnim = new QPropertyAnimation(opacityEffect, "opacity");
         opacityAnim->setDuration(150);        // 动画时间 1 秒
         opacityAnim->setStartValue(1.0);       // 从完全不透明
         opacityAnim->setEndValue(0.0);         // 到完全透明
-
         // 创建位置动画（向上移动）
         QPropertyAnimation *moveAnim = new QPropertyAnimation(history_win, "geometry");
         moveAnim->setDuration(150);           // 动画时间 1 秒
         moveAnim->setStartValue(startRect);    // 从当前窗口位置
         moveAnim->setEndValue(endRect);        // 向上移动 100 像素
-
         // 并行动画组（确保透明度和位置同时变化）
         QParallelAnimationGroup *group = new QParallelAnimationGroup(history_win);
         group->addAnimation(opacityAnim);
         group->addAnimation(moveAnim);
-
         // 动画完成后隐藏窗口
         connect(group, &QParallelAnimationGroup::finished, history_win, &QWidget::hide);
-
         // 启动动画，确保动画执行完再释放内存
         group->start(QAbstractAnimation::DeleteWhenStopped);
-
     }
 }
 //历史界面跟随galdialog
-void galgamedialog::moveEvent(QMoveEvent *event) {
-    if (history_win && history_win->isVisible()) {
+void galgamedialog::moveEvent(QMoveEvent *event)
+{
+    if (history_win && history_win->isVisible())
+    {
         QPoint offset = event->pos() - lastPos;  // 计算偏移量
         history_win->move(history_win->pos() + offset);
     }
     lastPos = event->pos();  // 更新主窗口位置
 }
 //滚轮打开历史界面
-void galgamedialog::wheelEvent(QWheelEvent *event) {
-    if (event->angleDelta().y() > 0) {
+void galgamedialog::wheelEvent(QWheelEvent *event)
+{
+    if (event->angleDelta().y() > 0)
         handleWheelUp(); // 向上滚轮
-    } else if (event->angleDelta().y() < 0) {
+    else if (event->angleDelta().y() < 0)
         handleWheelDown(); // 向下滚轮
-    }
 }
 // 向上滚轮处理
-void galgamedialog::handleWheelUp() {
+void galgamedialog::handleWheelUp()
+{
     if(!isHistoryOpen) ui->pushButton_history->click();
-    qDebug() << "向上滚轮触发";
 }
 // 向下滚轮处理
-void galgamedialog::handleWheelDown() {
+void galgamedialog::handleWheelDown()
+{
     if(isHistoryOpen) ui->pushButton_history->click();
-    qDebug() << "向下滚轮触发";
 }

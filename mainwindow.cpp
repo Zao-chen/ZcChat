@@ -23,7 +23,7 @@
 #include "third_party/json/json.hpp"
 using json_t = nlohmann::json;
 
-QString local_version = "v4.3.0-beta";
+QString local_version = "v4.3.1";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWindow(parent)
@@ -66,7 +66,6 @@ MainWindow::MainWindow(QWidget *parent)
     setting_general_win->findChild<QCheckBox*>("checkBox_autoopen")->setChecked(settings->value("/soft/auto_open").toBool());
     //窗口配置
     setting_general_win->findChild<QSpinBox*>("spinBox_dialogtime")->setValue(settings->value("/dialog/time").toInt());
-        qDebug()<<"1";
     setting_general_win->findChild<QSpinBox*>("spinBox_dialogscale")->setValue(settings->value("/dialog/size").toInt());
     /*AI模型设置*/
     setting_ai_win->findChild<QLineEdit*>("lineEdit_url")->setText(settings->value("/llm/url").toString());
@@ -170,14 +169,15 @@ MainWindow::MainWindow(QWidget *parent)
     already_init = true;
     QString reply = getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest");
     QString tagName;
-    try {
+    try
+    {
         auto jsonData = json_t::parse(reply.toUtf8());
-        if (jsonData.contains("tag_name")) {
-            tagName = QString::fromStdString(jsonData["tag_name"]);
-        }
-    } catch (const std::exception& e) {
+        if (jsonData.contains("tag_name")) tagName = QString::fromStdString(jsonData["tag_name"]);
+    }
+    catch (const std::exception& e)
+    {
         qWarning() << "版本获取失败，json解析错误: " << e.what();
-        tagName.clear();  // 如果解析失败，设置为空
+        tagName.clear(); // 如果解析失败，设置为空
     }
     if (local_version.contains("beta"))
     {
