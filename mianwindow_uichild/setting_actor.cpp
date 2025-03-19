@@ -65,3 +65,17 @@ void setting_actor::on_lineEdit_speechInput_endWord_textChanged(const QString &a
     settings_actor->setValue("/speechInput/end_word",arg1);
 }
 
+//调用installTranslator后，系统会给窗体发送信号将产生了changeEvent槽产生event
+void setting_actor::changeEvent(QEvent *e)
+{
+    qDebug()<<"22";
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        qDebug()<<"change";
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}

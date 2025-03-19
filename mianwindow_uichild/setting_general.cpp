@@ -1,7 +1,9 @@
 #include "setting_general.h"
 #include "ui_setting_general.h"
+
 #include "../mainwindow.h"
 #include <QDir>
+#include <QTranslator>
 
 static QScopedPointer<QSettings> settings(new QSettings("Setting.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
 
@@ -42,4 +44,40 @@ void setting_general::on_spinBox_dialogscale_valueChanged(int arg1)
 {
     mainWin->ChangeSetting_dialogSize(arg1);
 }
+
+
+void setting_general::on_comboBox_lan_currentIndexChanged(int index)
+{
+    QTranslator translator;
+    QString lan = "en_US";
+    switch (index) {
+    case 0:
+        lan = "zh_CN";
+        break;
+    case 1:
+        lan = "zh_TW";
+        break;
+    case 2:
+        lan = "en_US";
+        break;
+    case 3:
+        lan = "ja_JP";
+        break;
+    default:
+        lan = "en_US";
+        break;
+    }
+    qInfo()<<"切换语言到"<<lan;
+    if (translator.load(":/translations/translations/" + lan + ".qm"))
+    {
+        qInfo() << "切换成功" << lan;
+        qApp->installTranslator(&translator);
+        ui->retranslateUi(this);
+    }
+    else
+    {
+        qWarning() << "加载翻译文件失败：" << lan;
+    }
+}
+
 

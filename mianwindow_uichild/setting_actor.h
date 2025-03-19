@@ -22,16 +22,12 @@ private slots:
     void on_lineEdit_llm_agent_textChanged(const QString &arg1);
     void on_comboBox_vits_api_currentIndexChanged(int index);
     void on_comboBox_vits_model_currentTextChanged(const QString &arg1);
-
     void on_lineEdit_vits_id_textChanged(const QString &arg1);
-
     void on_lineEdit_vits_customUrl_textChanged(const QString &arg1);
-
     void on_comboBox_vits_language_currentTextChanged(const QString &arg1);
-
     void on_lineEdit_speechInput_wakeWord_textChanged(const QString &arg1);
-
     void on_lineEdit_speechInput_endWord_textChanged(const QString &arg1);
+    void changeEvent(QEvent *e);//changeEvent槽函数声明
 
 private:
     Ui::setting_actor *ui;

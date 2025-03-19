@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,1">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0,1">
    <property name="leftMargin">
     <number>20</number>
    </property>
@@ -50,6 +50,54 @@
      <property name="text">
       <string>软件设置</string>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="ElaScrollPageArea" name="widget_10" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="2,0">
+      <property name="leftMargin">
+       <number>15</number>
+      </property>
+      <property name="rightMargin">
+       <number>15</number>
+      </property>
+      <item>
+       <widget class="ElaText" name="label_21">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>语言/語言/Language/言語</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="ElaComboBox" name="comboBox_lan">
+        <item>
+         <property name="text">
+          <string>简体中文</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>繁體中文</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>English</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>日本語</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -306,6 +354,19 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item>
     <spacer name="verticalSpacer_5">

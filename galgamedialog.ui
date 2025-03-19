@@ -72,7 +72,7 @@
       <bool>true</bool>
      </property>
      <property name="placeholderText">
-      <string>说点什么吧（Shift+Enter回车 Enter发送）</string>
+      <string>说点什么吧（Shift+Enter换行 Enter发送）</string>
      </property>
     </widget>
    </item>

@@ -85,3 +85,26 @@ install(TARGETS ZcChat
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(ZcChat)
 endif()
+
+
+## 生成ts文件的文件夹
+set(TS_DIR "${CMAKE_SOURCE_DIR}/translations")
+
+set(TS_FILES
+    "${TS_DIR}/en_US.ts"
+    "${TS_DIR}/zh_CN.ts"
+    "${TS_DIR}/zh_TW.ts"
+    "${TS_DIR}/ja_JP.ts"
+)
+
+# 使用qt_add_lupdate来更新ts文件
+find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
+
+qt_add_lupdate(ZcChat
+    TRANSLATIONS ${TS_FILES}
+)
+
+# 使用qt_add_lrelease来生成qm文件
+qt_add_lrelease(ZcChat
+    TRANSLATIONS ${TS_FILES}
+)

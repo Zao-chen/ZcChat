@@ -23,7 +23,7 @@
 #include "third_party/json/json.hpp"
 using json_t = nlohmann::json;
 
-QString local_version = "v4.3.1";
+QString local_version = "v4.3.2";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWindow(parent)
@@ -58,9 +58,9 @@ MainWindow::MainWindow(QWidget *parent)
     QDir dir(qApp->applicationDirPath()+"/characters");
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     QStringList folderList = dir.entryList();
-    setting_general_win->findChild<QComboBox*>()->addItems(folderList);
+    setting_general_win->findChild<QComboBox*>("comboBox_actor")->addItems(folderList);
     qInfo()<<"读取到角色列表："<<folderList;
-    setting_general_win->findChild<QComboBox*>()->setCurrentIndex(folderList.indexOf(settings->value("/actor/name").toString()));
+    setting_general_win->findChild<QComboBox*>("comboBox_actor")->setCurrentIndex(folderList.indexOf(settings->value("/actor/name").toString()));
     //软件配置项
     setting_general_win->findChild<QCheckBox*>("checkBox_autostart")->setChecked(settings->value("/soft/auto_start").toBool());
     setting_general_win->findChild<QCheckBox*>("checkBox_autoopen")->setChecked(settings->value("/soft/auto_open").toBool());
@@ -408,4 +408,17 @@ void MainWindow::getEnergy_from_gal(int energy)
 }
 void MainWindow::updateEnergyDisplay() {
     setting_voiceinput_win->findChild<QLCDNumber*>()->display(currentEnergy);
+}
+
+//调用installTranslator后，系统会给窗体发送信号将产生了changeEvent槽产生event
+void MainWindow::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
 }

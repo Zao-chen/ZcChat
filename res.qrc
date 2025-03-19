@@ -4,4 +4,10 @@
         <file>img/microphone-solid.svg</file>
         <file>img/volume-fill.svg</file>
     </qresource>
+	<qresource prefix="/translations">
+        <file>translations/en_US.qm</file>
+        <file>translations/zh_CN.qm</file>
+        <file>translations/zh_TW.qm</file>
+        <file>translations/ja_JP.qm</file>
+    </qresource>
 </RCC>

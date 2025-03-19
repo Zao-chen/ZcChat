@@ -62,6 +62,7 @@ private slots:
     void on_restartAppAction();
     void on_resetTachie();
     void hideWindow();
+    void changeEvent(QEvent *e);//changeEvent槽函数声明
 
 signals:
     void init_to_tachie(); //初始化立绘
