@@ -25,4 +25,8 @@ void setting_vits::on_lineEdit_url_textChanged(const QString &arg1)
 {
     settings->setValue("/vits/url",arg1);
 }
-
+//重载窗口
+void setting_vits::refreshUI()
+{
+    ui->retranslateUi(this);
+}

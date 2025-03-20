@@ -64,18 +64,8 @@ void setting_actor::on_lineEdit_speechInput_endWord_textChanged(const QString &a
     QScopedPointer<QSettings> settings_actor(new QSettings(qApp->applicationDirPath()+"/characters/"+settings.value("actor/name").toString()+"/config.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
     settings_actor->setValue("/speechInput/end_word",arg1);
 }
-
-//调用installTranslator后，系统会给窗体发送信号将产生了changeEvent槽产生event
-void setting_actor::changeEvent(QEvent *e)
+//重载窗口
+void setting_actor::refreshUI()
 {
-    qDebug()<<"22";
-    QWidget::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        qDebug()<<"change";
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
+    ui->retranslateUi(this);
 }

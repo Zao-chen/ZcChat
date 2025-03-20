@@ -23,6 +23,7 @@ class galgamedialog : public QWidget
 public:
     explicit galgamedialog(QWidget *parent = nullptr);
     void spawnVoice(QString message,bool onlySound); //语言合成函数
+    void refreshUI(); //重载窗口
     ~galgamedialog();
 
 private slots:

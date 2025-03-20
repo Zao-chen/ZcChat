@@ -4,6 +4,8 @@
 #include "../mainwindow.h"
 #include <QDir>
 #include <QTranslator>
+#include <QProcess>
+#include <QThread>
 
 static QScopedPointer<QSettings> settings(new QSettings("Setting.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
 
@@ -45,39 +47,27 @@ void setting_general::on_spinBox_dialogscale_valueChanged(int arg1)
     mainWin->ChangeSetting_dialogSize(arg1);
 }
 
-
-void setting_general::on_comboBox_lan_currentIndexChanged(int index)
+void setting_general::on_comboBox_lan_currentTextChanged(const QString &arg1)
 {
-    QTranslator translator;
-    QString lan = "en_US";
-    switch (index) {
-    case 0:
-        lan = "zh_CN";
-        break;
-    case 1:
-        lan = "zh_TW";
-        break;
-    case 2:
-        lan = "en_US";
-        break;
-    case 3:
-        lan = "ja_JP";
-        break;
-    default:
-        lan = "en_US";
-        break;
-    }
-    qInfo()<<"切换语言到"<<lan;
-    if (translator.load(":/translations/translations/" + lan + ".qm"))
+    if(mainWin->already_init)
     {
-        qInfo() << "切换成功" << lan;
-        qApp->installTranslator(&translator);
-        ui->retranslateUi(this);
-    }
-    else
-    {
-        qWarning() << "加载翻译文件失败：" << lan;
+        QTranslator translator;
+        qInfo()<<"切换语言到"<<arg1;
+        if (translator.load(":/translations/translations/" + arg1 + ".qm"))
+        {
+            qInfo() << "切换成功" << arg1;
+            qApp->installTranslator(&translator);
+            settings->setValue("/soft/lan",arg1);
+            mainWin->ChangeSetting_Lan(arg1);
+        }
+        else
+        {
+            qWarning() << "加载翻译文件失败：" << arg1;
+        }
     }
 }
-
-
+//重载窗口
+void setting_general::refreshUI()
+{
+    ui->retranslateUi(this);
+}

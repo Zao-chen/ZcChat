@@ -13,6 +13,7 @@ class setting_vits : public QWidget
 
 public:
     explicit setting_vits(QWidget *parent = nullptr);
+    void refreshUI(); //重载窗口
     ~setting_vits();
 
 private slots:

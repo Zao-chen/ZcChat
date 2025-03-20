@@ -15,6 +15,7 @@ class setting_ai : public QWidget
 
 public:
     explicit setting_ai(QWidget *parent = nullptr);
+    void refreshUI(); //重载窗口
     ~setting_ai();
 
 private slots:

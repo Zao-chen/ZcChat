@@ -62,3 +62,8 @@ void setting_voiceinput::on_spinBox_size_valueChanged(int arg1)
     settings->setValue("/speechInput/size",arg1);
 }
 
+//重载窗口
+void setting_voiceinput::refreshUI()
+{
+    ui->retranslateUi(this);
+}

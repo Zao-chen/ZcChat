@@ -27,4 +27,8 @@ void setting_ai::on_checkBox_feedback_clicked(bool checked)
 {
     settings->setValue("/llm/feedback",checked);
 }
-
+//重载窗口
+void setting_ai::refreshUI()
+{
+    ui->retranslateUi(this);
+}

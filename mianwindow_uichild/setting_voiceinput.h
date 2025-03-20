@@ -15,6 +15,7 @@ class setting_voiceinput : public QWidget
 
 public:
     explicit setting_voiceinput(QWidget *parent = nullptr);
+    void refreshUI(); //重载窗口
     ~setting_voiceinput();
 
 private slots:

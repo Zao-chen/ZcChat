@@ -861,3 +861,8 @@ void galgamedialog::handleWheelDown()
 {
     if(isHistoryOpen) ui->pushButton_history->click();
 }
+//重载窗口
+void galgamedialog::refreshUI()
+{
+    ui->retranslateUi(this);
+}

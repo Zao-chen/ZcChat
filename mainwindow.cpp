@@ -19,6 +19,7 @@
 #include <QLabel>
 #include <QGraphicsOpacityEffect>
 #include <qpropertyanimation>
+#include <QTranslator>
 
 #include "third_party/json/json.hpp"
 using json_t = nlohmann::json;
@@ -64,6 +65,8 @@ MainWindow::MainWindow(QWidget *parent)
     //软件配置项
     setting_general_win->findChild<QCheckBox*>("checkBox_autostart")->setChecked(settings->value("/soft/auto_start").toBool());
     setting_general_win->findChild<QCheckBox*>("checkBox_autoopen")->setChecked(settings->value("/soft/auto_open").toBool());
+    setting_general_win->findChild<QComboBox*>("comboBox_lan")->setCurrentText(settings->value("/soft/lan").toString());
+    qInfo()<<"使用语言"<<settings->value("/soft/lan").toString();
     //窗口配置
     setting_general_win->findChild<QSpinBox*>("spinBox_dialogtime")->setValue(settings->value("/dialog/time").toInt());
     setting_general_win->findChild<QSpinBox*>("spinBox_dialogscale")->setValue(settings->value("/dialog/size").toInt());
@@ -200,6 +203,9 @@ MainWindow::MainWindow(QWidget *parent)
         setUserInfoCardSubTitle("当前为最新版本^_^");
     }
     qInfo()<<"MainWindow加载完成！";
+
+
+
 }
 
 MainWindow::~MainWindow()
@@ -320,6 +326,17 @@ void MainWindow::ChangeSetting_ActorChoose(const QString &arg1)
     reloadActorSetting();
     emit init_to_tachie();
 }
+//语言修改
+void MainWindow::ChangeSetting_Lan(const QString &arg1)
+{
+    ui->retranslateUi(this);
+    setting_actor_win->refreshUI();
+    setting_ai_win->refreshUI();
+    setting_general_win->refreshUI();
+    setting_vits_win->refreshUI();
+    setting_voiceinput_win->refreshUI();
+    dialog_win->refreshUI();
+}
 //vits模型修改
 void MainWindow::ChangeSetting_VitsModel(const QString &arg1)
 {
@@ -408,17 +425,4 @@ void MainWindow::getEnergy_from_gal(int energy)
 }
 void MainWindow::updateEnergyDisplay() {
     setting_voiceinput_win->findChild<QLCDNumber*>()->display(currentEnergy);
-}
-
-//调用installTranslator后，系统会给窗体发送信号将产生了changeEvent槽产生event
-void MainWindow::changeEvent(QEvent *e)
-{
-    QWidget::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
 }

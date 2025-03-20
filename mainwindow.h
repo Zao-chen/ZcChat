@@ -39,6 +39,7 @@ public:
     //通用设置
     void ChangeSetting_ActorChoose(const QString &arg1);
     void ChangeSetting_AutoStart(bool checked);
+    void ChangeSetting_Lan(const QString &arg1);
     //语音输入设置
     void ChangeSetting_speechInputAPI(int index);
     void ChangSetting_speechInputWake(bool checked);
@@ -48,6 +49,7 @@ public:
     void ChangeSetting_VitsAPI(int index);
     void ChangeSetting_VitsModel(const QString &arg1);
     void ChangeSetting_VitsLanguage(const QString &arg1);
+    bool already_init=false; //是否已经初始化了
     ~MainWindow();
 
 private slots:
@@ -62,7 +64,6 @@ private slots:
     void on_restartAppAction();
     void on_resetTachie();
     void hideWindow();
-    void changeEvent(QEvent *e);//changeEvent槽函数声明
 
 signals:
     void init_to_tachie(); //初始化立绘
@@ -70,7 +71,6 @@ signals:
 
 private:
     Ui::MainWindow *ui;
-    bool already_init=false; //是否已经初始化了
     /*托盘相关*/
     QSystemTrayIcon *m_sysTrayIcon; //系统托盘
     QMenu *m_menu; //菜单

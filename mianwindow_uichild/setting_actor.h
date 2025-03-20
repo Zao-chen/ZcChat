@@ -15,6 +15,7 @@ class setting_actor : public QWidget
 
 public:
     explicit setting_actor(QWidget *parent = nullptr);
+    void refreshUI(); //重载窗口
     ~setting_actor();
 
 private slots:
@@ -27,7 +28,6 @@ private slots:
     void on_comboBox_vits_language_currentTextChanged(const QString &arg1);
     void on_lineEdit_speechInput_wakeWord_textChanged(const QString &arg1);
     void on_lineEdit_speechInput_endWord_textChanged(const QString &arg1);
-    void changeEvent(QEvent *e);//changeEvent槽函数声明
 
 private:
     Ui::setting_actor *ui;
