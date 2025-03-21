@@ -219,6 +219,7 @@ void MainWindow::show_dialogwin_from_tachie()
 {
     if(isDialogOpen)
     {
+        dialog_win->handleWheelDown();
         qInfo()<<"隐藏对话框……";
         //设置窗口透明度效果
         QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(dialog_win);

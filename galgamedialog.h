@@ -24,6 +24,9 @@ public:
     explicit galgamedialog(QWidget *parent = nullptr);
     void spawnVoice(QString message,bool onlySound); //语言合成函数
     void refreshUI(); //重载窗口
+    /*滚轮事件*/
+    void handleWheelUp();   // 处理向上滚轮
+    void handleWheelDown(); // 处理向下滚轮
     ~galgamedialog();
 
 private slots:
@@ -87,8 +90,6 @@ private:
     history *history_win; //子窗口指针
     QPoint lastPos; //记录主窗口上次位置
     bool isHistoryOpen = false;//用于切换对话框显示和隐藏
-    /*滚轮事件*/
-    void handleWheelUp();   // 处理向上滚轮
-    void handleWheelDown(); // 处理向下滚轮
+
 };
 #endif // GALGAMEDIALOG_H
