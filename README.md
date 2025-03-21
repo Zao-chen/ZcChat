@@ -5,18 +5,12 @@
 
 [![GitHub Release](https://img.shields.io/github/v/release/Zao-chen/ZcChat?include_prereleases&style=for-the-badge)](https://github.com/Zao-chen/ZcChat/releases)[![GitHub License](https://img.shields.io/github/license/Zao-chen/ZcChat?style=for-the-badge)](LICENSE)[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/commits)
 [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Zao-chen/ZcChat/total?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/releases)[![GitHub Repo stars](https://img.shields.io/github/stars/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/stargazers)[![GitHub Discussions](https://img.shields.io/github/discussions/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/discussions)[![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/issues)
-
-**视频演示**：
-
-- [3.0 操控电脑功能演示](https://www.bilibili.com/video/BV1hA9SYYEbb)
-- [2.0 语音输入功能演示](https://www.bilibili.com/video/BV1KWccegEkv)
-- [1.0 立绘动画功能演示](https://www.bilibili.com/video/BV1aFCKYJEy4/)
-- [0.0 基础功能演示](https://www.bilibili.com/video/BV1YUUaYgEgC/)
+### 中文 [English](/README_EN.md)
 
 ---
 
 ## 🎯 项目介绍
-
+[视频演示](https://www.bilibili.com/video/BV1hA9SYYEbb)
 ### ✨ 特色功能
 
 - **长期记忆**：使用Letta实现AI长期记忆，并且发展拓展性格和个性。
