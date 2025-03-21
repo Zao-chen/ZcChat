@@ -29,6 +29,7 @@
 #include <QParallelAnimationGroup>
 #include <QPainterPath>
 #include <QNetworkInterface>
+#include <QStandardPaths>
 
 #include "third_party/json/json.hpp"
 using json_t = nlohmann::json;
@@ -36,7 +37,7 @@ using json_t = nlohmann::json;
 galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::galgamedialog)
-    , settings(new QSettings(qApp->applicationDirPath()+"/Setting.ini", QSettings::IniFormat, this))
+    , settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat, this))
 {
     qInfo()<<"初始化galgamedialog……";
     ui->setupUi(this);
@@ -85,7 +86,7 @@ galgamedialog::galgamedialog(QWidget *parent)
                     /*结束词检查*/
                     bool containsAny = false;
                     // 遍历 list，检查 msg 是否包含任意一个子字符串
-                    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
+                    QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
                     for (const QString &str : settings_actor->value("/speechInput/end_word").toString().split("|"))
                     {
                         if (msg.contains(str))
@@ -202,7 +203,7 @@ QString galgamedialog::UrlpostLLM()
     QNetworkAccessManager* naManager = new QNetworkAccessManager(this);
     QNetworkRequest request;
     //头设置
-    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
+    QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
     request.setUrl(QUrl(settings->value("/llm/url").toString()+"/v1/agents/"+settings_actor->value("/llm/agent").toString()+"/messages"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
     //直接解析 JSON 字符串，嵌入动态内容
@@ -705,7 +706,7 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
     QNetworkReply* reply;
     QString text;
-    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
+    QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
     //语音语言选择
     if(settings_actor->value("/vits/lan").toString()=="ja")
         text = message.split("|")[2];
@@ -725,7 +726,7 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
         if (reply->error() == QNetworkReply::NoError) {
             if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200)
             {
-                QFile outputFile(qApp->applicationDirPath()+"/temp.mp3");
+                QFile outputFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/temp.mp3");
                 if (outputFile.open(QIODevice::WriteOnly))
                 {
                     outputFile.write(reply->readAll());
@@ -739,7 +740,7 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
                 }
                 QAudioOutput *audioOutput = new QAudioOutput; //创建 QAudioOutput 对象来控制音量
                 player->setAudioOutput(audioOutput); //将 QAudioOutput 连接到 QMediaPlayer
-                player->setSource(QUrl::fromLocalFile(qApp->applicationDirPath()+"/temp.mp3")); //设置媒体源文件
+                player->setSource(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/temp.mp3")); // 设置媒体源文件
                 audioOutput->setVolume(1); //0.0 为最小音量，1.0 为最大音量
                 player->setPosition(0);
                 player->play(); //播放音频

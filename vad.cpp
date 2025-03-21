@@ -1,7 +1,7 @@
 #include "vad.h"
 #include <QSettings>
 #include <QApplication>
-
+#include <QStandardPaths>
 
 VAD::VAD(QObject *parent) : QObject(parent), silentFrameCount(0)
 {
@@ -11,7 +11,7 @@ void VAD::processAudio(const QByteArray &audioData, const QAudioFormat &format)
 {
     QVector<double> samples = convertToPCM(audioData, format);
     double energy = calculateEnergy(samples);
-    QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
+    QSettings *settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
     emit energy_to_main(energy);
     //简单的能量阈值检测
     if (energy > settings->value("/speechInput/energy").toInt()) //调整阈值

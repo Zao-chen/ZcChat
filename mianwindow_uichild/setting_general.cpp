@@ -6,8 +6,9 @@
 #include <QTranslator>
 #include <QProcess>
 #include <QThread>
+#include <QStandardPaths>
 
-static QScopedPointer<QSettings> settings(new QSettings("Setting.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
+static QScopedPointer<QSettings> settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat)); // 使用 QScopedPointer 来自动管理资源。
 
 setting_general::setting_general(QWidget *parent)
     : QWidget(parent)

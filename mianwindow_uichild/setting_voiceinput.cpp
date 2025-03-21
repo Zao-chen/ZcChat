@@ -1,8 +1,9 @@
 #include "setting_voiceinput.h"
 #include "ui_setting_voiceinput.h"
 #include "../mainwindow.h"
+#include <QStandardPaths>
 
-static QScopedPointer<QSettings> settings(new QSettings("Setting.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
+static QScopedPointer<QSettings> settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat)); // 使用 QScopedPointer 来自动管理资源。
 
 setting_voiceinput::setting_voiceinput(QWidget *parent)
     : QWidget(parent)

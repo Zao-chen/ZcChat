@@ -8,6 +8,7 @@
 #include <iostream>
 #include <QApplication>
 #include <QWidget>
+#include <QStandardPaths>
 
 namespace QT_LOG
 {
@@ -47,7 +48,7 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext &context, con
     }
 
     m_LogMutex.lock(); // 线程安全
-    QFile outFile(qApp->applicationDirPath() + "/log.txt");
+    QFile outFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/log.txt");
     outFile.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
     QTextStream ts(&outFile);
     ts << log_info << Qt::endl;
@@ -58,7 +59,7 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext &context, con
 
 void logInit(QString logFile = "")
 {
-    QFile file(qApp->applicationDirPath() + "/log.txt");
+    QFile file(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/log.txt");
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         file.close();
     } else {

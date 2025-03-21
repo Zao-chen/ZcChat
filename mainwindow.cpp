@@ -20,11 +20,12 @@
 #include <QGraphicsOpacityEffect>
 #include <qpropertyanimation>
 #include <QTranslator>
+#include <QStandardPaths>
 
 #include "third_party/json/json.hpp"
 using json_t = nlohmann::json;
 
-QString local_version = "v4.3.2";
+QString local_version = "v4.4.0-beta";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWindow(parent)
@@ -37,8 +38,13 @@ MainWindow::MainWindow(QWidget *parent)
     setUserInfoCardTitle("ZcChat "+local_version);
     setUserInfoCardSubTitle("检测新版本中……");
     window()->resize(1280,720);
-    QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
-    setUserInfoCardPixmap(QPixmap(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png"));
+    QString appFolder = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat"; // 应用名称为 ZcChat
+    QDir dir1(appFolder);
+    if (!dir1.exists()) {
+        dir1.mkpath("."); // 创建文件夹
+    }
+    QSettings *settings = new QSettings(appFolder + "/Setting.ini", QSettings::IniFormat);
+    setUserInfoCardPixmap(QPixmap(appFolder + "/characters/" + settings->value("actor/name").toString() + "/正常.png"));
     /*子页面初始化*/
     setting_general_win = new setting_general(this);
     addPageNode("通用设置",setting_general_win,ElaIconType::House);
@@ -56,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
     qInfo()<<"读取配置……";
     /*通用设置*/
     //角色选择配置
-    QDir dir(qApp->applicationDirPath()+"/characters");
+    QDir dir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters");
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     QStringList folderList = dir.entryList();
     setting_general_win->findChild<QComboBox*>("comboBox_actor")->addItems(folderList);
@@ -255,9 +261,9 @@ void MainWindow::show_dialogwin_from_tachie()
 void MainWindow::reloadActorSetting()
 {
     qInfo()<<"重载角色配置……";
-    QSettings *settings = new QSettings(qApp->applicationDirPath()+"/Setting.ini",QSettings::IniFormat);
-    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
-    QString imagePath = qApp->applicationDirPath() +"/characters/"+settings->value("actor/name").toString()+"/正常.png";
+    QSettings *settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
+    QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
+    QString imagePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/正常.png";
     QPixmap originalPixmap(imagePath);
     if (originalPixmap.isNull())
     {
@@ -273,7 +279,6 @@ void MainWindow::reloadActorSetting()
         setUserInfoCardPixmap(croppedPixmap);
         setUserInfoCardPixmap(croppedPixmap);
         setUserInfoCardPixmap(croppedPixmap);
-        qInfo()<<"设置主页图片"<<qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/正常.png";
     }
     setting_actor_win->findChild<QLabel*>("label_editActor")->setText("当前配置角色："+settings->value("actor/name").toString());
     setting_actor_win->findChild<QSpinBox*>("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
@@ -299,17 +304,17 @@ QByteArray MainWindow::getUrl(const QString &input)
 /*保存立绘位置*/
 void MainWindow::changeTachieLocation_from_tachie(int x,int y)
 {
-    QSettings *settings = new QSettings("Setting.ini",QSettings::IniFormat);
+    QSettings *settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
     settings->setValue("/tachie/location_x",x);
     settings->setValue("/tachie/location_y",y);
 }
 /*保存配置函数*/
 void MainWindow::saveSetting(const QString &key, const QVariant &value) {
-    QScopedPointer<QSettings> settings(new QSettings("Setting.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
+    static QScopedPointer<QSettings> settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat)); // 使用 QScopedPointer 来自动管理资源。
     settings->setValue(key, value);
 }
 void MainWindow::saveActorSetting(const QString &key, const QVariant &value) {
-    QScopedPointer<QSettings> settings(new QSettings("Setting.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
+    QScopedPointer<QSettings> settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat)); // 使用 QScopedPointer 来自动管理资源。
     QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
     settings_actor->setValue(key, value);
 }
