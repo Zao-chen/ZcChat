@@ -52,19 +52,7 @@ void setting_general::on_comboBox_lan_currentTextChanged(const QString &arg1)
 {
     if(mainWin->already_init)
     {
-        QTranslator translator;
-        qInfo()<<"切换语言到"<<arg1;
-        if (translator.load(":/translations/translations/" + arg1 + ".qm"))
-        {
-            qInfo() << "切换成功" << arg1;
-            qApp->installTranslator(&translator);
-            settings->setValue("/soft/lan",arg1);
-            mainWin->ChangeSetting_Lan(arg1);
-        }
-        else
-        {
-            qWarning() << "加载翻译文件失败：" << arg1;
-        }
+        mainWin->ChangeSetting_Lan(arg1);
     }
 }
 //重载窗口

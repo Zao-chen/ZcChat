@@ -208,10 +208,8 @@ MainWindow::MainWindow(QWidget *parent)
         qInfo()<<"当前为最新版本"+local_version;
         setUserInfoCardSubTitle("当前为最新版本^_^");
     }
+    ChangeSetting_Lan(settings->value("/soft/lan").toString());
     qInfo()<<"MainWindow加载完成！";
-
-
-
 }
 
 MainWindow::~MainWindow()
@@ -335,6 +333,19 @@ void MainWindow::ChangeSetting_ActorChoose(const QString &arg1)
 //语言修改
 void MainWindow::ChangeSetting_Lan(const QString &arg1)
 {
+    static QScopedPointer<QSettings> settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat)); // 使用 QScopedPointer 来自动管理资源。
+    QTranslator translator;
+    qInfo()<<"切换语言到"<<arg1;
+    if (translator.load(":/translations/translations/" + arg1 + ".qm"))
+    {
+        qInfo() << "切换成功" << arg1;
+        qApp->installTranslator(&translator);
+        settings->setValue("/soft/lan",arg1);
+    }
+    else
+    {
+        qWarning() << "加载翻译文件失败：" << arg1;
+    }
     ui->retranslateUi(this);
     setting_actor_win->refreshUI();
     setting_ai_win->refreshUI();
