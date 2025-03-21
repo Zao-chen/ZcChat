@@ -6,7 +6,7 @@
 #include <QWidget>
 #include <QMediaRecorder>
 #include <QMediaCaptureSession>
-#include "vad.h"
+#include "utils/vad.h"
 #include <QAudioSource>
 #include <QSettings>
 

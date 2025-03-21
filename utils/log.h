@@ -9,7 +9,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QStandardPaths>
-#include "utils/createwin.h"
+#include "createwin.h"
 
 namespace QT_LOG
 {

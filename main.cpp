@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QDir>
 #include <QTranslator>
-#include "log.h"
+#include "utils/log.h"
 #include "ElaApplication.h"
 
 int main(int argc, char *argv[])

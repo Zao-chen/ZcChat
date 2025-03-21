@@ -30,8 +30,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         include/ElaWidgetTools.qrc
         res.qrc
         logo.rc
-        vad.h vad.cpp
-        log.h
+        utils/vad.h utils/vad.cpp
+        utils/log.h
         mianwindow_uichild/setting_general.h mianwindow_uichild/setting_general.cpp mianwindow_uichild/setting_general.ui
         mianwindow_uichild/setting_ai.h mianwindow_uichild/setting_ai.cpp mianwindow_uichild/setting_ai.ui
         mianwindow_uichild/setting_vits.h mianwindow_uichild/setting_vits.cpp mianwindow_uichild/setting_vits.ui
@@ -41,6 +41,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         galgamedialog_uichild/historychild.h galgamedialog_uichild/historychild.cpp galgamedialog_uichild/historychild.ui
         dialog/messagewindow.h dialog/messagewindow.cpp dialog/messagewindow.ui
         utils/createwin.h utils/createwin.cpp
+
 
     )
 else()
