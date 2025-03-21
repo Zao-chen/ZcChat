@@ -40,8 +40,8 @@ A diagram to understand how ZcChat works:
 
 ### 🎭 Step 2 - Configure Character
 
-1. Place character illustrations into the `/characters/{Name}` folder.  
-   > The final project structure should be `/characters/{Name}/normal.png...`
+1. Place character illustrations into the `{Document}/ZcChat/characters/{Name}` folder.  
+   > The final project structure should be `{Document}/ZcChat/characters/{Name}/normal.png...`
 2. Select the character in `ZcChat > General Settings > Character Selection`.
 3. Set the illustration size in `ZcChat > Character Configuration`.
 4. Right-click the tray to reset the illustration position.  
