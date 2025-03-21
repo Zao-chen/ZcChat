@@ -23,6 +23,8 @@
 #include <QStandardPaths>
 
 #include "third_party/json/json.hpp"
+#include <QDebug>
+
 using json_t = nlohmann::json;
 
 QString local_version = "v4.4.2-beta";
@@ -32,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     /*窗口初始化*/
-    qInfo()<<"MainWindow初始化……";
+    qInfo()<<tr("MainWindow初始化……");
     ui->setupUi(this);
     setWindowIcon(QIcon(":/img/img/logo.png"));
     setUserInfoCardTitle("ZcChat "+local_version);
@@ -40,7 +42,8 @@ MainWindow::MainWindow(QWidget *parent)
     window()->resize(1280,720);
     QString appFolder = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat"; // 应用名称为 ZcChat
     QDir dir1(appFolder);
-    if (!dir1.exists()) {
+    if (!dir1.exists())
+    {
         dir1.mkpath("."); // 创建文件夹
     }
     QSettings *settings = new QSettings(appFolder + "/Setting.ini", QSettings::IniFormat);
@@ -344,7 +347,7 @@ void MainWindow::ChangeSetting_Lan(const QString &arg1)
     }
     else
     {
-        qWarning() << "加载翻译文件失败：" << arg1;
+        qCritical() << "加载翻译文件失败：" << arg1;
     }
     ui->retranslateUi(this);
     setting_actor_win->refreshUI();

@@ -30,6 +30,7 @@
 #include <QPainterPath>
 #include <QNetworkInterface>
 #include <QStandardPaths>
+#include <QDebug>
 
 #include "third_party/json/json.hpp"
 using json_t = nlohmann::json;
@@ -254,7 +255,7 @@ QString galgamedialog::UrlpostWithFile()
         //添加文件字段
         if (!file->open(QIODevice::ReadOnly))
         {
-            qWarning()<<"语音识别-whisper-打开文件失败";
+            qCritical()<<"语音识别-whisper-打开文件失败";
             return "无法打开文件!";
         }
         QHttpPart filePart;
@@ -281,8 +282,7 @@ QString galgamedialog::UrlpostWithFile()
         }
         else
         {
-            qWarning()<<"语音识别-whisper-错误:" << reply->errorString();
-            qWarning()<<"语音识别-whisper-错误信息:" << reply->readAll();
+            qCritical()<<"语音识别-whisper-错误:" << reply->errorString()<<";错误信息:" << reply->readAll();
         }
         reply->deleteLater();
         return "error";
@@ -320,7 +320,7 @@ QString galgamedialog::UrlpostWithFile()
             }
             else
             {
-                qWarning()<<"语音识别-百度-token-请求失败"<<reply->errorString();
+                qCritical()<<"语音识别-百度-token-请求失败"<<reply->errorString();
                 return;
             }
             reply->deleteLater();
@@ -335,7 +335,7 @@ QString galgamedialog::UrlpostWithFile()
         QFile file(audioFilePath);
         if (!file.open(QIODevice::ReadOnly))
         {
-            qWarning()<<"语音识别-百度-识别-打开文件失败" << audioFilePath;
+            qCritical()<<"语音识别-百度-识别-打开文件失败" << audioFilePath;
         }
         QByteArray audioData = file.readAll();
         file.close();
@@ -371,7 +371,7 @@ QString galgamedialog::UrlpostWithFile()
                 }
                 else
                 {
-                    qWarning() << "语音识别-百度-识别失败：" << reply_api->errorString();
+                    qCritical() << "语音识别-百度-识别失败：" << reply_api->errorString();
                 }
                 loop.quit();
                 reply_api->deleteLater();
@@ -389,7 +389,7 @@ QString galgamedialog::UrlpostWithFile()
         {
             if (resultJson.isEmpty())
             {
-                qWarning() << "输入的 JSON 为空";
+                qCritical() << "输入的 JSON 为空";
                 result.clear();
             }
             nlohmann::json doc = nlohmann::json::parse(resultJson.toStdString());
@@ -406,13 +406,12 @@ QString galgamedialog::UrlpostWithFile()
             }
             else
             {
-                qWarning() << "JSON 中没有有效的 'result' 字段";
+                qCritical() << "JSON 中没有有效的 'result' 字段";
             }
         }
         catch (const nlohmann::json::exception& e)
         {
-            qWarning() << "Json解析错误: " << e.what();
-            qWarning() << "解析失败的 JSON: " << resultJson;
+            qCritical() << "Json解析错误: " << e.what()<<";解析失败的 JSON: " << resultJson;
             result.clear();
         }
         return result;
@@ -587,7 +586,7 @@ void galgamedialog::send_to_llm()
     // 获取到的json处理
     QString message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为[" + QString::fromStdString(jsonDoc.dump()) + "]|错误error";
     // 解析 JSON 字符串
-    if (jsonDoc.is_discarded()) qWarning() << "返回值为空";
+    if (jsonDoc.is_discarded()) qCritical() << "letta返回值为空";
     else if (jsonDoc.contains("messages") && jsonDoc["messages"].is_array()) // 查找 "content" 字段
     {
         for (const auto& value : jsonDoc["messages"])
@@ -608,13 +607,13 @@ void galgamedialog::send_to_llm()
     else if(message.split("|").size()!=3)
     {
         if(!settings->value("/llm/feedback").toBool()) message = "正常|[error] Letta正常返回，但是返回值格式错误，返回值["+message+"]|错误error";
-        //如果忽略报错
         else message = "正常|"+message+"|";
     }
     qInfo()<<"切换立绘："+message.split("|")[0];
     //语音合成
     if(settings->value("/vits/enable").toBool())
     {
+        qInfo() << "正在进行语言合成";
         spawnVoice(message,false);
     }
     else
@@ -717,13 +716,15 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
     if (match.hasMatch())
         text = text.replace(match.captured(1),"");
     //语音api选择
+    qInfo() << "语言合成内容" << text;
     if(settings_actor->value("/vits/api").toInt()==1)
         reply = manager->get(QNetworkRequest(QUrl(settings_actor->value("/vits/custom_url").toString().replace("{msg}",text))));
     else
         reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings_actor->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings_actor->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings_actor->value("/vits/lan").toString())));
     //播放返回值
     connect(reply, &QNetworkReply::finished, this, [=]() {
-        if (reply->error() == QNetworkReply::NoError) {
+        if (reply->error() == QNetworkReply::NoError)
+        {
             if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200)
             {
                 QFile outputFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/temp.mp3");
@@ -746,10 +747,15 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
                 player->play(); //播放音频
                 if(!onlySound)
                 {
+                    qInfo() << "语言合成播放完成";
                     changetext(message.split("|")[1].replace(" ","")); //逐字显示
                     history_win->addChildWindow(settings->value("/actor/name").toString(),message);
                     ui->pushButton->show();
                     emit change_tachie_to_tachie(message.split("|")[0]);
+                }
+                else
+                {
+                    qInfo() << "语言重放完成" << text;
                 }
             }
         }
@@ -759,6 +765,10 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
             {
                 ui->textEdit->setText("[error] Vits错误，请检查Vits配置或者关闭语言输出");
                 ui->pushButton->show();
+            }
+            else
+            {
+                qInfo() << "语言重放失败" << text;
             }
         }
     });

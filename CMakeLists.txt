@@ -39,6 +39,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         mianwindow_uichild/setting_actor.h mianwindow_uichild/setting_actor.cpp mianwindow_uichild/setting_actor.ui
         galgamedialog_uichild/history.h galgamedialog_uichild/history.cpp galgamedialog_uichild/history.ui
         galgamedialog_uichild/historychild.h galgamedialog_uichild/historychild.cpp galgamedialog_uichild/historychild.ui
+        dialog/messagewindow.h dialog/messagewindow.cpp dialog/messagewindow.ui
+        utils/createwin.h utils/createwin.cpp
+
     )
 else()
     if(ANDROID)
@@ -97,14 +100,13 @@ set(TS_FILES
     "${TS_DIR}/ja_JP.ts"
 )
 
-# 使用qt_add_lupdate来更新ts文件
-find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
+find_program(LUPDATE_EXECUTABLE lupdate)
 
-qt_add_lupdate(ZcChat
-    TRANSLATIONS ${TS_FILES}
-)
+foreach(_ts_file ${TS_FILES})
+    execute_process(
+        COMMAND ${LUPDATE_EXECUTABLE} -recursive ${CMAKE_SOURCE_DIR} -ts ${_ts_file}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
+endforeach()
 
-# 使用qt_add_lrelease来生成qm文件
-qt_add_lrelease(ZcChat
-    TRANSLATIONS ${TS_FILES}
-)
+

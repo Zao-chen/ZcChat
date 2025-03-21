@@ -9,6 +9,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QStandardPaths>
+#include "utils/createwin.h"
 
 namespace QT_LOG
 {
@@ -41,12 +42,12 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext &context, con
             break;
         case QtCriticalMsg:
             log_info = QString("%1 [Critical] %2 %3").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"), windowName, msg);
+            createwin(QString("%1 [Error] %2").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"), msg));
             break;
         case QtFatalMsg:
             log_info = QString("%1 [Fatal] %2 %3").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"), windowName, msg);
             abort();
     }
-
     m_LogMutex.lock(); // 线程安全
     QFile outFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/log.txt");
     outFile.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
