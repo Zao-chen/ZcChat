@@ -25,7 +25,7 @@
 #include "third_party/json/json.hpp"
 using json_t = nlohmann::json;
 
-QString local_version = "v4.4.0-beta";
+QString local_version = "v4.4.2-beta";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWindow(parent)
