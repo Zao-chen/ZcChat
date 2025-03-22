@@ -27,7 +27,7 @@
 
 using json_t = nlohmann::json;
 
-QString local_version = "v4.4.2-beta";
+QString local_version = "v4.4.3-beta";
 
 MainWindow::MainWindow(QWidget *parent)
     : ElaWindow(parent)

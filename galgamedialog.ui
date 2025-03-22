@@ -65,6 +65,32 @@
        <pointsize>14</pointsize>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QMenu {
+    background-color: #ffffff; /* 白色背景 */
+    border: none;              /* 无边框 */
+    border-radius: 8px;        /* 圆角半径 */
+    padding: 5px;              /* 内边距 */
+}
+
+QMenu::item {
+    padding: 8px 20px;         /* 菜单项的内边距 */
+    background-color: transparent; /* 默认背景色透明 */
+    border-radius: 4px;        /* 菜单项圆角 */
+}
+
+QMenu::item:selected {
+    background-color: #e0e0e0; /* 选中项的背景色 */
+    color: #000000;            /* 选中项的文字颜色 */
+}
+
+QMenu::separator {
+    height: 1px;
+    background: #dcdcdc;
+    margin: 5px 0;
+}
+</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::Shape::NoFrame</enum>
      </property>
