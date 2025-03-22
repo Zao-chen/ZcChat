@@ -17,17 +17,25 @@ tachie::tachie(QWidget *parent) :
 {
     ui->setupUi(this);
     /*无边框设置*/
-    this->setWindowFlags(Qt::Tool); //当前窗口的构造函数下调用
-    this->setWindowFlags(Qt::ToolTip); //同时隐藏任务栏图标和标题栏图标
-    setWindowFlag(Qt::FramelessWindowHint);
-    setWindowFlags (windowFlags () | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground);
     /*初始化*/
-    init_from_main();
+    init_from_main(true);
 }
 /*初始化*/
-void tachie::init_from_main()
+void tachie::init_from_main(bool pin)
 {
+    qInfo()<<"置顶状态"<<pin;
+    if (pin)
+    {
+        setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    }
+    else
+    {
+        setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);
+    }
+
+    // 重新显示窗口
+    show();
     QString appFolder = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat";
     // 创建 QSettings 对象
     QSettings *settings = new QSettings(appFolder + "/Setting.ini", QSettings::IniFormat);

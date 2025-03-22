@@ -28,7 +28,7 @@ private:
 
 private slots:
     void changetachie_from_galdialog(QString name); //修改立绘
-    void init_from_main(); //初始化立绘
+    void init_from_main(bool pin); //初始化立绘
     void resetlocation_from_main(); //重置立绘位置
 };
 

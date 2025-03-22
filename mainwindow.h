@@ -63,10 +63,11 @@ private slots:
     void on_exitAppAction();
     void on_openGithub();
     void on_restartAppAction();
+    void on_pinTachie();
     void hideWindow();
 
 signals:
-    void init_to_tachie(); //初始化立绘
+    void init_to_tachie(bool pin); //初始化立绘
     void init_to_dialog(); //初始化对话框
 
 private:
@@ -77,6 +78,7 @@ private:
     QAction *m_showMainAction; //托盘动作
     QAction *m_exitAppAction; //托盘动作
     QAction *m_restartAppAction; //托盘动作
+    QAction *m_pinTachie; //托盘动作
     /*网络相关*/
     QByteArray getUrl(const QString &input); //网络
     QNetworkAccessManager *m_manager;
@@ -90,5 +92,7 @@ private:
     int currentEnergy;   // 当前能量值
     void updateEnergyDisplay();
     bool isDialogOpen = false; //用于切换对话框显示和隐藏
+    /*一些变量*/
+    bool isPin = true; //是否置顶
 };
 #endif // MAINWINDOW_H

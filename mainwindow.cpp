@@ -131,6 +131,8 @@ MainWindow::MainWindow(QWidget *parent)
     //托盘连接
     m_showMainAction = new QAction("主界面", this);
     connect(m_showMainAction,SIGNAL(triggered()),this,SLOT(on_showMainAction()));
+    m_pinTachie = new QAction("置顶 √", this);
+    connect(m_pinTachie,SIGNAL(triggered()),this,SLOT(on_pinTachie()));
     m_exitAppAction = new QAction("退出", this);
     connect(m_exitAppAction,SIGNAL(triggered()),this,SLOT(on_exitAppAction()));
     m_restartAppAction = new QAction("重启", this);
@@ -138,6 +140,7 @@ MainWindow::MainWindow(QWidget *parent)
     //托盘创建
     m_menu = new ElaMenu(this);
     m_menu->addAction(m_showMainAction); //新增菜单项--打开主界面
+    m_menu->addAction(m_pinTachie); //新增菜单项--打开主界面
     m_menu->addSeparator(); //增加分隔符
     m_menu->addAction(m_restartAppAction); //新增菜单项---重启
     m_menu->addAction(m_exitAppAction); //新增菜单项---退出程序
@@ -154,7 +157,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(tachie_win, SIGNAL(show_dialogwin_to_main()), this, SLOT(show_dialogwin_from_tachie()));
     connect(tachie_win, SIGNAL(changeLocation_to_main(int,int)), this, SLOT(changeTachieLocation_from_tachie(int,int)));
     connect(dialog_win, SIGNAL(change_tachie_to_tachie(QString)), tachie_win, SLOT(changetachie_from_galdialog(QString)));
-    connect(this, SIGNAL(init_to_tachie()), tachie_win, SLOT(init_from_main()));
+    connect(this, SIGNAL(init_to_tachie(bool)), tachie_win, SLOT(init_from_main(bool)));
     connect(this, SIGNAL(init_to_dialog()), dialog_win, SLOT(init_from_main()));
     connect(dialog_win, SIGNAL(energy_to_main(int)), this, SLOT(getEnergy_from_gal(int)));
     connect(this, SIGNAL(resetlocation_to_tachie()), tachie_win, SLOT(resetlocation_from_main()));
@@ -318,14 +321,14 @@ void MainWindow::saveActorSetting(const QString &key, const QVariant &value) {
 void MainWindow::ChangeSetting_tachieSize(int arg1)
 {
     saveActorSetting("/tachie/size",arg1);
-    emit init_to_tachie();
+    emit init_to_tachie(isPin);
 }
 //角色选择修改
 void MainWindow::ChangeSetting_ActorChoose(const QString &arg1)
 {
     if(already_init) saveSetting("/actor/name",arg1);
     reloadActorSetting();
-    emit init_to_tachie();
+    emit init_to_tachie(isPin);
 }
 //语言修改
 void MainWindow::ChangeSetting_Lan(const QString &arg1)
@@ -426,6 +429,20 @@ void MainWindow::on_openGithub()
 void MainWindow::resetTachie()
 {
     emit resetlocation_to_tachie();
+}
+void MainWindow::on_pinTachie()
+{
+    if(isPin)
+    {
+        m_pinTachie->setText("置顶 ×");
+        isPin = false;
+    }
+    else
+    {
+        m_pinTachie->setText("置顶 √");
+        isPin = true;
+    }
+    emit init_to_tachie(isPin);
 }
 /*窗口隐藏重写*/
 void MainWindow::hideWindow()
