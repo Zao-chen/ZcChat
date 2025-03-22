@@ -316,7 +316,7 @@ void MainWindow::saveSetting(const QString &key, const QVariant &value) {
 }
 void MainWindow::saveActorSetting(const QString &key, const QVariant &value) {
     QScopedPointer<QSettings> settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat)); // 使用 QScopedPointer 来自动管理资源。
-    QSettings *settings_actor = new QSettings(qApp->applicationDirPath()+"/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
+    QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/ZcChat/characters/"+settings->value("actor/name").toString()+"/config.ini",QSettings::IniFormat);
     settings_actor->setValue(key, value);
 }
 /*配置项修改和保存*/
