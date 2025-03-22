@@ -50,6 +50,7 @@ public:
     void ChangeSetting_VitsModel(const QString &arg1);
     void ChangeSetting_VitsLanguage(const QString &arg1);
     bool already_init=false; //是否已经初始化了
+    void resetTachie();
     ~MainWindow();
 
 private slots:
@@ -62,7 +63,6 @@ private slots:
     void on_exitAppAction();
     void on_openGithub();
     void on_restartAppAction();
-    void on_resetTachie();
     void hideWindow();
 
 signals:
@@ -77,8 +77,6 @@ private:
     QAction *m_showMainAction; //托盘动作
     QAction *m_exitAppAction; //托盘动作
     QAction *m_restartAppAction; //托盘动作
-    QAction *m_openGithub; //托盘动作
-    QAction *m_resetTachie; //托盘动作
     /*网络相关*/
     QByteArray getUrl(const QString &input); //网络
     QNetworkAccessManager *m_manager;

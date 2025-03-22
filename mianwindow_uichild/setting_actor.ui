@@ -65,7 +65,7 @@
    </item>
    <item>
     <widget class="ElaScrollPageArea" name="widget_3" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_17" stretch="0,1,0,0">
+     <layout class="QHBoxLayout" name="horizontalLayout_17" stretch="0,4,1,0,0">
       <property name="leftMargin">
        <number>15</number>
       </property>
@@ -96,6 +96,13 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="ElaPushButton" name="pushButton_resettachie">
+        <property name="text">
+         <string>重置位置</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="ElaSpinBox" name="spinBox_tachie_size">
@@ -544,6 +551,11 @@
    <class>ElaComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">elacombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaPushButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">elapushbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

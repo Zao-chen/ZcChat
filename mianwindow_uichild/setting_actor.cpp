@@ -67,3 +67,9 @@ void setting_actor::refreshUI()
 {
     ui->retranslateUi(this);
 }
+
+void setting_actor::on_pushButton_resettachie_clicked()
+{
+    mainWin->resetTachie();
+}
+

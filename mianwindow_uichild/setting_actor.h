@@ -29,6 +29,8 @@ private slots:
     void on_lineEdit_speechInput_wakeWord_textChanged(const QString &arg1);
     void on_lineEdit_speechInput_endWord_textChanged(const QString &arg1);
 
+    void on_pushButton_resettachie_clicked();
+
 private:
     Ui::setting_actor *ui;
     MainWindow *mainWin;

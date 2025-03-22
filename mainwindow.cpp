@@ -131,20 +131,14 @@ MainWindow::MainWindow(QWidget *parent)
     //托盘连接
     m_showMainAction = new QAction("主界面", this);
     connect(m_showMainAction,SIGNAL(triggered()),this,SLOT(on_showMainAction()));
-    m_openGithub = new QAction("Github", this);
-    connect(m_openGithub,SIGNAL(triggered()),this,SLOT(on_openGithub()));
     m_exitAppAction = new QAction("退出", this);
     connect(m_exitAppAction,SIGNAL(triggered()),this,SLOT(on_exitAppAction()));
     m_restartAppAction = new QAction("重启", this);
     connect(m_restartAppAction,SIGNAL(triggered()),this,SLOT(on_restartAppAction()));
-    m_resetTachie = new QAction("重置立绘", this);
-    connect(m_resetTachie,SIGNAL(triggered()),this,SLOT(on_resetTachie()));
     //托盘创建
     m_menu = new ElaMenu(this);
     m_menu->addAction(m_showMainAction); //新增菜单项--打开主界面
-    m_menu->addAction(m_openGithub); //新增菜单项--打开github
     m_menu->addSeparator(); //增加分隔符
-    m_menu->addAction(m_resetTachie); //新增菜单项---重置立绘
     m_menu->addAction(m_restartAppAction); //新增菜单项---重启
     m_menu->addAction(m_exitAppAction); //新增菜单项---退出程序
     m_sysTrayIcon->setContextMenu(m_menu);
@@ -429,7 +423,7 @@ void MainWindow::on_openGithub()
     QDesktopServices::openUrl(QUrl("https://github.com/Zao-chen/ZcChat"));
 }
 //托盘重置立绘
-void MainWindow::on_resetTachie()
+void MainWindow::resetTachie()
 {
     emit resetlocation_to_tachie();
 }
