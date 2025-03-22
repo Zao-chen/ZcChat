@@ -65,6 +65,9 @@
        <pointsize>14</pointsize>
       </font>
      </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::ContextMenuPolicy::DefaultContextMenu</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true">QMenu {
     background-color: #ffffff; /* 白色背景 */
@@ -88,6 +91,46 @@ QMenu::separator {
     height: 1px;
     background: #dcdcdc;
     margin: 5px 0;
+}
+QScrollArea {
+    border: none; /* 去除边框 */
+    background: transparent; /* 背景透明 */
+}
+
+QScrollBar:vertical, QScrollBar:horizontal {
+    border: none; /* 去除边框 */
+    background: transparent; /* 背景透明 */
+    width: 8px; /* 设置滚动条的宽度 */
+    height: 8px; /* 设置滚动条的高度 */
+}
+
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background: rgba(136, 136, 136, 0.5); /* 设置滚动条滑块的淡灰色 */
+    border-radius: 4px; /* 设置滑块的圆角 */
+}
+
+QScrollBar::handle:vertical:hover, QScrollBar::handle:horizontal:hover {
+    background: rgba(136, 136, 136, 0.8); /* 滑块悬停时的颜色 */
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical,
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    background: transparent; /* 去除上下箭头 */
+    border: none; /* 去除箭头边框 */
+    height: 0px; /* 强制去除箭头按钮 */
+    width: 0px; /* 强制去除箭头按钮 */
+}
+
+QProgressBar {
+    border: none; /* 去除进度条边框 */
+    background: #f0f0f0; /* 进度条的背景颜色 */
+    height: 8px; /* 设置进度条的高度 */
+    margin-bottom: 10px; /* 为进度条下方留出空间 */
+}
+
+QProgressBar::chunk {
+    background: rgba(76, 175, 80, 0.5); /* 设置淡绿色的进度条颜色 */
+    border-radius: 4px; /* 设置进度条块的圆角 */
 }
 </string>
      </property>
@@ -118,6 +161,9 @@ QMenu::separator {
      </property>
      <property name="toolTip">
       <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
      </property>
      <property name="text">
       <string/>
