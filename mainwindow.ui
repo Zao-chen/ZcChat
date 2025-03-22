@@ -45,7 +45,8 @@ QWidget#scrollAreaWidgetContents_7 {
 QLineEdit {
     padding-left: 7px;  /* 设置左侧空白 */
     padding-right: 7px; /* 设置右侧空白 */
-}</string>
+}
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7">
    <property name="spacing">

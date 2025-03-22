@@ -3,7 +3,7 @@
 
 #include <QStandardItemModel>
 #include <QSettings>
-#include <QMenu>
+#include "ElaMenu.h"
 #include <QProcess>
 #include <QFile>
 #include <QDesktopServices>
@@ -140,7 +140,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_resetTachie = new QAction("重置立绘", this);
     connect(m_resetTachie,SIGNAL(triggered()),this,SLOT(on_resetTachie()));
     //托盘创建
-    m_menu = new QMenu(this);
+    m_menu = new ElaMenu(this);
     m_menu->addAction(m_showMainAction); //新增菜单项--打开主界面
     m_menu->addAction(m_openGithub); //新增菜单项--打开github
     m_menu->addSeparator(); //增加分隔符
