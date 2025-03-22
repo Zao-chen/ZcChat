@@ -8,6 +8,7 @@
 #include "mianwindow_uichild/setting_vits.h"
 #include "mianwindow_uichild/setting_voiceinput.h"
 #include "mianwindow_uichild/setting_actor.h"
+#include "mianwindow_uichild/about.h"
 #include "ElaWindow.h"
 #include <QSystemTrayIcon>
 #include <QTimer>
@@ -27,12 +28,14 @@ signals:
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    QString local_version = "v4.3.1";
     /*菜单窗口创建*/
     setting_general *setting_general_win;
     setting_ai *setting_ai_win;
     setting_vits *setting_vits_win;
     setting_voiceinput *setting_voiceinput_win;
     setting_actor *setting_actor_win;
+    about *about_win;
     galgamedialog *dialog_win;
     tachie *tachie_win;
     /*设置时候的一些传递*/

@@ -41,6 +41,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         galgamedialog_uichild/historychild.h galgamedialog_uichild/historychild.cpp galgamedialog_uichild/historychild.ui
         dialog/messagewindow.h dialog/messagewindow.cpp dialog/messagewindow.ui
         utils/createwin.h utils/createwin.cpp
+        mianwindow_uichild/about.h mianwindow_uichild/about.cpp mianwindow_uichild/about.ui
 
 
     )

@@ -27,8 +27,6 @@
 
 using json_t = nlohmann::json;
 
-QString local_version = "v4.4.3-beta";
-
 MainWindow::MainWindow(QWidget *parent)
     : ElaWindow(parent)
     , ui(new Ui::MainWindow)
@@ -58,7 +56,11 @@ MainWindow::MainWindow(QWidget *parent)
     setting_voiceinput_win = new setting_voiceinput(this);
     addPageNode("语音输入设置",setting_voiceinput_win,ElaIconType::CircleMicrophone);
     setting_actor_win = new setting_actor(this);
-    addPageNode("角色配置",setting_actor_win,ElaIconType::GingerbreadMan);
+    addPageNode("角色配置",setting_actor_win,ElaIconType::Snowman);
+
+    about_win = new about(this);
+    QString _settingKey{""};
+    addFooterNode("关于", about_win,_settingKey, 0, ElaIconType::User);
     /*
      * 读取配置
     */

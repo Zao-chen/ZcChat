@@ -3,8 +3,12 @@
         <file>img/logo.png</file>
         <file>img/microphone-solid.svg</file>
         <file>img/volume-fill.svg</file>
+        <file>img/github-mark.svg</file>
+        <file>img/file-solid.svg</file>
+        <file>img/circle-dot-regular.svg</file>
+        <file>img/snowman-solid.svg</file>
     </qresource>
-	<qresource prefix="/translations">
+    <qresource prefix="/translations">
         <file>translations/en_US.qm</file>
         <file>translations/zh_CN.qm</file>
         <file>translations/zh_TW.qm</file>
