@@ -21,6 +21,7 @@
 #include <qpropertyanimation>
 #include <QTranslator>
 #include <QStandardPaths>
+#include "ElaText.h"
 
 #include "third_party/json/json.hpp"
 #include <QDebug>
@@ -102,7 +103,6 @@ MainWindow::MainWindow(QWidget *parent)
     setting_actor_win->findChild<QComboBox*>("comboBox_vits_api")->addItems({"vits-simple-api","自定义"});
     setting_actor_win->findChild<QComboBox*>("comboBox_vits_model")->addItems({"vits","w2v2-vits","bert-vits2","gpt-sovits"});
     setting_actor_win->findChild<QComboBox*>("comboBox_vits_language")->addItems({"ja","zh"});
-    reloadActorSetting();
     /*托盘*/
     qInfo()<<"初始化托盘……";
     //初始化托盘
@@ -195,6 +195,7 @@ MainWindow::MainWindow(QWidget *parent)
         setUserInfoCardSubTitle(tr("当前为最新版本^_^"));
     }
     ChangeSetting_Lan(settings->value("/soft/lan").toString());
+    reloadActorSetting();
     qInfo()<<"MainWindow加载完成！";
 }
 
@@ -266,7 +267,8 @@ void MainWindow::reloadActorSetting()
         setUserInfoCardPixmap(croppedPixmap);
     }
     /*重载*/
-    setting_actor_win->findChild<QLabel*>("label_editActor")->setText("当前配置角色："+settings->value("actor/name").toString());
+    qInfo()<<"设置角色!"<<settings->value("/actor/name").toString();
+    setting_actor_win->findChild<ElaText*>("label_editActor")->setText("当前配置角色："+settings->value("/actor/name").toString());
     setting_actor_win->findChild<QSpinBox*>("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
     setting_actor_win->findChild<QLineEdit*>("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
     setting_actor_win->findChild<QComboBox*>("comboBox_vits_api")->setCurrentIndex(settings_actor->value("/vits/api").toInt());
@@ -317,9 +319,12 @@ void MainWindow::ChangeSetting_tachieSize(int arg1)
 //角色选择修改
 void MainWindow::ChangeSetting_ActorChoose(const QString &arg1)
 {
-    if(already_init) saveSetting("/actor/name",arg1);
-    reloadActorSetting();
-    emit init_to_tachie(isPin);
+    if(already_init)
+    {
+        saveSetting("/actor/name",arg1);
+        reloadActorSetting();
+        emit init_to_tachie(isPin);
+    }
 }
 //语言修改
 void MainWindow::ChangeSetting_Lan(const QString &arg1)
