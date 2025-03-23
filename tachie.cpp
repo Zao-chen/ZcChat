@@ -24,25 +24,21 @@ tachie::tachie(QWidget *parent) :
 /*初始化*/
 void tachie::init_from_main(bool pin)
 {
+    //置顶状态修改
     qInfo()<<"置顶状态"<<pin;
     if (pin)
-    {
         setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-    }
     else
-    {
         setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);
-    }
-
-    // 重新显示窗口
+    //重新显示窗口
     show();
     QString appFolder = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat";
-    // 创建 QSettings 对象
+    //创建 QSettings 对象
     QSettings *settings = new QSettings(appFolder + "/Setting.ini", QSettings::IniFormat);
     QSettings *settings_actor = new QSettings(appFolder + "/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
     QPixmap pixmap;
     pixmap.load(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/正常.png");
-    // 缩放新图片并设置到 label
+    //缩放新图片并设置到 label
     QPixmap scaledPixmap = pixmap.scaled(
         pixmap.width() * (settings_actor->value("tachie/size").toInt() / 100.0),
         pixmap.height() * (settings_actor->value("tachie/size").toInt() / 100.0),

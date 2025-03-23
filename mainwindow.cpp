@@ -36,31 +36,28 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowIcon(QIcon(":/img/img/logo.png"));
     setUserInfoCardTitle("ZcChat "+local_version);
-    setUserInfoCardSubTitle("检测新版本中……");
+    setUserInfoCardSubTitle(tr("检测新版本中……"));
     window()->resize(1280,720);
+    /*配置文件初始化*/
     QString appFolder = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat"; // 应用名称为 ZcChat
     QDir dir1(appFolder);
-    if (!dir1.exists())
-    {
-        dir1.mkpath("."); // 创建文件夹
-    }
+    if (!dir1.exists()) dir1.mkpath("."); //创建文件夹
     QSettings *settings = new QSettings(appFolder + "/Setting.ini", QSettings::IniFormat);
     setUserInfoCardPixmap(QPixmap(appFolder + "/characters/" + settings->value("actor/name").toString() + "/正常.png"));
     /*子页面初始化*/
     setting_general_win = new setting_general(this);
-    addPageNode("通用设置",setting_general_win,ElaIconType::House);
+    addPageNode(tr("通用设置"),setting_general_win,ElaIconType::House);
     setting_ai_win = new setting_ai(this);
-    addPageNode("AI模型设置",setting_ai_win,ElaIconType::UserRobot);
+    addPageNode(tr("AI模型设置"),setting_ai_win,ElaIconType::UserRobot);
     setting_vits_win = new setting_vits(this);
-    addPageNode("语音合成设置",setting_vits_win,ElaIconType::Speaker);
+    addPageNode(tr("语音合成设置"),setting_vits_win,ElaIconType::Speaker);
     setting_voiceinput_win = new setting_voiceinput(this);
-    addPageNode("语音输入设置",setting_voiceinput_win,ElaIconType::CircleMicrophone);
+    addPageNode(tr("语音输入设置"),setting_voiceinput_win,ElaIconType::CircleMicrophone);
     setting_actor_win = new setting_actor(this);
-    addPageNode("角色配置",setting_actor_win,ElaIconType::Snowman);
-
+    addPageNode(tr("角色配置"),setting_actor_win,ElaIconType::Snowman);
     about_win = new about(this);
     QString _settingKey{""};
-    addFooterNode("关于", about_win,_settingKey, 0, ElaIconType::User);
+    addFooterNode(tr("关于"), about_win,_settingKey, 0, ElaIconType::User);
     /*
      * 读取配置
     */
@@ -115,29 +112,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_sysTrayIcon, &QSystemTrayIcon::activated, //给QSystemTrayIcon添加槽函数
         [=](QSystemTrayIcon::ActivationReason reason)
         {
-            switch(reason)
-            {
-            case QSystemTrayIcon::Trigger: //单击托盘图标
-                this->show();
-                break;
-            case QSystemTrayIcon::DoubleClick: //双击托盘图标
-                m_sysTrayIcon->showMessage("ZcChat",
-                                           "左键打开主界面，右键打开菜单",
-                                           QSystemTrayIcon::Information,
-                                           1000);
-                break;
-            default:
-                break;
-            }
+            if(reason == QSystemTrayIcon::Trigger) this->show(); //单击打开窗口
         });
     //托盘连接
-    m_showMainAction = new QAction("主界面", this);
+    m_showMainAction = new QAction(tr("主界面"), this);
     connect(m_showMainAction,SIGNAL(triggered()),this,SLOT(on_showMainAction()));
-    m_pinTachie = new QAction("置顶 √", this);
+    m_pinTachie = new QAction(tr("置顶 √"), this);
     connect(m_pinTachie,SIGNAL(triggered()),this,SLOT(on_pinTachie()));
-    m_exitAppAction = new QAction("退出", this);
+    m_exitAppAction = new QAction(tr("退出"), this);
     connect(m_exitAppAction,SIGNAL(triggered()),this,SLOT(on_exitAppAction()));
-    m_restartAppAction = new QAction("重启", this);
+    m_restartAppAction = new QAction(tr("重启"), this);
     connect(m_restartAppAction,SIGNAL(triggered()),this,SLOT(on_restartAppAction()));
     //托盘创建
     m_menu = new ElaMenu(this);
@@ -193,22 +177,22 @@ MainWindow::MainWindow(QWidget *parent)
     if (local_version.contains("beta"))
     {
         qInfo()<<"正在运行beta版"+local_version+"，最新正式版"+tagName;
-        setUserInfoCardSubTitle("你正在运行beta版，遇到问题请提issue。最新正式版："+tagName);
+        setUserInfoCardSubTitle(tr("你正在运行beta版，遇到问题请提issue。最新正式版：")+tagName);
     }
     else if (reply == "error" || tagName.isEmpty())
     {
         qWarning()<<"获取新版本失败："<<reply;
-        setUserInfoCardSubTitle("获取新版本失败");
+        setUserInfoCardSubTitle(tr("获取新版本失败"));
     }
     else if (local_version != tagName)
     {
         qInfo()<<"发现新版本"+tagName;
-        setUserInfoCardSubTitle("发现新版本" + tagName);
+        setUserInfoCardSubTitle(tr("发现新版本") + tagName);
     }
     else
     {
         qInfo()<<"当前为最新版本"+local_version;
-        setUserInfoCardSubTitle("当前为最新版本^_^");
+        setUserInfoCardSubTitle(tr("当前为最新版本^_^"));
     }
     ChangeSetting_Lan(settings->value("/soft/lan").toString());
     qInfo()<<"MainWindow加载完成！";
@@ -225,7 +209,7 @@ void MainWindow::show_dialogwin_from_tachie()
 {
     if(isDialogOpen)
     {
-        dialog_win->handleWheelDown();
+        dialog_win->handleWheelDown(); //隐藏历史窗口
         qInfo()<<"隐藏对话框……";
         //设置窗口透明度效果
         QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(dialog_win);
@@ -263,6 +247,7 @@ void MainWindow::reloadActorSetting()
     qInfo()<<"重载角色配置……";
     QSettings *settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
     QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
+    /*呆毛图标设置*/
     QString imagePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/正常.png";
     QPixmap originalPixmap(imagePath);
     if (originalPixmap.isNull())
@@ -280,6 +265,7 @@ void MainWindow::reloadActorSetting()
         setUserInfoCardPixmap(croppedPixmap);
         setUserInfoCardPixmap(croppedPixmap);
     }
+    /*重载*/
     setting_actor_win->findChild<QLabel*>("label_editActor")->setText("当前配置角色："+settings->value("actor/name").toString());
     setting_actor_win->findChild<QSpinBox*>("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
     setting_actor_win->findChild<QLineEdit*>("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
@@ -301,13 +287,6 @@ QByteArray MainWindow::getUrl(const QString &input)
     if (reply->error() == QNetworkReply::NoError) return reply->readAll();
     else return "error";
 }
-/*保存立绘位置*/
-void MainWindow::changeTachieLocation_from_tachie(int x,int y)
-{
-    QSettings *settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
-    settings->setValue("/tachie/location_x",x);
-    settings->setValue("/tachie/location_y",y);
-}
 /*保存配置函数*/
 void MainWindow::saveSetting(const QString &key, const QVariant &value) {
     static QScopedPointer<QSettings> settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat)); // 使用 QScopedPointer 来自动管理资源。
@@ -319,6 +298,12 @@ void MainWindow::saveActorSetting(const QString &key, const QVariant &value) {
     settings_actor->setValue(key, value);
 }
 /*配置项修改和保存*/
+/*保存立绘位置*/
+void MainWindow::changeTachieLocation_from_tachie(int x,int y)
+{
+    saveSetting("/tachie/location_x",x);
+    saveSetting("/tachie/location_y",y);
+}
 //立绘大小修改
 void MainWindow::ChangeSetting_tachieSize(int arg1)
 {
@@ -335,19 +320,19 @@ void MainWindow::ChangeSetting_ActorChoose(const QString &arg1)
 //语言修改
 void MainWindow::ChangeSetting_Lan(const QString &arg1)
 {
-    static QScopedPointer<QSettings> settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat)); // 使用 QScopedPointer 来自动管理资源。
     QTranslator translator;
     qInfo()<<"切换语言到"<<arg1;
     if (translator.load(":/translations/translations/" + arg1 + ".qm"))
     {
         qInfo() << "切换成功" << arg1;
         qApp->installTranslator(&translator);
-        settings->setValue("/soft/lan",arg1);
+        saveSetting("/soft/lan",arg1);
     }
     else
     {
-        qCritical() << "加载翻译文件失败：" << arg1;
+        qCritical() << tr("加载翻译文件失败：") << arg1;
     }
+    /*刷新界面*/
     ui->retranslateUi(this);
     setting_actor_win->refreshUI();
     setting_ai_win->refreshUI();
@@ -422,11 +407,6 @@ void MainWindow::on_restartAppAction()
     QProcess::startDetached(program, arguments); //启动新进程
     QCoreApplication::quit(); //退出当前程序
 }
-//托盘ithub
-void MainWindow::on_openGithub()
-{
-    QDesktopServices::openUrl(QUrl("https://github.com/Zao-chen/ZcChat"));
-}
 //托盘重置立绘
 void MainWindow::resetTachie()
 {
@@ -436,12 +416,12 @@ void MainWindow::on_pinTachie()
 {
     if(isPin)
     {
-        m_pinTachie->setText("置顶 ×");
+        m_pinTachie->setText(tr("置顶 ×"));
         isPin = false;
     }
     else
     {
-        m_pinTachie->setText("置顶 √");
+        m_pinTachie->setText(tr("置顶 √"));
         isPin = true;
     }
     emit init_to_tachie(isPin);

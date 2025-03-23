@@ -47,9 +47,9 @@ galgamedialog::galgamedialog(QWidget *parent)
     setWindowOpacity(0.95);
     setAttribute(Qt::WA_TranslucentBackground);
     /*内容初始化*/
-    ui->pushButton->hide();
-    ui->label_name->setText("你");
-    emit init_from_main();
+    ui->pushButton_next->hide();
+    ui->label_name->setText(tr("你"));
+    init_from_main();
     /*逐字显示*/
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
@@ -149,7 +149,7 @@ galgamedialog::galgamedialog(QWidget *parent)
             {
                 if(settings->value("/speechInput/wake_enable").toBool())
                 {
-                    ui->pushButton_input->pressed();
+                    on_pushButton_input_pressed();
                     is_record = true;
                 }
             }
@@ -160,7 +160,7 @@ galgamedialog::galgamedialog(QWidget *parent)
             {
                 if(settings->value("/speechInput/wake_enable").toBool())
                 {
-                    ui->pushButton_input->released();
+                    on_pushButton_input_released();
                     is_record = false;
                 }
             }
@@ -181,7 +181,6 @@ galgamedialog::galgamedialog(QWidget *parent)
 }
 galgamedialog::~galgamedialog()
 {
-    qInfo()<<"galgamedialog关闭……";
     delete ui;
 }
 /*按键相关*/
@@ -255,7 +254,7 @@ QString galgamedialog::UrlpostWithFile()
         //添加文件字段
         if (!file->open(QIODevice::ReadOnly))
         {
-            qCritical()<<"语音识别-whisper-打开文件失败";
+            qCritical()<<tr("语音识别-whisper-打开录音文件失败");
             return "无法打开文件!";
         }
         QHttpPart filePart;
@@ -282,7 +281,7 @@ QString galgamedialog::UrlpostWithFile()
         }
         else
         {
-            qCritical()<<"语音识别-whisper-错误:" << reply->errorString()<<";错误信息:" << reply->readAll();
+            qCritical()<<tr("语音识别-whisper-错误:") << reply->errorString()<<"：" << reply->readAll();
         }
         reply->deleteLater();
         return "error";
@@ -320,7 +319,7 @@ QString galgamedialog::UrlpostWithFile()
             }
             else
             {
-                qCritical()<<"语音识别-百度-token-请求失败"<<reply->errorString();
+                qCritical()<<tr("语音识别-百度-token-请求失败")<<reply->errorString();
                 return;
             }
             reply->deleteLater();
@@ -333,14 +332,12 @@ QString galgamedialog::UrlpostWithFile()
         // 读取本地音频文件为二进制数据
         QString audioFilePath = QDir::currentPath() + "/output.m4a"; // 音频文件路径
         QFile file(audioFilePath);
-        if (!file.open(QIODevice::ReadOnly))
-        {
-            qCritical()<<"语音识别-百度-识别-打开文件失败" << audioFilePath;
-        }
+        if (!file.open(QIODevice::ReadOnly)) qCritical()<<tr("语音识别-百度-识别-打开文件失败") << audioFilePath;
         QByteArray audioData = file.readAll();
         file.close();
         QString resultJson;
-        if (!audioData.isEmpty()) {
+        if (!audioData.isEmpty())
+        {
             // 将音频数据进行 Base64 编码
             QString base64AudioData = audioData.toBase64();
             // 创建 JSON 请求体，严格保持原有格式
@@ -371,7 +368,7 @@ QString galgamedialog::UrlpostWithFile()
                 }
                 else
                 {
-                    qCritical() << "语音识别-百度-识别失败：" << reply_api->errorString();
+                    qCritical() << tr("语音识别-百度-识别失败：") << reply_api->errorString();
                 }
                 loop.quit();
                 reply_api->deleteLater();
@@ -389,7 +386,7 @@ QString galgamedialog::UrlpostWithFile()
         {
             if (resultJson.isEmpty())
             {
-                qCritical() << "输入的 JSON 为空";
+                qCritical() << tr("输入的 JSON 为空");
                 result.clear();
             }
             nlohmann::json doc = nlohmann::json::parse(resultJson.toStdString());
@@ -400,7 +397,7 @@ QString galgamedialog::UrlpostWithFile()
                 {
                     if (value.is_string()) {
                         result = QString::fromStdString(value.get<std::string>());
-                        qInfo() << "语音识别-百度-识别-获取到结果：" << result;
+                        qInfo() << "语音识别-百度-识别-获取到结果: " << result;
                     }
                 }
             }
@@ -409,9 +406,9 @@ QString galgamedialog::UrlpostWithFile()
                 qCritical() << "JSON 中没有有效的 'result' 字段";
             }
         }
-        catch (const nlohmann::json::exception& e)
+        catch (...)
         {
-            qCritical() << "Json解析错误: " << e.what()<<";解析失败的 JSON: " << resultJson;
+            qCritical() << tr("语音识别-百度-识别-Json解析错误: ") << resultJson;
             result.clear();
         }
         return result;
@@ -438,17 +435,15 @@ void galgamedialog::changetext(QString text)
     timer->start(settings->value("/dialog/time").toInt());
 }
 //逐字显示更新
-void galgamedialog::updateText() {
-    if (currentIndex <= fullText.length()) {
+void galgamedialog::updateText()
+{
+    if (currentIndex <= fullText.length())
         ui->textEdit->setText(fullText.left(++currentIndex));
-    }
     else
-    {
         isInChangetext = false;
-    }
     return;
 }
-/*立绘的移动*/
+/*对话框的移动*/
 //鼠标按下事件
 void galgamedialog::mousePressEvent(QMouseEvent *event)
 {
@@ -485,7 +480,7 @@ void galgamedialog::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 /*点击继续*/
-void galgamedialog::on_pushButton_clicked()
+void galgamedialog::on_pushButton_next_clicked()
 {
     if(isInChangetext)
     {
@@ -495,10 +490,10 @@ void galgamedialog::on_pushButton_clicked()
     }
     else
     {
-        ui->label_name->setText("你");
+        ui->label_name->setText(tr("你"));
         ui->textEdit->clear();
         ui->textEdit->setEnabled(true);
-        ui->pushButton->hide();
+        ui->pushButton_next->hide();
     }
 }
 /*圆角边框*/
@@ -516,10 +511,10 @@ void galgamedialog::paintEvent(QPaintEvent *event)
     {
         QPainterPath shadowPath;
         shadowPath.setFillRule(Qt::WindingFill);
-        // 使用圆角矩形而不是普通矩形绘制阴影
+        //使用圆角矩形而不是普通矩形绘制阴影
         QRectF shadowRect((5 - i), (5 - i) , this->width() - (5 - i) * 2, this->height() - (5 - i) * 2);
         shadowPath.addRoundedRect(shadowRect, 15, 15);  // 添加圆角矩形路径
-        // 增加透明度效果，模拟阴影逐渐变淡
+        //增加透明度效果，模拟阴影逐渐变淡
         color.setAlpha(50 - qSqrt(i) * 22);
         painter.setPen(color);
         painter.drawPath(shadowPath);  // 绘制阴影路径
@@ -547,6 +542,7 @@ void galgamedialog::on_pushButton_input_released()
     qInfo()<<"结束录音";
     if (audioRecorder) audioRecorder->stop();
 }
+/*初始化*/
 void galgamedialog::init_from_main()
 {
     if(!settings->value("/speechInput/enable").toBool()) //不开启语言输入
@@ -571,22 +567,22 @@ void galgamedialog::init_from_main()
 //发送llm消息
 void galgamedialog::send_to_llm()
 {
-    history_win->addChildWindow("你",ui->textEdit->toPlainText());
+    history_win->addChildWindow(tr("你"),ui->textEdit->toPlainText());
     //对话框设置
     ui->label_name->setText(settings->value("/actor/name").toString());
     ui->textEdit->setEnabled(false);
-    ui->pushButton->hide();
+    ui->pushButton_next->hide();
     //去除换行
     QTextCursor cursor=ui->textEdit->textCursor(); //得到当前text的光标
     if(cursor.hasSelection()) cursor.clearSelection();
     cursor.deletePreviousChar(); //删除前一个字符
-    // 发送post请求
+    //发送post请求
     nlohmann::json jsonDoc = nlohmann::json::parse(UrlpostLLM().toStdString(), nullptr, false);
     qInfo() << "接收到post信息：" << QString::fromStdString(jsonDoc.dump());
-    // 获取到的json处理
+    //获取到的json处理
     QString message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为[" + QString::fromStdString(jsonDoc.dump()) + "]|错误error";
-    // 解析 JSON 字符串
-    if (jsonDoc.is_discarded()) qCritical() << "letta返回值为空";
+    //解析 JSON 字符串
+    if (jsonDoc.is_discarded()) qCritical() << "letta返回值解析失败";
     else if (jsonDoc.contains("messages") && jsonDoc["messages"].is_array()) // 查找 "content" 字段
     {
         for (const auto& value : jsonDoc["messages"])
@@ -602,7 +598,8 @@ void galgamedialog::send_to_llm()
     //信息判断
     if(message.isNull())
     {
-        message = "正常|[error] Letta返回了["+QString::fromStdString(jsonDoc.dump())+"]，可能是Letta未启动/agent配置错误|错误error";
+        message = "正常|[error] "+QString::fromStdString(jsonDoc.dump())+"|error";
+        qCritical() << tr("Letta返回了[")+QString::fromStdString(jsonDoc.dump())+tr("]，可能是Letta未启动/agent配置错误|错误error");
     }
     else if(message.split("|").size()!=3)
     {
@@ -620,7 +617,7 @@ void galgamedialog::send_to_llm()
     {
         changetext(message.split("|")[1].replace(" ","")); //逐字显示
         history_win->addChildWindow(settings->value("/actor/name").toString(),message);
-        ui->pushButton->show();
+        ui->pushButton_next->show();
         emit change_tachie_to_tachie(message.split("|")[0]);
     }
     /*发送指令相关*/
@@ -750,7 +747,7 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
                     qInfo() << "语言合成播放完成";
                     changetext(message.split("|")[1].replace(" ","")); //逐字显示
                     history_win->addChildWindow(settings->value("/actor/name").toString(),message);
-                    ui->pushButton->show();
+                    ui->pushButton_next->show();
                     emit change_tachie_to_tachie(message.split("|")[0]);
                 }
                 else
@@ -763,12 +760,13 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
         {
             if(!onlySound)
             {
-                ui->textEdit->setText("[error] Vits错误，请检查Vits配置或者关闭语言输出");
-                ui->pushButton->show();
+                ui->textEdit->setText(tr("[error] Vits错误，请检查Vits配置或者关闭语言输出"));
+                qCritical()<<tr("Vits错误，请检查Vits配置或者关闭语言输出");
+                ui->pushButton_next->show();
             }
             else
             {
-                qInfo() << "语言重放失败" << text;
+                qCritical() << "语言重放失败" << text;
             }
         }
     });
@@ -776,71 +774,72 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
 /*历史按钮*/
 void galgamedialog::on_pushButton_history_clicked()
 {
-    history_win->move(this->x(), this->y() -450);  // 确保子窗口出现在父窗口旁边
+    history_win->move(this->x(), this->y() -450); // 确保子窗口出现在父窗口旁边
     if (!isHistoryOpen)
     {
-        // 显示窗口
+        //显示窗口
         history_win->show();
         isHistoryOpen = true;
         qInfo() << "打开日志窗口……";
-        // 设置窗口透明度效果
+        //设置窗口透明度效果
         auto *opacityEffect = new QGraphicsOpacityEffect(history_win);
         history_win->setGraphicsEffect(opacityEffect);
-        // 获取窗口初始和目标位置
+        //获取窗口初始和目标位置
         QRect startRect = history_win->geometry();
         QRect endRect = startRect;
-        startRect.moveTop(startRect.top() + 20);  // 初始位置向下偏移 100 像素
-        // 设置窗口起始位置（下方 + 透明）
+        startRect.moveTop(startRect.top() + 20); // 初始位置向下偏移 100 像素
+        //设置窗口起始位置（下方 + 透明）
         history_win->setGeometry(startRect);
         opacityEffect->setOpacity(0.0);
-        // 创建透明度动画（淡入）
+        //创建透明度动画（淡入）
         auto *opacityAnim = new QPropertyAnimation(opacityEffect, "opacity");
         opacityAnim->setDuration(150);
         opacityAnim->setStartValue(0.0);
         opacityAnim->setEndValue(1.0);
-        // 创建位置动画（向上移动）
+        //创建位置动画（向上移动）
         auto *moveAnim = new QPropertyAnimation(history_win, "geometry");
         moveAnim->setDuration(150);
         moveAnim->setStartValue(startRect);
         moveAnim->setEndValue(endRect);
-        // 并行动画组，确保两种动画同时进行
+        //并行动画组，确保两种动画同时进行
         auto *group = new QParallelAnimationGroup(history_win);
         group->addAnimation(opacityAnim);
         group->addAnimation(moveAnim);
-        // 防止动画被回收
+        //防止动画被回收
         group->start(QAbstractAnimation::DeleteWhenStopped);
     }
     else
     {
         isHistoryOpen = false;
         qInfo() << "关闭日志窗口……";
-        // 获取窗口的当前位置和目标位置
+        //获取窗口的当前位置和目标位置
         QRect startRect = history_win->geometry();
         QRect endRect = startRect;
-        endRect.moveTop(endRect.top() + 20);  // 目标位置向上偏移 100 像素
-        // 确保窗口可见且透明度效果已设置
+        endRect.moveTop(endRect.top() + 20); //目标位置向上偏移 100 像素
+        //确保窗口可见且透明度效果已设置
         QGraphicsOpacityEffect *opacityEffect = qobject_cast<QGraphicsOpacityEffect *>(history_win->graphicsEffect());
-        if (!opacityEffect) {
+        if (!opacityEffect)
+        {
             opacityEffect = new QGraphicsOpacityEffect(history_win);
             history_win->setGraphicsEffect(opacityEffect);
         }
-        // 创建透明度动画（淡出）
+        //创建透明度动画（淡出）
         QPropertyAnimation *opacityAnim = new QPropertyAnimation(opacityEffect, "opacity");
-        opacityAnim->setDuration(150);        // 动画时间 1 秒
-        opacityAnim->setStartValue(1.0);       // 从完全不透明
-        opacityAnim->setEndValue(0.0);         // 到完全透明
-        // 创建位置动画（向上移动）
+        opacityAnim->setDuration(150); //动画时间
+        opacityAnim->setStartValue(1.0); //从完全不透明
+        opacityAnim->setEndValue(0.0); //到完全透明
+        //创建位置动画（向上移动）
         QPropertyAnimation *moveAnim = new QPropertyAnimation(history_win, "geometry");
-        moveAnim->setDuration(150);           // 动画时间 1 秒
-        moveAnim->setStartValue(startRect);    // 从当前窗口位置
-        moveAnim->setEndValue(endRect);        // 向上移动 100 像素
-        // 并行动画组（确保透明度和位置同时变化）
+        moveAnim->setDuration(150); //动画时间 1 秒
+        moveAnim->setStartValue(startRect); //从当前窗口位置
+        moveAnim->setEndValue(endRect); //向上移动 100 像素
+        //并行动画组（确保透明度和位置同时变化）
         QParallelAnimationGroup *group = new QParallelAnimationGroup(history_win);
         group->addAnimation(opacityAnim);
         group->addAnimation(moveAnim);
-        // 动画完成后隐藏窗口
+        //动画完成后隐藏窗口
         connect(group, &QParallelAnimationGroup::finished, history_win, &QWidget::hide);
-        // 启动动画，确保动画执行完再释放内存
+        //启动动画，确保动画执行完再释放内存
         group->start(QAbstractAnimation::DeleteWhenStopped);
     }
 }
@@ -849,7 +848,7 @@ void galgamedialog::moveEvent(QMoveEvent *event)
 {
     if (history_win && history_win->isVisible())
     {
-        QPoint offset = event->pos() - lastPos;  // 计算偏移量
+        QPoint offset = event->pos() - lastPos; //计算偏移量
         history_win->move(history_win->pos() + offset);
     }
     lastPos = event->pos();  // 更新主窗口位置
@@ -858,9 +857,9 @@ void galgamedialog::moveEvent(QMoveEvent *event)
 void galgamedialog::wheelEvent(QWheelEvent *event)
 {
     if (event->angleDelta().y() > 0)
-        handleWheelUp(); // 向上滚轮
+        handleWheelUp(); //向上滚轮
     else if (event->angleDelta().y() < 0)
-        handleWheelDown(); // 向下滚轮
+        handleWheelDown(); //向下滚轮
 }
 // 向上滚轮处理
 void galgamedialog::handleWheelUp()

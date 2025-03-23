@@ -15,6 +15,10 @@ public:
     explicit messagewindow(const QString &message,QWidget *parent = nullptr);
     ~messagewindow();
 
+private slots:
+    void on_pushButton_copy_clicked();
+    void on_pushButton_open_clicked();
+
 private:
     void showModal(const QString &message);
     Ui::messagewindow *ui;

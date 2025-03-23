@@ -62,14 +62,13 @@ void setting_actor::on_lineEdit_speechInput_endWord_textChanged(const QString &a
     QScopedPointer<QSettings> settings_actor(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings.value("actor/name").toString() + "/config.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
     settings_actor->setValue("/speechInput/end_word",arg1);
 }
+void setting_actor::on_pushButton_resettachie_clicked()
+{
+    mainWin->resetTachie();
+}
 //重载窗口
 void setting_actor::refreshUI()
 {
     ui->retranslateUi(this);
-}
-
-void setting_actor::on_pushButton_resettachie_clicked()
-{
-    mainWin->resetTachie();
 }
 

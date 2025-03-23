@@ -16,6 +16,7 @@ about::about(QWidget *parent)
 {
     ui->setupUi(this);
 
+    /*按钮设置*/
     ui->pushButton->setUrl("https://github.com/Zao-chen/ZcChat");
     ui->pushButton->setCardPixmap(QPixmap(":/img/img/github-mark.svg"));
     ui->pushButton->setTitle("Github");
@@ -36,49 +37,37 @@ about::about(QWidget *parent)
     ui->pushButton_4->setTitle("角色文件夹");
     ui->pushButton_4->setSubTitle("点击打开角色文件的存放位置");
 
-    //ui->tableView->setSelectionMode(QAbstractItemView::NoSelection);
-
+    /*更新记录获取*/
     bool yourversion = false;
-
     ui->tableView->setSelectionMode(QAbstractItemView::NoSelection);  // 禁止选择
-    try {
+    try
+    {
         m_manager = new QNetworkAccessManager(this);  // 新建QNetworkAccessManager对象
         QString result = getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases");
-
         // 检查是否获取到有效数据
-        if (result.isEmpty()) {
-            throw std::runtime_error("Failed to get data from the URL.");
+        if (result.isEmpty())
+        {
+            qWarning()<<"Failed to get data from the URL.";
         }
-
         nlohmann::json releases = nlohmann::json::parse(result.toUtf8().constData());
-
         // 创建模型
         QStandardItemModel* model = new QStandardItemModel;
-
         // 遍历所有的 release 数据
         for (const auto& release : releases) {
             if (release.contains("name") && release.contains("published_at")) {
                 QString title = QString::fromStdString(release["name"].get<std::string>());
                 mainWin = qobject_cast<MainWindow *>(this->parent());
-
                 // 判断是否是目标版本
-                if (title.split(" ")[0] == mainWin->local_version) {
-                    yourversion = true;  // 找到版本后，设置为 true
-                }
-
+                if (title.split(" ")[0] == mainWin->local_version) yourversion = true;  // 找到版本后，设置为 true
                 QString dateTime = QString::fromStdString(release["published_at"].get<std::string>());
                 QString date = dateTime.left(10);  // 提取日期部分
-
                 // 将数据添加到模型中
                 QList<QStandardItem*> rowItems;
-
                 if (!yourversion) rowItems << new QStandardItem("□") << new QStandardItem(title.split(" ")[0]) << new QStandardItem(date) << new QStandardItem(title.split(" ")[1]);
                 else rowItems << new QStandardItem("■")<< new QStandardItem(title.split(" ")[0]) << new QStandardItem(date) << new QStandardItem(title.split(" ")[1]);
                 model->appendRow(rowItems);  // 每行一个 QStandardItem 列表
-
             }
         }
-
         // 设置 QLabel 显示内容
         ui->tableView->setModel(model);
         // 设置列宽自适应
@@ -86,18 +75,18 @@ about::about(QWidget *parent)
         ui->tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
         ui->tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
         ui->tableView->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
-
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e)
+    {
         ui->label_msg->setText("获取更新失败");
         qWarning() << "发生错误:" << e.what();  // 打印错误信息
-    } catch (...) {
+    }
+    catch (...)
+    {
         ui->label_msg->setText("未知错误");
         qWarning() << "发生未知错误";
     }
-
-
 }
-
 about::~about()
 {
     delete ui;

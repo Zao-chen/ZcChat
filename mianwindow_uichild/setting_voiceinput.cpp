@@ -47,8 +47,9 @@ void setting_voiceinput::on_lineEdit_baidusecretkey_textChanged(const QString &a
 //其他设置
 void setting_voiceinput::on_checkBox_wake_clicked(bool checked)
 {
-    mainWin->ChangSetting_speechInputWake(checked);
     settings->setValue("/speechInput/wake_enable",checked);
+    mainWin->ChangSetting_speechInputWake(checked);
+
 }
 void setting_voiceinput::on_checkBox_interrupt_clicked(bool checked)
 {

@@ -19,17 +19,16 @@ historychild::historychild(const QString &name,const QString &msg,QWidget *paren
     else
     {
         ui->label_msg->setText(msg);
-        ui->pushButton->hide();
+        ui->pushButton_reSpawnVoice->hide();
     }
     ui->label_name->setText(name);
 }
-
 historychild::~historychild()
 {
     delete ui;
 }
-
-void historychild::on_pushButton_clicked(bool checked)
+/*重播消息*/
+void historychild::on_pushButton_reSpawnVoice_clicked(bool checked)
 {
     qInfo()<<"重播消息"<<msg_l;
     galWin->spawnVoice(msg_l,true);

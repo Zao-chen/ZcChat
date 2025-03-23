@@ -18,8 +18,6 @@ public:
 
 private slots:
     void on_checkBox_enable_clicked(bool checked);
-
-
     void on_lineEdit_url_textChanged(const QString &arg1);
 
 private:

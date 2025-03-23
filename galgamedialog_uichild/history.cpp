@@ -12,7 +12,7 @@ history::history(QWidget *parent)
 {
     ui->setupUi(this);
     qInfo() << "history 窗口创建...";
-    // 设置窗口属性
+    //设置窗口属性
     /*无边框设置*/
     setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
     setWindowOpacity(0.9);
@@ -20,14 +20,14 @@ history::history(QWidget *parent)
     // 获取 scrollAreaWidgetContents 的布局，如果没有，创建一个布局
     QVBoxLayout *layout = qobject_cast<QVBoxLayout *>(ui->scrollAreaWidgetContents->layout());
     ui->scrollArea->setWidgetResizable(true);
-    connect(ui->scrollArea->verticalScrollBar(), &QScrollBar::rangeChanged, this, [=]() {
+    connect(ui->scrollArea->verticalScrollBar(), &QScrollBar::rangeChanged, this, [=]()
+    {
         ui->scrollArea->verticalScrollBar()->setValue(ui->scrollArea->verticalScrollBar()->maximum());
     });
 }
 
 history::~history()
 {
-    qInfo() << "history 窗口销毁...";
     delete ui;
 }
 void history::addChildWindow(QString name,QString msg) {
@@ -56,10 +56,10 @@ void history::paintEvent(QPaintEvent *event)
         shadowPath.setFillRule(Qt::WindingFill);
         // 使用圆角矩形而不是普通矩形绘制阴影
         QRectF shadowRect((5 - i), (5 - i) , this->width() - (5 - i) * 2, this->height() - (5 - i) * 2);
-        shadowPath.addRoundedRect(shadowRect, 15, 15);  // 添加圆角矩形路径
+        shadowPath.addRoundedRect(shadowRect, 15, 15); //添加圆角矩形路径
         // 增加透明度效果，模拟阴影逐渐变淡
         color.setAlpha(50 - qSqrt(i) * 22);
         painter.setPen(color);
-        painter.drawPath(shadowPath);  // 绘制阴影路径
+        painter.drawPath(shadowPath); //绘制阴影路径
     }
 }

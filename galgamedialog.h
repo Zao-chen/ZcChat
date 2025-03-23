@@ -31,7 +31,7 @@ public:
 
 private slots:
     /*界面上的一些按钮*/
-    void on_pushButton_clicked(); //下一步
+    void on_pushButton_next_clicked(); //下一步
     void on_pushButton_input_pressed(); //语音输入
     void on_pushButton_input_released(); //语音输入
     void on_pushButton_history_clicked(); //历史

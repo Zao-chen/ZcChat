@@ -28,7 +28,7 @@ signals:
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    QString local_version = "v4.3.1";
+    QString local_version = "v4.5.0-beta";
     /*菜单窗口创建*/
     setting_general *setting_general_win;
     setting_ai *setting_ai_win;
@@ -52,6 +52,7 @@ public:
     void ChangeSetting_VitsAPI(int index);
     void ChangeSetting_VitsModel(const QString &arg1);
     void ChangeSetting_VitsLanguage(const QString &arg1);
+    /*一些函数*/
     bool already_init=false; //是否已经初始化了
     void resetTachie();
     ~MainWindow();
@@ -64,7 +65,6 @@ private slots:
     /*托盘*/
     void on_showMainAction();
     void on_exitAppAction();
-    void on_openGithub();
     void on_restartAppAction();
     void on_pinTachie();
     void hideWindow();

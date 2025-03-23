@@ -62,7 +62,7 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="pushButton_reSpawnVoice">
    <property name="geometry">
     <rect>
      <x>10</x>

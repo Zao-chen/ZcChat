@@ -28,7 +28,6 @@ private slots:
     void on_comboBox_vits_language_currentTextChanged(const QString &arg1);
     void on_lineEdit_speechInput_wakeWord_textChanged(const QString &arg1);
     void on_lineEdit_speechInput_endWord_textChanged(const QString &arg1);
-
     void on_pushButton_resettachie_clicked();
 
 private:
