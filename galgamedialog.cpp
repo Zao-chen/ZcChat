@@ -715,9 +715,15 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
     //语音api选择
     qInfo() << "语言合成内容" << text;
     if(settings_actor->value("/vits/api").toInt()==1)
+    {
         reply = manager->get(QNetworkRequest(QUrl(settings_actor->value("/vits/custom_url").toString().replace("{msg}",text))));
+        qInfo()<<"发送语言合成"<<settings_actor->value("/vits/custom_url").toString().replace("{msg}",text);
+    }
     else
+    {
         reply = manager->get(QNetworkRequest(QUrl(settings->value("/vits/url").toString()+"/voice/"+settings_actor->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings_actor->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings_actor->value("/vits/lan").toString())));
+        qInfo()<<"发送语言合成"<<settings->value("/vits/url").toString()+"/voice/"+settings_actor->value("/vits/vitsmodel").toString()+"?text="+text+"&id="+settings_actor->value("/vits/id").toString()+"&format=mp3"+"&lang="+settings_actor->value("/vits/lan").toString();
+    }
     //播放返回值
     connect(reply, &QNetworkReply::finished, this, [=]() {
         if (reply->error() == QNetworkReply::NoError)

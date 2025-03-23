@@ -270,9 +270,13 @@ void MainWindow::reloadActorSetting()
     setting_actor_win->findChild<QSpinBox*>("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
     setting_actor_win->findChild<QLineEdit*>("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
     setting_actor_win->findChild<QComboBox*>("comboBox_vits_api")->setCurrentIndex(settings_actor->value("/vits/api").toInt());
-    setting_actor_win->findChild<QComboBox*>("comboBox_vits_model")->setCurrentText(settings_actor->value("/vits/vitsmodel").toString());
+    QComboBox *comboBox = setting_actor_win->findChild<QComboBox*>("comboBox_vits_model");
+    QString model = settings_actor->value("/vits/vitsmodel").toString();
+    comboBox->setCurrentIndex(comboBox->findText(model) != -1 ? comboBox->findText(model) : -1);
     setting_actor_win->findChild<QLineEdit*>("lineEdit_vits_customUrl")->setText(settings_actor->value("/vits/custom_url").toString());
-    setting_actor_win->findChild<QComboBox*>("comboBox_vits_language")->setCurrentText(settings_actor->value("/vits/lan").toString());
+    QComboBox *comboBox2 = setting_actor_win->findChild<QComboBox*>("comboBox_vits_language");
+    QString language = settings_actor->value("/vits/lan").toString();
+    comboBox2->setCurrentIndex(comboBox2->findText(language) != -1 ? comboBox2->findText(language) : -1);
     setting_actor_win->findChild<QLineEdit*>("lineEdit_vits_id")->setText(settings_actor->value("/vits/id").toString());
     setting_actor_win->findChild<QLineEdit*>("lineEdit_speechInput_wakeWord")->setText(settings_actor->value("/speechInput/wake_word").toString());
     setting_actor_win->findChild<QLineEdit*>("lineEdit_speechInput_endWord")->setText(settings_actor->value("/speechInput/end_word").toString());

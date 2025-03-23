@@ -37,7 +37,6 @@ void setting_actor::on_comboBox_vits_model_currentTextChanged(const QString &arg
 {
     mainWin->ChangeSetting_VitsModel(arg1);
 }
-
 void setting_actor::on_lineEdit_vits_id_textChanged(const QString &arg1)
 {
     QScopedPointer<QSettings> settings_actor(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings.value("actor/name").toString() + "/config.ini", QSettings::IniFormat)); //使用 QScopedPointer来自动管理资源。
