@@ -704,7 +704,7 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
     QString text;
     QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
     //语音语言选择
-    if(settings_actor->value("/vits/lan").toString()=="ja")
+    if(settings_actor->value("/vits/lan").toString() == "ja")
         text = message.split("|")[2];
     else
         text = message.split("|")[1];
