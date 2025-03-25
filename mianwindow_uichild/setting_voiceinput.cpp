@@ -38,11 +38,11 @@ void setting_voiceinput::on_checkBox_enable_clicked(bool checked)
 //api修改
 void setting_voiceinput::on_lineEdit_baiduapikey_textChanged(const QString &arg1)
 {
-    settings->setValue("/speechInput/baidu_apikey",arg1);
+    //if(mainWin->already_init) settings->setValue("/speechInput/baidu_apikey",arg1);
 }
 void setting_voiceinput::on_lineEdit_baidusecretkey_textChanged(const QString &arg1)
 {
-    settings->setValue("/speechInput/baidu_secretkey",arg1);
+    //if(mainWin->already_init) settings->setValue("/speechInput/baidu_secretkey",arg1);
 }
 //其他设置
 void setting_voiceinput::on_checkBox_wake_clicked(bool checked)

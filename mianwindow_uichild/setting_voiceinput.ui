@@ -503,11 +503,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ElaCheckBox</class>
-   <extends>QCheckBox</extends>
-   <header location="global">elacheckbox.h</header>
-  </customwidget>
-  <customwidget>
    <class>ElaScrollPageArea</class>
    <extends>QWidget</extends>
    <header location="global">elascrollpagearea.h</header>
@@ -532,6 +527,11 @@
    <class>ElaComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">elacombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header location="global">elacheckbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

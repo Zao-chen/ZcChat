@@ -59,6 +59,15 @@ MainWindow::MainWindow(QWidget *parent)
     about_win = new about(this);
     QString _settingKey{""};
     addFooterNode(tr("关于"), about_win,_settingKey, 0, ElaIconType::User);
+    /*窗口初始化*/
+    qInfo()<<"初始化窗口……";
+    dialog_win = new galgamedialog;
+    dialog_win->move(settings->value("/tachie/location_x").toInt(),settings->value("/tachie/location_y").toInt());
+    tachie_win = new tachie;
+    tachie_win->show();
+    tachie_win->move(settings->value("/tachie/location_x").toInt(),settings->value("/tachie/location_y").toInt());
+
+    ChangeSetting_Lan(settings->value("/soft/lan").toString());
     /*
      * 读取配置
     */
@@ -84,7 +93,7 @@ MainWindow::MainWindow(QWidget *parent)
     setting_ai_win->findChild<QCheckBox*>("checkBox_feedback")->setChecked(settings->value("/llm/feedback").toBool());
     /*语音输入设置*/
     //基础设置
-    setting_voiceinput_win->findChild<QComboBox*>("comboBox_api")->addItems({"whisper-asr-webservice","百度语音识别"});
+    setting_voiceinput_win->findChild<QComboBox*>("comboBox_api")->addItems({"whisper-asrwebservice","百度语音识别"});
     setting_voiceinput_win->findChild<QComboBox*>("comboBox_api")->setCurrentIndex(settings->value("/speechInput/api").toInt());
     setting_voiceinput_win->findChild<QStackedWidget*>("stackedWidget_speechInput")->setCurrentIndex(settings->value("/speechInput/api").toInt());
     setting_voiceinput_win->findChild<QLineEdit*>("lineEdit_url")->setText(settings->value("/speechInput/url").toString());
@@ -132,13 +141,6 @@ MainWindow::MainWindow(QWidget *parent)
     m_menu->addAction(m_exitAppAction); //新增菜单项---退出程序
     m_sysTrayIcon->setContextMenu(m_menu);
     m_sysTrayIcon->show(); //在系统托盘显示此对象
-    /*窗口初始化*/
-    qInfo()<<"初始化窗口……";
-    dialog_win = new galgamedialog;
-    dialog_win->move(settings->value("/tachie/location_x").toInt(),settings->value("/tachie/location_y").toInt());
-    tachie_win = new tachie;
-    tachie_win->show();
-    tachie_win->move(settings->value("/tachie/location_x").toInt(),settings->value("/tachie/location_y").toInt());
     /*信号槽连接*/
     connect(tachie_win, SIGNAL(show_dialogwin_to_main()), this, SLOT(show_dialogwin_from_tachie()));
     connect(tachie_win, SIGNAL(changeLocation_to_main(int,int)), this, SLOT(changeTachieLocation_from_tachie(int,int)));
@@ -194,7 +196,6 @@ MainWindow::MainWindow(QWidget *parent)
         qInfo()<<"当前为最新版本"+local_version;
         setUserInfoCardSubTitle(tr("当前为最新版本^_^"));
     }
-    ChangeSetting_Lan(settings->value("/soft/lan").toString());
     reloadActorSetting();
     qInfo()<<"MainWindow加载完成！";
 }
