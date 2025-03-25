@@ -234,7 +234,7 @@ QString galgamedialog::UrlpostLLM()
 /*语言识别post请求*/
 QString galgamedialog::UrlpostWithFile()
 {
-    QFile *file = new QFile(QDir::currentPath() + "/output.m4a");
+    QFile *file = new QFile( QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat" + "/output.m4a");
     if(file->size()<=settings->value("/speechInput/size").toInt())
     {
         qInfo()<<file->size()<<" 文件太小，认定为噪音";
@@ -330,7 +330,7 @@ QString galgamedialog::UrlpostWithFile()
         /*发送识别*/
         QNetworkAccessManager manager_api;
         // 读取本地音频文件为二进制数据
-        QString audioFilePath = QDir::currentPath() + "/output.m4a"; // 音频文件路径
+        QString audioFilePath =  QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat" + "/output.m4a"; // 音频文件路径
         QFile file(audioFilePath);
         if (!file.open(QIODevice::ReadOnly)) qCritical()<<tr("语音识别-百度-识别-打开文件失败") << audioFilePath;
         QByteArray audioData = file.readAll();
@@ -533,7 +533,7 @@ void galgamedialog::on_pushButton_input_pressed()
         audioRecorder->setAudioSampleRate(44100); //设置采样率
         audioRecorder->setAudioChannelCount(2); // 设置声道数
         audioRecorder->setQuality(QMediaRecorder::HighQuality); //设置录制质量
-        audioRecorder->setOutputLocation(QUrl::fromLocalFile(QDir::currentPath() + "/output.m4a"));
+        audioRecorder->setOutputLocation(QUrl::fromLocalFile( QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat" + "/output.m4a"));
         audioRecorder->record();
     }
 }
