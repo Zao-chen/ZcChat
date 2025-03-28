@@ -55,8 +55,6 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     addPageNode(tr("语音输入设置"), setting_voiceinput_win, ElaIconType::CircleMicrophone);
     setting_actor_win = new setting_actor(this);
     addPageNode(tr("角色配置"), setting_actor_win, ElaIconType::Snowman);
-    about_win = new about(this);
-    addFooterNode(tr("关于"), about_win, *new QString(""), 0, ElaIconType::User);
     /*窗口初始化*/
     qInfo()<<"初始化窗口……";
     dialog_win = new galgamedialog;
@@ -203,9 +201,9 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     m_manager = new QNetworkAccessManager(this);
     //新建QNetworkAccessManager对象
     already_init = true;
-    QString reply = getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest");
-    QString tagName;
-    try {
+    reply = getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest");
+    try
+    {
         auto jsonData = json_t::parse(reply.toUtf8());
         if(jsonData.contains("tag_name")) tagName = QString::fromStdString(jsonData["tag_name"]);
     } catch (const std::exception & e) {
@@ -221,12 +219,14 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
         setUserInfoCardSubTitle(tr("获取新版本失败"));
     } else if(local_version != tagName) {
         qInfo()<<"发现新版本" + tagName;
-        setUserInfoCardSubTitle(tr("发现新版本") + tagName);
+        setUserInfoCardSubTitle(tr("发现新版本") + tagName + tr("\n可以前往“关于”界面进行更新"));
     } else {
         qInfo()<<"当前为最新版本" + local_version;
         setUserInfoCardSubTitle(tr("当前为最新版本^_^"));
     }
     reloadActorSetting();
+    about_win = new about(this);
+    addFooterNode(tr("关于"), about_win, *new QString(""), 0, ElaIconType::User);
     qInfo()<<"MainWindow加载完成！";
 }
 MainWindow::~MainWindow() {

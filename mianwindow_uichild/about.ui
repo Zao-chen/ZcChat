@@ -16,7 +16,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,1,0">
+  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,1,0">
    <property name="leftMargin">
     <number>20</number>
    </property>
@@ -106,6 +106,36 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="topMargin">
+      <number>20</number>
+     </property>
+     <item>
+      <widget class="ElaPushButton" name="pushButton_upDate">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="ElaProgressBar" name="progressBar">
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="textVisible">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="ElaText" name="label_3">
      <property name="font">
       <font>
@@ -165,6 +195,16 @@
    <class>ElaTableView</class>
    <extends>QTableView</extends>
    <header location="global">elatableview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaPushButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">elapushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaProgressBar</class>
+   <extends>QProgressBar</extends>
+   <header location="global">elaprogressbar.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

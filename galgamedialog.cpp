@@ -584,16 +584,29 @@ void galgamedialog::init_from_main()
     else
     {
         qInfo() << "不使用 VAD";
+
         // 断开信号并释放音频设备
         if (audioDevice)
         {
-            audioSource->stop();
-            qInfo() << "断开音频设备信号...";
+            qInfo() << "停止音频源并断开音频设备信号...";
+
+            // 停止音频源
+            if (audioSource && audioSource->state() != QAudio::StoppedState)
+            {
+                audioSource->stop();
+            }
+
+            // 断开信号
             disconnect(audioDevice, &QIODevice::readyRead, this, nullptr);
-            audioDevice->close();   // 关闭设备
-            delete audioDevice;     // 释放资源
-            audioDevice = nullptr;  // 清空指针
+
+            // 关闭设备
+            audioDevice->close();
+
+            // 安全删除
+            audioDevice->deleteLater(); // 安全删除
+            audioDevice = nullptr;      // 清空指针
         }
+
         // 停止音频源并释放资源
         if (audioSource)
         {
@@ -605,6 +618,7 @@ void galgamedialog::init_from_main()
             delete audioSource;      // 释放资源
             audioSource = nullptr;   // 清空指针
         }
+        // 停止音频录制并释放资源
         if (audioRecorder)
         {
             if (audioRecorder->recorderState() == QMediaRecorder::RecordingState)
@@ -616,14 +630,14 @@ void galgamedialog::init_from_main()
             {
                 qWarning() << "audioRecorder 未处于录制状态，跳过停止！";
             }
-            delete audioRecorder;
-            audioRecorder = nullptr;
+
+            delete audioRecorder;    // 释放资源
+            audioRecorder = nullptr; // 清空指针
         }
         else
         {
             qWarning() << "audioRecorder 是 nullptr，跳过停止操作！";
         }
-
     }
     qInfo()<<"VAD启动完成";
 }

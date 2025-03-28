@@ -28,7 +28,7 @@ signals:
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    QString local_version = "v4.5.4-beta";
+    QString local_version = "v4.6.0";
     /*菜单窗口创建*/
     setting_general *setting_general_win;
     setting_ai *setting_ai_win;
@@ -55,6 +55,8 @@ public:
     /*一些函数*/
     bool already_init=false; //是否已经初始化了
     void resetTachie();
+    QString reply;
+    QString tagName;
     ~MainWindow();
 
 private slots:
