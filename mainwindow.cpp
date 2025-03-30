@@ -295,6 +295,7 @@ void MainWindow::reloadActorSetting() {
     /*重载*/
     qInfo()<<"设置角色!"<<settings->value("/actor/name").toString();
     setting_actor_win->findChild < ElaText * > ("label_editActor")->setText("当前配置角色：" + settings->value("/actor/name").toString());
+    if(settings_actor->value("/tachie/size").isNull()) settings_actor->setValue("/tachie/size",100);
     setting_actor_win->findChild < QSpinBox * > ("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
     setting_actor_win->findChild < QComboBox * > ("comboBox_vits_api")->setCurrentIndex(settings_actor->value("/vits/api").toInt());

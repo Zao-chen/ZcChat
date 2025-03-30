@@ -28,7 +28,7 @@ signals:
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    QString local_version = "v4.6.0";
+    QString local_version = "v4.6.1";
     /*菜单窗口创建*/
     setting_general *setting_general_win;
     setting_ai *setting_ai_win;
