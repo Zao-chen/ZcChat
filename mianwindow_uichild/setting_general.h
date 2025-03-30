@@ -26,6 +26,8 @@ private slots:
     void on_spinBox_dialogscale_valueChanged(int arg1);
     void on_comboBox_lan_currentTextChanged(const QString &arg1);
 
+    void on_pushButton_open_clicked();
+
 private:
     Ui::setting_general *ui;
     MainWindow *mainWin;

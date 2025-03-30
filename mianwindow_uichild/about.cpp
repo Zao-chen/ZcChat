@@ -31,10 +31,6 @@ about::about(QWidget *parent)
     ui->pushButton_3->setCardPixmap(QPixmap(":/img/img/file-solid.svg"));
     ui->pushButton_3->setTitle("软件日志");
     ui->pushButton_3->setSubTitle("ZcChat的运行日志，用于排除问题，提Issue的时候别忘了带上它");
-    ui->pushButton_4->setUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters");
-    ui->pushButton_4->setCardPixmap(QPixmap(":/img/img/snowman-solid.svg"));
-    ui->pushButton_4->setTitle("角色文件夹");
-    ui->pushButton_4->setSubTitle("点击打开角色文件的存放位置");
     //界面设置
     ui->progressBar->setVisible(false);
     /*更新记录获取*/

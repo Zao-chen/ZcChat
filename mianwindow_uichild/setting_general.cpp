@@ -7,6 +7,8 @@
 #include <QProcess>
 #include <QThread>
 #include <QStandardPaths>
+#include <QDesktopServices>
+#include <QDebug>
 
 static QScopedPointer<QSettings> settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat)); // 使用 QScopedPointer 来自动管理资源。
 
@@ -60,3 +62,16 @@ void setting_general::refreshUI()
 {
     ui->retranslateUi(this);
 }
+/*打开角色文件夹*/
+void setting_general::on_pushButton_open_clicked()
+{
+    QString documentsPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    QString folderPath = QDir(documentsPath).filePath("ZcChat/characters");
+
+    if (QDir(folderPath).exists()) {
+        QDesktopServices::openUrl(QUrl::fromLocalFile(folderPath));
+    } else {
+        qCritical()<<folderPath+" 打开失败，文件夹不存在，请尝试使用管理员权限运行ZcChat或使用管理员权限重新安装ZcChat";
+    }
+}
+

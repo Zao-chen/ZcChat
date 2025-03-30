@@ -58,7 +58,7 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QWidget" name="widget" native="true">
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,1">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,1">
         <item>
          <widget class="ElaAcrylicUrlCard" name="pushButton">
           <property name="text">
@@ -75,13 +75,6 @@
         </item>
         <item>
          <widget class="ElaAcrylicUrlCard" name="pushButton_3">
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="ElaAcrylicUrlCard" name="pushButton_4">
           <property name="text">
            <string>PushButton</string>
           </property>
