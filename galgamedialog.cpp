@@ -39,6 +39,7 @@ galgamedialog::galgamedialog(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::galgamedialog)
     , settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat, this))
+    , settings_actor(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat))
 {
     qInfo()<<"初始化galgamedialog……";
     ui->setupUi(this);
@@ -88,7 +89,6 @@ galgamedialog::galgamedialog(QWidget *parent)
                     /*结束词检查*/
                     bool containsAny = false;
                     // 遍历 list，检查 msg 是否包含任意一个子字符串
-                    QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
                     for (const QString &str : settings_actor->value("/speechInput/end_word").toString().split("|"))
                     {
                         if (msg.contains(str))
@@ -179,6 +179,45 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
             send_to_llm();
     keys.removeAll(event->key());
 }
+/*openaipost请求*/
+QString galgamedialog::UrlpostLLM_openai()
+{
+    qInfo() << "发送 API openai 请求……";
+    is_in_llm = true;
+    QNetworkAccessManager* naManager = new QNetworkAccessManager(this);
+    QNetworkRequest request;
+    // 设置 URL 和请求头
+    request.setUrl(QUrl("https://api.chatanywhere.tech/v1/chat/completions"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+    request.setRawHeader("Authorization", "Bearer sk-VH4aplm66pmSjjuyZkbZH9yiokNY6jo35NlKAg6dcbLxila4");
+    // 构建 JSON 数据
+    json_t rootObject = {
+        {"model", "gpt-4o-mini"},
+        {"messages",{
+                        {
+                            {"role", "system"},
+                            {"content","你是一个友好的助手"}
+                        },
+                        {
+                            {"role", "user"},
+                            {"content", ui->textEdit->toPlainText().toStdString()}  // 从 UI 获取用户输入的内容
+                        }
+                    }}
+    };
+    // 输出发送的 JSON 数据
+    qInfo() << "发送 post 请求：" << QString::fromStdString(rootObject.dump());
+    // 发起 POST 请求
+    QEventLoop loop;
+    QNetworkReply* reply = naManager->post(request, QByteArray::fromStdString(rootObject.dump()));
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+    // 获取响应数据
+    QString read = reply->readAll();
+    reply->deleteLater();  // 释放内存
+    qInfo() << "获取到 API 响应：" << read;
+    is_in_llm = false;
+    return read;
+}
 /*LLMpost请求*/
 QString galgamedialog::UrlpostLLM()
 {
@@ -187,7 +226,6 @@ QString galgamedialog::UrlpostLLM()
     QNetworkAccessManager* naManager = new QNetworkAccessManager(this);
     QNetworkRequest request;
     //头设置
-    QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
     request.setUrl(QUrl(settings->value("/llm/url").toString()+"/v1/agents/"+settings_actor->value("/llm/agent").toString()+"/messages"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
     //直接解析 JSON 字符串，嵌入动态内容
@@ -653,30 +691,55 @@ void galgamedialog::send_to_llm()
     QTextCursor cursor=ui->textEdit->textCursor(); //得到当前text的光标
     if(cursor.hasSelection()) cursor.clearSelection();
     cursor.deletePreviousChar(); //删除前一个字符
+    QString message;
     //发送post请求
-    nlohmann::json jsonDoc = nlohmann::json::parse(UrlpostLLM().toStdString(), nullptr, false);
-    qInfo() << "接收到post信息：" << QString::fromStdString(jsonDoc.dump());
-    //获取到的json处理
-    QString message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为[" + QString::fromStdString(jsonDoc.dump()) + "]|错误error";
-    //解析 JSON 字符串
-    if (jsonDoc.is_discarded()) qCritical() << "letta返回值解析失败";
-    else if (jsonDoc.contains("messages") && jsonDoc["messages"].is_array()) // 查找 "content" 字段
+    if(1)
     {
-        for (const auto& value : jsonDoc["messages"])
+        QString result_from_llm = UrlpostLLM();
+        nlohmann::json jsonDoc = nlohmann::json::parse(result_from_llm.toStdString(), nullptr, false);
+        qInfo() << "接收到post信息：" << QString::fromStdString(jsonDoc.dump());
+        //获取到的json处理
+        message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为[" + QString::fromStdString(jsonDoc.dump()) + "]|错误error";
+        //解析 JSON 字符串
+        if (jsonDoc.is_discarded()) qCritical() << "letta返回值解析失败";
+        else if (jsonDoc.contains("messages") && jsonDoc["messages"].is_array()) // 查找 "content" 字段
         {
-            if (value.contains("content"))
+            for (const auto& value : jsonDoc["messages"])
             {
-                message = QString::fromStdString(value["content"].get<std::string>());
-                break; //找到第一个匹配的 content 字段后退出
+                if (value.contains("content"))
+                {
+                    message = QString::fromStdString(value["content"].get<std::string>());
+                    break; //找到第一个匹配的 content 字段后退出
+                }
             }
+        }
+    }
+    else
+    {
+        QString result_from_llm = UrlpostLLM_openai();
+        try {
+            // 解析 JSON 响应
+            json_t responseJson = json_t::parse(result_from_llm.toStdString());
+            // 输出整个解析后的 JSON
+            qInfo() << "解析后的 JSON：" << QString::fromStdString(responseJson.dump());
+            // 访问嵌套的内容 "content"
+            std::string content = responseJson["choices"][0]["message"]["content"];
+            // 打印内容
+            qInfo() << "模型回复内容：" << QString::fromStdString(content);
+            message = QString::fromStdString(content);
+        }
+        catch (const nlohmann::json::parse_error& e)
+        {
+            // 捕获并输出解析错误
+            qInfo() << "解析 JSON 错误：" << e.what();
         }
     }
     qInfo() << "读取到message" << message;
     //信息判断
     if(message.isNull())
     {
-        message = "正常|[error] "+QString::fromStdString(jsonDoc.dump())+"|error";
-        qCritical() << tr("Letta返回了[")+QString::fromStdString(jsonDoc.dump())+tr("]，可能是Letta未启动/agent配置错误|错误error");
+        //message = "正常|[error] "+QString::fromStdString(jsonDoc.dump())+"|error";
+        //qCritical() << tr("Letta返回了[")+QString::fromStdString(jsonDoc.dump())+tr("]，可能是Letta未启动/agent配置错误|错误error");
     }
     else if(message.split("|").size()!=3)
     {
@@ -779,7 +842,6 @@ void galgamedialog::spawnVoice(QString message,bool onlySound)
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
     QNetworkReply* reply;
     QString text;
-    QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
     //语音语言选择
     if(settings_actor->value("/vits/lan").toString() == "ja")
         text = message.split("|")[2];

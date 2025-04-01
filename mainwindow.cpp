@@ -278,7 +278,15 @@ void MainWindow::show_dialogwin_from_tachie() {
 void MainWindow::reloadActorSetting() {
     qInfo()<<"重载角色配置……";
     QSettings * settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
-    QSettings * settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+                   + "/ZcChat/characters_config/"
+                   + settings->value("actor/name").toString();
+    QDir dir(path);
+    if (!dir.exists())
+    {
+        dir.mkpath(path);
+    }
+    QSettings * settings_actor = new QSettings(path+"/config.ini", QSettings::IniFormat);
     /*呆毛图标设置*/
     QString imagePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/正常.png";
     QPixmap originalPixmap(imagePath);
@@ -330,7 +338,7 @@ void MainWindow::saveActorSetting(const QString & key,
                                   const QVariant & value) {
     QScopedPointer < QSettings > settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat));
     //使用 QScopedPointer 来自动管理资源。
-    QSettings * settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
+    QSettings * settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
     settings_actor->setValue(key, value);
 }
 /*配置项修改和保存*/

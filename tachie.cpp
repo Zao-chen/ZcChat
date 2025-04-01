@@ -35,7 +35,7 @@ void tachie::init_from_main(bool pin)
     QString appFolder = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat";
     //创建 QSettings 对象
     QSettings *settings = new QSettings(appFolder + "/Setting.ini", QSettings::IniFormat);
-    QSettings *settings_actor = new QSettings(appFolder + "/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
+    QSettings *settings_actor = new QSettings(appFolder + "/characters_config/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
     QPixmap pixmap;
     pixmap.load(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/正常.png");
     //缩放新图片并设置到 label
@@ -57,7 +57,7 @@ void tachie::resetlocation_from_main()
 void tachie::changetachie_from_galdialog(QString name)
 {
     QSettings *settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
-    QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
+    QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
     qInfo()<<"【接收】对话框 --- 修改立绘"+name+" ---> 立绘";
     QPixmap pixmap;
     if (!pixmap.load(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/" + name.replace(" ", "") + ".png"))

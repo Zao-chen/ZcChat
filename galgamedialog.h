@@ -9,6 +9,7 @@
 #include "utils/vad.h"
 #include <QAudioSource>
 #include <QSettings>
+#include <QStandardPaths>
 
 class history; //前向声明子窗口类
 
@@ -63,6 +64,7 @@ private:
     /*网络*/
     QNetworkAccessManager *m_manager;
     QString UrlpostLLM();
+    QString UrlpostLLM_openai();
     QString UrlpostWithFile();
     QByteArray getUrl(const QString &input);
     /*逐字显示*/
@@ -90,6 +92,6 @@ private:
     history *history_win; //子窗口指针
     QPoint lastPos; //记录主窗口上次位置
     bool isHistoryOpen = false;//用于切换对话框显示和隐藏
-
+    QSettings *settings_actor;
 };
 #endif // GALGAMEDIALOG_H

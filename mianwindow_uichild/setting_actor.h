@@ -2,6 +2,8 @@
 #define SETTING_ACTOR_H
 
 #include <QWidget>
+#include <QSettings>
+#include <QStandardPaths>
 
 class MainWindow;
 
@@ -31,6 +33,8 @@ private slots:
     void on_pushButton_resettachie_clicked();
 
 private:
+    QSettings *settings;
+    QSettings *settings_actor;
     Ui::setting_actor *ui;
     MainWindow *mainWin;
 };
