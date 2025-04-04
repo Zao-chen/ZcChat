@@ -11,6 +11,9 @@
 #include <QSettings>
 #include <QStandardPaths>
 
+#include "third_party/json/json.hpp"
+using json_t = nlohmann::json;
+
 class history; //前向声明子窗口类
 
 namespace Ui {
@@ -93,5 +96,6 @@ private:
     QPoint lastPos; //记录主窗口上次位置
     bool isHistoryOpen = false;//用于切换对话框显示和隐藏
     QSettings *settings_actor;
+    QList<json_t> llm_messages; // 用于存储对话消息
 };
 #endif // GALGAMEDIALOG_H

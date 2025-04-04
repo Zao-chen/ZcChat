@@ -180,31 +180,42 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
     keys.removeAll(event->key());
 }
 /*openaipost请求*/
-QString galgamedialog::UrlpostLLM_openai()
-{
+QString galgamedialog::UrlpostLLM_openai() {
     qInfo() << "发送 API openai 请求……";
     is_in_llm = true;
     QNetworkAccessManager* naManager = new QNetworkAccessManager(this);
     QNetworkRequest request;
+
+    // 添加用户消息到消息列表
+    json_t userMessage = {
+        {"role", "user"},
+        {"content", ui->textEdit->toPlainText().toStdString()}  // 从 UI 获取用户输入的内容
+    };
+    llm_messages.push_back(userMessage); // 保存用户消息
+
     // 设置 URL 和请求头
-    //request.setUrl(QUrl("https://api.chatanywhere.tech/v1/chat/completions"));
     request.setUrl(QUrl(settings->value("llm/openai_url").toString()));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
-    request.setRawHeader("Authorization", "Bearer "+settings->value("llm/openai_key").toByteArray());
+    request.setRawHeader("Authorization", "Bearer " + settings->value("llm/openai_key").toByteArray());
+
     // 构建 JSON 数据
     json_t rootObject = {
         {"model", "gpt-4o-mini"},
-        {"messages",{
-                        {
-                            {"role", "system"},
-                            {"content",settings_actor->value("llm/prompt").toString().toStdString()}
-                        },
-                        {
-                            {"role", "user"},
-                            {"content", ui->textEdit->toPlainText().toStdString()}  // 从 UI 获取用户输入的内容
-                        }
-                    }}
+        {"messages", json_t::array()} // 创建一个空数组
     };
+
+    // 添加系统消息
+    json_t systemMessage = {
+        {"role", "system"},
+        {"content", settings_actor->value("llm/prompt").toString().toStdString()}
+    };
+    rootObject["messages"].push_back(systemMessage); // 将系统消息添加到数组中
+
+    // 将所有的用户和助手消息添加到 messages 数组中
+    for (const auto& message : llm_messages) {
+        rootObject["messages"].push_back(message);
+    }
+
     // 输出发送的 JSON 数据
     qInfo() << "发送 post 请求：" << QString::fromStdString(rootObject.dump());
     // 发起 POST 请求
