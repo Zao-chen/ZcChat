@@ -2,7 +2,7 @@
 #include "ui_setting_actor.h"
 #include "../mainwindow.h"
 #include <QStandardPaths>
-
+#include <QPlainTextEdit>
 
 setting_actor::setting_actor(QWidget *parent)
     : QWidget(parent)

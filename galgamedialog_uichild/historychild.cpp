@@ -22,6 +22,11 @@ historychild::historychild(const QString &name,const QString &msg,QWidget *paren
         ui->pushButton_reSpawnVoice->hide();
     }
     ui->label_name->setText(name);
+    QSettings * settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat" + "/Setting.ini", QSettings::IniFormat);
+    if (!settings->value("vits/enable").toBool())
+    {
+        ui->pushButton_reSpawnVoice->hide();
+    }
 }
 historychild::~historychild()
 {

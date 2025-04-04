@@ -57,7 +57,8 @@ galgamedialog::galgamedialog(QWidget *parent)
     /*读取历史*/
     // 读取所有消息
     int index = 0;
-    while (true) {
+    while (true)
+    {
         QString key = QString("Messages/%1").arg(index);
         if (!chathistory->contains(key + "/role")) break; // 如果没有更多消息，退出循环
         json_t message;
@@ -71,7 +72,6 @@ galgamedialog::galgamedialog(QWidget *parent)
     /*逐字显示*/
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
-
     /*录音*/
     audioRecorder = new QMediaRecorder(this);
     captureSession.setRecorder(audioRecorder);
@@ -202,7 +202,8 @@ QString galgamedialog::UrlpostLLM_openai() {
     QNetworkAccessManager* naManager = new QNetworkAccessManager(this);
     QNetworkRequest request;
     // 添加用户消息到消息列表
-    json_t userMessage = {
+    json_t userMessage =
+    {
         {"role", "user"},
         {"content", ui->textEdit->toPlainText().toStdString()}  // 从 UI 获取用户输入的内容
     };
@@ -212,20 +213,20 @@ QString galgamedialog::UrlpostLLM_openai() {
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
     request.setRawHeader("Authorization", "Bearer " + settings->value("llm/openai_key").toByteArray());
     // 构建 JSON 数据
-    json_t rootObject = {
+    json_t rootObject =
+    {
         {"model", settings->value("llm/openai_model").toString().toStdString()},
         {"messages", json_t::array()} // 创建一个空数组
     };
     // 添加系统消息
-    json_t systemMessage = {
+    json_t systemMessage =
+    {
         {"role", "system"},
         {"content", settings_actor->value("llm/prompt").toString().toStdString()}
     };
     rootObject["messages"].push_back(systemMessage); // 将系统消息添加到数组中
     // 将所有的用户和助手消息添加到 messages 数组中
-    for (const auto& message : llm_messages) {
-        rootObject["messages"].push_back(message);
-    }
+    for (const auto& message : llm_messages) rootObject["messages"].push_back(message);
     // 输出发送的 JSON 数据
     qInfo() << "发送 post 请求：" << QString::fromStdString(rootObject.dump());
     // 发起 POST 请求
@@ -252,7 +253,8 @@ QString galgamedialog::UrlpostLLM()
     request.setUrl(QUrl(settings->value("/llm/url").toString()+"/v1/agents/"+settings_actor->value("/llm/agent").toString()+"/messages"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
     //直接解析 JSON 字符串，嵌入动态内容
-    json_t rootObject = {
+    json_t rootObject =
+    {
         {"messages", {
                          {
                              {"role", "user"},
@@ -645,29 +647,23 @@ void galgamedialog::init_from_main()
     else
     {
         qInfo() << "不使用 VAD";
-
         // 断开信号并释放音频设备
         if (audioDevice)
         {
             qInfo() << "停止音频源并断开音频设备信号...";
-
             // 停止音频源
             if (audioSource && audioSource->state() != QAudio::StoppedState)
             {
                 audioSource->stop();
             }
-
             // 断开信号
             disconnect(audioDevice, &QIODevice::readyRead, this, nullptr);
-
             // 关闭设备
             audioDevice->close();
-
             // 安全删除
             audioDevice->deleteLater(); // 安全删除
             audioDevice = nullptr;      // 清空指针
         }
-
         // 停止音频源并释放资源
         if (audioSource)
         {
@@ -691,7 +687,6 @@ void galgamedialog::init_from_main()
             {
                 qWarning() << "audioRecorder 未处于录制状态，跳过停止！";
             }
-
             delete audioRecorder;    // 释放资源
             audioRecorder = nullptr; // 清空指针
         }
