@@ -45,3 +45,9 @@ void setting_ai::on_lineEdit_openai_key_textChanged(const QString &arg1)
     settings->setValue("/llm/openai_key",arg1);
 }
 
+
+void setting_ai::on_lineEdit_openai_model_textChanged(const QString &arg1)
+{
+    settings->setValue("/llm/openai_model",arg1);
+}
+

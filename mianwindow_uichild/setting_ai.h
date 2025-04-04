@@ -28,6 +28,8 @@ private slots:
 
     void on_lineEdit_openai_key_textChanged(const QString &arg1);
 
+    void on_lineEdit_openai_model_textChanged(const QString &arg1);
+
 private:
     Ui::setting_ai *ui;
     MainWindow *mainWin;
