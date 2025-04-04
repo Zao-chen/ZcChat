@@ -52,6 +52,8 @@ galgamedialog::galgamedialog(QWidget *parent)
     ui->pushButton_next->hide();
     ui->label_name->setText(tr("你"));
     init_from_main();
+    /*子窗口*/
+    history_win = new history(this);
     /*读取历史*/
     // 读取所有消息
     int index = 0;
@@ -61,14 +63,15 @@ galgamedialog::galgamedialog(QWidget *parent)
         json_t message;
         message["role"] = chathistory->value(key + "/role").toString().toStdString();
         message["content"] = chathistory->value(key + "/content").toString().toStdString();
+        if(chathistory->value(key + "/role").toString()=="user")  history_win->addChildWindow(tr("你"),chathistory->value(key + "/content").toString());
+        else if(chathistory->value(key + "/role").toString()=="assistant") history_win->addChildWindow(settings->value("/actor/name").toString(),chathistory->value(key + "/content").toString());
         llm_messages.push_back(message);
         index++;
     }
     /*逐字显示*/
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
-    /*子窗口*/
-    history_win = new history(this);
+
     /*录音*/
     audioRecorder = new QMediaRecorder(this);
     captureSession.setRecorder(audioRecorder);
