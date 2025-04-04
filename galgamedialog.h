@@ -90,12 +90,15 @@ private:
     void send_to_llm(); //发送llm请求
     bool is_record = false; //正在录音？
     QMediaPlayer *player = new QMediaPlayer; //创建QMediaPlayer 对象
-    QSettings *settings; //声明 settings 为成员变量
     bool is_in_llm = false; //是否正在llm请求中
     history *history_win; //子窗口指针
     QPoint lastPos; //记录主窗口上次位置
     bool isHistoryOpen = false;//用于切换对话框显示和隐藏
+    //配置文件
+    QSettings *settings; //声明 settings 为成员变量
     QSettings *settings_actor;
+    QSettings *chathistory; //声明 settings 为成员变量
+
     QList<json_t> llm_messages; // 用于存储对话消息
 };
 #endif // GALGAMEDIALOG_H

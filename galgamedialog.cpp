@@ -40,6 +40,7 @@ galgamedialog::galgamedialog(QWidget *parent)
     , ui(new Ui::galgamedialog)
     , settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat, this))
     , settings_actor(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat))
+    , chathistory(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/history.ini", QSettings::IniFormat))
 {
     qInfo()<<"初始化galgamedialog……";
     ui->setupUi(this);
@@ -51,6 +52,18 @@ galgamedialog::galgamedialog(QWidget *parent)
     ui->pushButton_next->hide();
     ui->label_name->setText(tr("你"));
     init_from_main();
+    /*读取历史*/
+    // 读取所有消息
+    int index = 0;
+    while (true) {
+        QString key = QString("Messages/%1").arg(index);
+        if (!chathistory->contains(key + "/role")) break; // 如果没有更多消息，退出循环
+        json_t message;
+        message["role"] = chathistory->value(key + "/role").toString().toStdString();
+        message["content"] = chathistory->value(key + "/content").toString().toStdString();
+        llm_messages.push_back(message);
+        index++;
+    }
     /*逐字显示*/
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
@@ -742,6 +755,16 @@ void galgamedialog::send_to_llm()
             // 打印内容
             qInfo() << "模型回复内容：" << QString::fromStdString(content);
             message = QString::fromStdString(content);
+            json_t userMessage = {
+                {"role", "assistant"},
+                {"content", content}  // 从 UI 获取用户输入的内容
+            };
+            llm_messages.push_back(userMessage); // 保存用户消息
+            for (int i = 0; i < llm_messages.size(); ++i) {
+                QString key = QString("Messages/%1").arg(i);
+                chathistory->setValue(key + "/role", QString::fromStdString(llm_messages[i]["role"]));
+                chathistory->setValue(key + "/content", QString::fromStdString(llm_messages[i]["content"]));
+            }
         }
         catch (const nlohmann::json::parse_error& e) {
             // 捕获并输出解析错误
