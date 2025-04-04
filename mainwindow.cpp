@@ -91,6 +91,10 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     /* AI 模型设置 */
     setting_ai_win->findChild < QLineEdit * > ("lineEdit_url")->setText(settings->value("/llm/url").toString());
     qInfo()<<"LLM URL："<<settings->value("/llm/url").toString();
+    setting_ai_win->findChild < QLineEdit * > ("lineEdit_openai_url")->setText(settings->value("/llm/openai_url").toString());
+    qInfo()<<"openai URL："<<settings->value("/llm/openai_url").toString();
+    setting_ai_win->findChild < QLineEdit * > ("lineEdit_openai_key")->setText(settings->value("/llm/openai_key").toString());
+    qInfo()<<"openai Key："<<settings->value("/llm/openai_key").toString();
     setting_ai_win->findChild < QCheckBox * > ("checkBox_feedback")->setChecked(settings->value("/llm/feedback").toBool());
     qInfo()<<"启用反馈："<<settings->value("/llm/feedback").toBool();
     /* 语音输入设置 */
