@@ -10,8 +10,95 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="35"/>
-        <source>MainWindow初始化……</source>
+        <location filename="../mainwindow.cpp" line="38"/>
+        <source>检测新版本中……</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="49"/>
+        <source>通用设置</source>
+        <translation type="unfinished">通用設定</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="51"/>
+        <source>AI模型设置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="53"/>
+        <source>语音合成设置</source>
+        <translation type="unfinished">語音合成設定</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="55"/>
+        <source>语音输入设置</source>
+        <translation type="unfinished">語音輸入設置</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="57"/>
+        <source>角色配置</source>
+        <translation type="unfinished">角色配置</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="157"/>
+        <source>主界面</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="159"/>
+        <location filename="../mainwindow.cpp" line="446"/>
+        <source>置顶 √</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="161"/>
+        <source>退出</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="163"/>
+        <source>重启</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="216"/>
+        <source>你正在运行beta版，遇到问题请提issue。最新正式版：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="219"/>
+        <source>获取新版本失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="222"/>
+        <source>发现新版本</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="222"/>
+        <source>
+可以前往“关于”界面进行更新</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="225"/>
+        <source>当前为最新版本^_^</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="229"/>
+        <source>关于</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="364"/>
+        <source>加载翻译文件失败：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="443"/>
+        <source>置顶 ×</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -19,19 +106,19 @@
     <name>about</name>
     <message>
         <location filename="../mianwindow_uichild/about.ui" line="17"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="141"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="160"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/about.ui" line="41"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="142"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="161"/>
         <source> ZcChat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/about.ui" line="53"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="143"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="162"/>
         <source> 一个模仿Galgame效果的AI桌宠</source>
         <translation type="unfinished"></translation>
     </message>
@@ -39,18 +126,51 @@
         <location filename="../mianwindow_uichild/about.ui" line="65"/>
         <location filename="../mianwindow_uichild/about.ui" line="72"/>
         <location filename="../mianwindow_uichild/about.ui" line="79"/>
-        <location filename="../mianwindow_uichild/about.ui" line="86"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="144"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="145"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="146"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="147"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="163"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="164"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="165"/>
         <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mianwindow_uichild/about.ui" line="116"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="148"/>
+        <location filename="../mianwindow_uichild/about.ui" line="139"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_about.h" line="167"/>
         <source>更新日志：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mianwindow_uichild/about.cpp" line="74"/>
+        <source>获取新版本失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mianwindow_uichild/about.cpp" line="78"/>
+        <source>发现新版本</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mianwindow_uichild/about.cpp" line="83"/>
+        <source>当前为最新正式版</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mianwindow_uichild/about.cpp" line="110"/>
+        <source>下载中</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mianwindow_uichild/about.cpp" line="152"/>
+        <source>下载失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mianwindow_uichild/about.cpp" line="168"/>
+        <source>下载成功，正在打开</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mianwindow_uichild/about.cpp" line="173"/>
+        <source>安装包打开失败，请前往“下载”文件夹手动安装</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -79,6 +199,68 @@
         <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_galgamedialog.h" line="260"/>
         <source>历史</source>
         <translation>歷史</translation>
+    </message>
+    <message>
+        <location filename="../galgamedialog.cpp" line="51"/>
+        <location filename="../galgamedialog.cpp" line="477"/>
+        <location filename="../galgamedialog.cpp" line="647"/>
+        <source>你</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../galgamedialog.cpp" line="241"/>
+        <source>语音识别-whisper-打开录音文件失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../galgamedialog.cpp" line="268"/>
+        <source>语音识别-whisper-错误:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../galgamedialog.cpp" line="306"/>
+        <source>语音识别-百度-token-请求失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../galgamedialog.cpp" line="319"/>
+        <source>语音识别-百度-识别-打开文件失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../galgamedialog.cpp" line="355"/>
+        <source>语音识别-百度-识别失败：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../galgamedialog.cpp" line="373"/>
+        <source>输入的 JSON 为空</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../galgamedialog.cpp" line="395"/>
+        <source>语音识别-百度-识别-Json解析错误: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../galgamedialog.cpp" line="679"/>
+        <source>Letta返回了[</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../galgamedialog.cpp" line="679"/>
+        <source>]，可能是Letta未启动/agent配置错误|错误error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../galgamedialog.cpp" line="846"/>
+        <source>[error] Vits错误，请检查Vits配置或者关闭语言输出</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../galgamedialog.cpp" line="847"/>
+        <source>Vits错误，请检查Vits配置或者关闭语言输出</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -111,14 +293,20 @@
     <name>messagewindow</name>
     <message>
         <location filename="../dialog/messagewindow.ui" line="14"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_messagewindow.h" line="58"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_messagewindow.h" line="72"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/messagewindow.ui" line="38"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_messagewindow.h" line="60"/>
-        <source>详细消息请检查 文档ZcChatlog.txt</source>
+        <location filename="../dialog/messagewindow.ui" line="40"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_messagewindow.h" line="74"/>
+        <source>复制报错</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/messagewindow.ui" line="47"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_messagewindow.h" line="75"/>
+        <source>打开日志</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -314,103 +502,109 @@
     <name>setting_general</name>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="14"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="282"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="291"/>
         <source>Form</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="38"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="283"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="292"/>
         <source>通用设置</source>
         <translation>通用設定</translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="51"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="284"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="293"/>
         <source>软件设置</source>
         <translation>軟體設置</translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="72"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="285"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="294"/>
         <source>语言/語言/Language/言語</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="80"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="286"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="295"/>
         <source>zh_CN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="85"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="287"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="296"/>
         <source>zh_TW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="90"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="288"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="297"/>
         <source>en_US</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="95"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="289"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="298"/>
         <source>ja_JP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="126"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="291"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="300"/>
         <source>开机自启</source>
         <translation>開機自啟</translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="166"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="293"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="302"/>
         <source>自启动脚本</source>
         <translation>自啟動腳本</translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="197"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="295"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="304"/>
         <source>是否在ZcChat启动时自动运行目录下的autoOpen.cmd，你可以在cmd里写上启动letta、vits等的命令以达到一次启动的目的。</source>
         <translation>是否在ZcChat啟動時自動運行目錄下的autoOpen.cmd，你可以在cmd裡寫上啟動letta、vits等的命令以達到一次啟動的目的。</translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="209"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="296"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="305"/>
         <source>全局设置</source>
         <translation>全局設置</translation>
     </message>
     <message>
         <location filename="../mianwindow_uichild/setting_general.ui" line="230"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="297"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="306"/>
         <source>角色选择</source>
         <translation>角色選擇</translation>
     </message>
     <message>
-        <location filename="../mianwindow_uichild/setting_general.ui" line="248"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="298"/>
+        <location filename="../mianwindow_uichild/setting_general.ui" line="237"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="307"/>
+        <source>打开角色文件夹</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mianwindow_uichild/setting_general.ui" line="255"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="308"/>
         <source>窗口设置</source>
         <translation>窗口設置</translation>
     </message>
     <message>
-        <location filename="../mianwindow_uichild/setting_general.ui" line="269"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="299"/>
+        <location filename="../mianwindow_uichild/setting_general.ui" line="276"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="309"/>
         <source>逐字速度（毫秒/字）</source>
         <translation>逐字速度（毫秒/字）</translation>
     </message>
     <message>
-        <location filename="../mianwindow_uichild/setting_general.ui" line="316"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="300"/>
+        <location filename="../mianwindow_uichild/setting_general.ui" line="323"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="310"/>
         <source>对话框窗口缩放</source>
         <translation>對話框窗口縮放</translation>
     </message>
     <message>
-        <location filename="../mianwindow_uichild/setting_general.ui" line="351"/>
-        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="301"/>
+        <location filename="../mianwindow_uichild/setting_general.ui" line="358"/>
+        <location filename="../build/Desktop_Qt_6_5_2_MSVC2019_64bit-Release/ZcChat_autogen/include/ui_setting_general.h" line="311"/>
         <source>%</source>
         <translation></translation>
     </message>
