@@ -33,3 +33,15 @@ void setting_ai::refreshUI()
 {
     ui->retranslateUi(this);
 }
+
+void setting_ai::on_lineEdit_openai_url_textChanged(const QString &arg1)
+{
+    settings->setValue("/llm/openai_url",arg1);
+}
+
+
+void setting_ai::on_lineEdit_openai_key_textChanged(const QString &arg1)
+{
+    settings->setValue("/llm/openai_key",arg1);
+}
+

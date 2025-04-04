@@ -23,6 +23,11 @@ private slots:
 
     void on_checkBox_feedback_clicked(bool checked);
 
+    void on_lineEdit_openai_url_textChanged(const QString &arg1);
+
+
+    void on_lineEdit_openai_key_textChanged(const QString &arg1);
+
 private:
     Ui::setting_ai *ui;
     MainWindow *mainWin;

@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>911</width>
-    <height>617</height>
+    <height>671</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <property name="leftMargin">
     <number>20</number>
    </property>
@@ -137,8 +137,8 @@
     </widget>
    </item>
    <item>
-    <widget class="ElaScrollPageArea" name="widget_6" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="2,2">
+    <widget class="ElaScrollPageArea" name="widget_21" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_27" stretch="2,0">
       <property name="leftMargin">
        <number>15</number>
       </property>
@@ -146,34 +146,144 @@
        <number>15</number>
       </property>
       <item>
-       <widget class="ElaText" name="label_7">
+       <widget class="ElaText" name="label_37">
         <property name="font">
          <font>
           <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>agentID</string>
+         <string>AI API</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="ElaLineEdit" name="lineEdit_llm_agent">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-        </property>
+       <widget class="ElaComboBox" name="comboBox_ai_api">
+        <item>
+         <property name="text">
+          <string>Letta</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>OpenAI</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QStackedWidget" name="stackedWidget_LLM">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="page">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="ElaScrollPageArea" name="widget_6" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="2,2">
+          <property name="leftMargin">
+           <number>15</number>
+          </property>
+          <property name="rightMargin">
+           <number>15</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="ElaText" name="label_7">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>agentID</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ElaLineEdit" name="lineEdit_llm_agent">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="ElaScrollPageArea" name="widget_7" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,1">
+          <property name="leftMargin">
+           <number>15</number>
+          </property>
+          <property name="rightMargin">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="ElaText" name="label_8">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Persona</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ElaPlainTextEdit" name="textEdit_OpenaiPrompt"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -510,37 +620,24 @@
      </layout>
     </widget>
    </item>
-   <item>
-    <spacer name="verticalSpacer_9">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>7</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>ElaScrollPageArea</class>
-   <extends>QWidget</extends>
-   <header location="global">elascrollpagearea.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>ElaText</class>
    <extends>QLabel</extends>
    <header location="global">elatext.h</header>
   </customwidget>
   <customwidget>
-   <class>ElaLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">elalineedit.h</header>
+   <class>ElaPushButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">elapushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaScrollPageArea</class>
+   <extends>QWidget</extends>
+   <header location="global">elascrollpagearea.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>ElaSpinBox</class>
@@ -553,9 +650,14 @@
    <header location="global">elacombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>ElaPushButton</class>
-   <extends>QPushButton</extends>
-   <header location="global">elapushbutton.h</header>
+   <class>ElaLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">elalineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaPlainTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header location="global">elaplaintextedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

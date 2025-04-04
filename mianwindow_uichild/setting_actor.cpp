@@ -68,3 +68,14 @@ void setting_actor::refreshUI()
     ui->retranslateUi(this);
 }
 
+
+void setting_actor::on_comboBox_ai_api_currentIndexChanged(int index)
+{
+    ui->stackedWidget_LLM->setCurrentIndex(index);
+    settings_actor->setValue("/llm/llm",index);
+}
+void setting_actor::on_textEdit_OpenaiPrompt_textChanged()
+{
+    settings_actor->setValue("/llm/prompt",ui->textEdit_OpenaiPrompt->toPlainText());
+}
+

@@ -187,16 +187,17 @@ QString galgamedialog::UrlpostLLM_openai()
     QNetworkAccessManager* naManager = new QNetworkAccessManager(this);
     QNetworkRequest request;
     // 设置 URL 和请求头
-    request.setUrl(QUrl("https://api.chatanywhere.tech/v1/chat/completions"));
+    //request.setUrl(QUrl("https://api.chatanywhere.tech/v1/chat/completions"));
+    request.setUrl(QUrl(settings->value("llm/openai_url").toString()));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
-    request.setRawHeader("Authorization", "Bearer sk-VH4aplm66pmSjjuyZkbZH9yiokNY6jo35NlKAg6dcbLxila4");
+    request.setRawHeader("Authorization", "Bearer "+settings->value("llm/openai_key").toByteArray());
     // 构建 JSON 数据
     json_t rootObject = {
         {"model", "gpt-4o-mini"},
         {"messages",{
                         {
                             {"role", "system"},
-                            {"content","你是一个友好的助手"}
+                            {"content",settings_actor->value("llm/prompt").toString().toStdString()}
                         },
                         {
                             {"role", "user"},
@@ -207,6 +208,7 @@ QString galgamedialog::UrlpostLLM_openai()
     // 输出发送的 JSON 数据
     qInfo() << "发送 post 请求：" << QString::fromStdString(rootObject.dump());
     // 发起 POST 请求
+    ui->textEdit->setText("...");
     QEventLoop loop;
     QNetworkReply* reply = naManager->post(request, QByteArray::fromStdString(rootObject.dump()));
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -238,9 +240,9 @@ QString galgamedialog::UrlpostLLM()
                      }}
     };
     rootObject["messages"][0]["content"] = ui->textEdit->toPlainText().toStdString();
-    ui->textEdit->setText("...");
     //输出发送的 JSON
     qInfo() << "发送post：" << QString::fromStdString(rootObject.dump());
+    ui->textEdit->setText("...");
     //获取结果
     QEventLoop loop;
     QNetworkReply* reply = naManager->post(request, QByteArray::fromStdString(rootObject.dump()));
@@ -691,15 +693,15 @@ void galgamedialog::send_to_llm()
     QTextCursor cursor=ui->textEdit->textCursor(); //得到当前text的光标
     if(cursor.hasSelection()) cursor.clearSelection();
     cursor.deletePreviousChar(); //删除前一个字符
-    QString message;
+    QString message="";
     //发送post请求
-    if(1)
+    if(settings_actor->value("llm/llm").toInt()==0)
     {
         QString result_from_llm = UrlpostLLM();
         nlohmann::json jsonDoc = nlohmann::json::parse(result_from_llm.toStdString(), nullptr, false);
         qInfo() << "接收到post信息：" << QString::fromStdString(jsonDoc.dump());
         //获取到的json处理
-        message = "正常|[error] 未知错误，请检查letta的报错日志，返回值为[" + QString::fromStdString(jsonDoc.dump()) + "]|错误error";
+        message = "正常|[error] 错误，请检查letta的报错日志，返回值为[" + QString::fromStdString(jsonDoc.dump()) + "]|错误error";
         //解析 JSON 字符串
         if (jsonDoc.is_discarded()) qCritical() << "letta返回值解析失败";
         else if (jsonDoc.contains("messages") && jsonDoc["messages"].is_array()) // 查找 "content" 字段
@@ -716,34 +718,44 @@ void galgamedialog::send_to_llm()
     }
     else
     {
+        message = "正常|[error] opeanai请求错误 |错误error";
         QString result_from_llm = UrlpostLLM_openai();
-        try {
+        try
+        {
             // 解析 JSON 响应
             json_t responseJson = json_t::parse(result_from_llm.toStdString());
             // 输出整个解析后的 JSON
             qInfo() << "解析后的 JSON：" << QString::fromStdString(responseJson.dump());
+            // 检查是否有错误信息
+            if (responseJson.contains("error")) {
+                // 处理错误信息
+                std::string errorMessage = responseJson["error"]["message"];
+                qCritical() << "API 错误：" << QString::fromStdString(errorMessage);
+            }
             // 访问嵌套的内容 "content"
             std::string content = responseJson["choices"][0]["message"]["content"];
             // 打印内容
             qInfo() << "模型回复内容：" << QString::fromStdString(content);
             message = QString::fromStdString(content);
         }
-        catch (const nlohmann::json::parse_error& e)
-        {
+        catch (const nlohmann::json::parse_error& e) {
             // 捕获并输出解析错误
-            qInfo() << "解析 JSON 错误：" << e.what();
+            qCritical() << "解析 JSON 错误：" << e.what();
+        }
+        catch (const std::exception& e) {
+            // 捕获其他异常
+            qCritical() << "发生错误：" << e.what();
         }
     }
     qInfo() << "读取到message" << message;
     //信息判断
     if(message.isNull())
     {
-        //message = "正常|[error] "+QString::fromStdString(jsonDoc.dump())+"|error";
-        //qCritical() << tr("Letta返回了[")+QString::fromStdString(jsonDoc.dump())+tr("]，可能是Letta未启动/agent配置错误|错误error");
+        message = "正常|[error] LLM请求错误|error";
     }
     else if(message.split("|").size()!=3)
     {
-        if(!settings->value("/llm/feedback").toBool()) message = "正常|[error] Letta正常返回，但是返回值格式错误，返回值["+message+"]|错误error";
+        if(!settings->value("/llm/feedback").toBool()) message = "正常|[error] 正常返回，但是返回值格式错误，返回值["+message+"]|错误error";
         else message = "正常|"+message+"|";
     }
     qInfo()<<"切换立绘："+message.split("|")[0];

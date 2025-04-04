@@ -32,6 +32,10 @@ private slots:
     void on_lineEdit_speechInput_endWord_textChanged(const QString &arg1);
     void on_pushButton_resettachie_clicked();
 
+    void on_comboBox_ai_api_currentIndexChanged(int index);
+
+    void on_textEdit_OpenaiPrompt_textChanged();
+
 private:
     QSettings *settings;
     QSettings *settings_actor;

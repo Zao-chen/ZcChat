@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>733</width>
+    <height>481</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,1">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,1">
    <property name="leftMargin">
     <number>20</number>
    </property>
@@ -47,7 +47,7 @@
       </font>
      </property>
      <property name="text">
-      <string>基础设定</string>
+      <string>Letta设定</string>
      </property>
     </widget>
    </item>
@@ -92,6 +92,98 @@
     </widget>
    </item>
    <item>
+    <widget class="ElaText" name="label_15">
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>OpenAI API设定</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="ElaScrollPageArea" name="widget_6" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="2,2">
+      <property name="leftMargin">
+       <number>15</number>
+      </property>
+      <property name="rightMargin">
+       <number>15</number>
+      </property>
+      <item>
+       <widget class="ElaText" name="label_7">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>BaseUrl</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="ElaLineEdit" name="lineEdit_openai_url">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>https://api.openai.com/v1/responses</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="ElaScrollPageArea" name="widget_7" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="2,2">
+      <property name="leftMargin">
+       <number>15</number>
+      </property>
+      <property name="rightMargin">
+       <number>15</number>
+      </property>
+      <item>
+       <widget class="ElaText" name="label_8">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>APIKey</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="ElaLineEdit" name="lineEdit_openai_key">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>sk-xxxx</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="ElaText" name="label_24">
      <property name="font">
       <font>
@@ -120,7 +212,7 @@
          </font>
         </property>
         <property name="text">
-         <string>格式错误返回</string>
+         <string>忽略格式错误返回</string>
         </property>
        </widget>
       </item>
@@ -163,9 +255,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ElaCheckBox</class>
-   <extends>QCheckBox</extends>
-   <header location="global">elacheckbox.h</header>
+   <class>ElaText</class>
+   <extends>QLabel</extends>
+   <header location="global">elatext.h</header>
   </customwidget>
   <customwidget>
    <class>ElaScrollPageArea</class>
@@ -174,14 +266,14 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>ElaText</class>
-   <extends>QLabel</extends>
-   <header location="global">elatext.h</header>
-  </customwidget>
-  <customwidget>
    <class>ElaLineEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">elalineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header location="global">elacheckbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
