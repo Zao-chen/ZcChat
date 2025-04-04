@@ -36,6 +36,9 @@ A diagram to understand how ZcChat works:
 ### 📋 Step 1 - Preparation
 
 1. Download and install ZcChat from the [Release page](https://github.com/Zao-chen/ZcChat/releases). **Avoid using Chinese paths to prevent potential issues!**
+
+> If you encounter "Error while attempting to create a file," please check if it is being blocked by antivirus software, and try running the installer with administrator privileges.
+
 2. Find existing character data or create your own character in the [Discussion area](https://github.com/Zao-chen/ZcChat/discussions).
 
 ### 🎭 Step 2 - Configure Character
@@ -47,15 +50,22 @@ A diagram to understand how ZcChat works:
 4. Right-click the tray to reset the illustration position.  
    > Tip: Right-click the illustration to open or close the dialogue box. Scroll in the dialogue box to open or close history.
 
-### 🤖 Step 3 - Install and Configure Letta
+### 🤖 Step 3- Install and Configure LLM Model
 
-1. [Install Letta](https://github.com/letta-ai/letta?tab=readme-ov-file#-quickstart) and start it.
-2. Create an agent and enter the character's prompt (core memory) in `LettaADE > agent > Persona`.
-3. Enter the Letta address in `ZcChat > AI Model Configuration > Letta Address`.  
-   > The default Letta address is `http://localhost:8283`.
-4. Enter the agentID in `ZcChat > Character Configuration > AI Model > agentID`.
+#### Method 1: Letta
 
-**🎉🎉🎉 Now, ZcChat is ready to use! Here are some advanced features: 🎉🎉🎉**
+1. [Install Letta](https://github.com/letta-ai/letta?tab=readme-ov-file#-quickstart) and launch it.
+2. Create an agent and fill in the prompt words (core memory) of the role data in `LettaADE > agent > Persona`.
+3. Enter the Letta address in `ZcChat > AI Model Configuration > Letta Address`.
+   
+   > The default Letta address is `http://localhost:8283`
+4. Enter the agentID in `ZcChat > Role Configuration > AI Model > agentID`.
+
+#### Method 2: Openai General Interface
+1. Enter BaseUrl and Key in `ZcChat > AI Model Configuration > Openai Settings`.
+2. Select Openai in `ZcChat > Role Configuration > AI Model` and fill in the prompt words (core memory) of the Persona role data.
+
+**🎉🎉🎉At this point, ZcChat is basically ready for use. Here are some advanced features: 🎉🎉🎉**
 
 ### 🎙️ (Optional) Install and Configure Voice Synthesis
 

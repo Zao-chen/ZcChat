@@ -55,7 +55,9 @@
    
    > Tips：右键立绘可以打开和关闭对话框，在对话框滚轮可以打开和关闭历史。
 
-### 🤖 Step 3- 安装配置Letta
+### 🤖 Step 3- 安装配置LLM模型
+
+#### 方式1：Letta
 
 1. [安装Letta](https://github.com/letta-ai/letta?tab=readme-ov-file#-quickstart) 并启动。
 2. 创建agent，并在 `LettaADE > agent > Persona` 中填入角色数据的提示词（核心记忆）。
@@ -63,6 +65,10 @@
    
    > Letta默认地址为 `http://localhost:8283`
 4. 将agentID填入 `ZcChat > 角色配置 > AI模型 > agentID`。
+
+#### 方式2：Openai通用接口
+1. 将BaseUrl、Key填入 `ZcChat > AI模型配置 > Openai设定`。
+2. 在 `ZcChat > 角色配置 > AI模型` 中选择Openai并填入Persona角色数据的提示词（核心记忆）。
 
 **🎉🎉🎉至此，ZcChat已经可以基本使用了，以下是一些进阶功能的使用：🎉🎉🎉**
 
