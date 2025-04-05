@@ -177,7 +177,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget_LLM">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -328,7 +328,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget_vits">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_6">
       <layout class="QVBoxLayout" name="verticalLayout_13" stretch="0,0">

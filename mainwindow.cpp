@@ -108,7 +108,9 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     });
     setting_voiceinput_win->findChild < QComboBox * > ("comboBox_api")->setCurrentIndex(settings->value("/speechInput/api").toInt());
     qInfo()<<"语音识别 API："<<settings->value("/speechInput/api").toInt();
+
     setting_voiceinput_win->findChild < QStackedWidget * > ("stackedWidget_speechInput")->setCurrentIndex(settings->value("/speechInput/api").toInt());
+
     setting_voiceinput_win->findChild < QLineEdit * > ("lineEdit_url")->setText(settings->value("/speechInput/url").toString());
     qInfo()<<"语音识别 URL："<<settings->value("/speechInput/url").toString();
     setting_voiceinput_win->findChild < QLineEdit * > ("lineEdit_baiduapikey")->setText(settings->value("/speechInput/baidu_apikey").toString());
@@ -314,6 +316,8 @@ void MainWindow::reloadActorSetting() {
     setting_actor_win->findChild < QSpinBox * > ("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
 
     setting_actor_win->findChild < QComboBox * > ("comboBox_ai_api")->setCurrentIndex(settings_actor->value("/llm/llm").toInt());
+    setting_actor_win->findChild < QStackedWidget * > ("stackedWidget_LLM")->setCurrentIndex(settings_actor->value("/llm/llm").toInt());
+
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
     setting_actor_win->findChild < QPlainTextEdit * > ("textEdit_OpenaiPrompt")->setPlainText(settings_actor->value("/llm/prompt").toString());
 
