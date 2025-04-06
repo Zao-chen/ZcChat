@@ -79,7 +79,7 @@ private:
     /*重绘*/
     virtual void paintEvent(QPaintEvent *event) override;
     /*录音*/
-    QMediaRecorder *audioRecorder = nullptr;
+    QMediaRecorder *audioRecorder_record = nullptr;
     QMediaCaptureSession captureSession;
     /*vad*/
     VAD *vad; // VAD 对象

@@ -51,7 +51,6 @@ galgamedialog::galgamedialog(QWidget *parent)
     /*内容初始化*/
     ui->pushButton_next->hide();
     ui->label_name->setText(tr("你"));
-    init_from_main();
     /*子窗口*/
     history_win = new history(this);
     /*读取历史*/
@@ -73,8 +72,9 @@ galgamedialog::galgamedialog(QWidget *parent)
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &galgamedialog::updateText);
     /*录音*/
-    audioRecorder = new QMediaRecorder(this);
-    captureSession.setRecorder(audioRecorder);
+    //初始化
+    audioRecorder_record = new QMediaRecorder(this);
+    captureSession.setRecorder(audioRecorder_record);
     captureSession.setAudioInput(new QAudioInput(this));
     QAudioInput *audioInput = captureSession.audioInput();
     if (audioInput)
@@ -82,13 +82,11 @@ galgamedialog::galgamedialog(QWidget *parent)
         audioInput->setDevice(QMediaDevices::defaultAudioInput());
         qInfo() << "使用的音频输入设备:" << QMediaDevices::defaultAudioInput().description();
     }
-    else
+    else qWarning() << "无法初始化音频输入设备";
+    //录音连接
+    connect(audioRecorder_record, &QMediaRecorder::recorderStateChanged, this, [=](QMediaRecorder::RecorderState state)
     {
-        qWarning() << "无法初始化音频输入设备";
-    }
-    connect(audioRecorder, &QMediaRecorder::recorderStateChanged, this, [=](QMediaRecorder::RecorderState state)
-    {
-        if (state == QMediaRecorder::StoppedState)
+        if (state == QMediaRecorder::StoppedState) //如果停止录音，开始识别
         {
             qInfo()<<"结束录音->识别";
             QString msg = UrlpostWithFile();
@@ -147,11 +145,6 @@ galgamedialog::galgamedialog(QWidget *parent)
     format.setSampleFormat(QAudioFormat::Int16); //设置采样格式为 16 位整数
     //获取默认的音频输入设备
     QAudioDevice inputDevice = QMediaDevices::defaultAudioInput();
-    if (!inputDevice.isFormatSupported(format))
-    {
-        qWarning() << "不支持默认格式，正在尝试使用最接近的格式。";
-        format = inputDevice.preferredFormat();
-    }
     //创建 VAD 对象
     vad = new VAD(this);
     //连接 VAD 的信号到槽函数
@@ -166,7 +159,7 @@ galgamedialog::galgamedialog(QWidget *parent)
             on_pushButton_input_pressed();
             is_record = true;
         }
-        else
+        else if(!detected)
         {
             if (is_record && !is_in_llm && settings->value("/speechInput/wake_enable").toBool()) //语言唤醒结束
             {
@@ -177,6 +170,7 @@ galgamedialog::galgamedialog(QWidget *parent)
     });
     //创建音频输入对象
     audioSource = new QAudioSource(inputDevice, format, this);
+    init_from_main();
     qInfo()<<"galgamedialog加载完成！";
 }
 galgamedialog::~galgamedialog()
@@ -572,22 +566,22 @@ void galgamedialog::on_pushButton_input_pressed()
 {
     qInfo()<<"开始录音";
     if(settings->value("/speechInput/interrupt").toBool()) player->stop();
-    if (audioRecorder->recorderState() == QMediaRecorder::StoppedState)
+    if (audioRecorder_record->recorderState() == QMediaRecorder::StoppedState)
     {
         QMediaFormat format;
         format.setAudioCodec(QMediaFormat::AudioCodec::AAC); //对应编码器
-        audioRecorder->setMediaFormat(format);
-        audioRecorder->setAudioSampleRate(44100); //设置采样率
-        audioRecorder->setAudioChannelCount(2); // 设置声道数
-        audioRecorder->setQuality(QMediaRecorder::HighQuality); //设置录制质量
-        audioRecorder->setOutputLocation(QUrl::fromLocalFile( QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat" + "/output.m4a"));
-        audioRecorder->record();
+        audioRecorder_record->setMediaFormat(format);
+        audioRecorder_record->setAudioSampleRate(44100); //设置采样率
+        audioRecorder_record->setAudioChannelCount(2); // 设置声道数
+        audioRecorder_record->setQuality(QMediaRecorder::HighQuality); //设置录制质量
+        audioRecorder_record->setOutputLocation(QUrl::fromLocalFile( QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat" + "/output.m4a"));
+        audioRecorder_record->record();
     }
 }
 void galgamedialog::on_pushButton_input_released()
 {
     qInfo()<<"结束录音";
-    if (audioRecorder) audioRecorder->stop();
+    if (audioRecorder_record) audioRecorder_record->stop();
 }
 /*初始化*/
 void galgamedialog::init_from_main()
@@ -610,92 +604,25 @@ void galgamedialog::init_from_main()
     qreal scaleFactor = settings->value("/dialog/size").toDouble()/100;
     // 调整窗口大小
     this->resize(650*scaleFactor,200*scaleFactor);
-    qInfo() << "正在启动VAD";
+
     // VAD 处理
     if (settings->value("/speechInput/wake_enable").toBool())
     {
+        qInfo() << "启用VAD";
         audioDevice = audioSource->start();
-        if (!audioDevice)
+        connect(audioDevice, &QIODevice::readyRead, this, [=]()
         {
-            qWarning() << "启动音频输入失败！";
-        }
-        else
-        {
-            qInfo() << "音频设备启动成功！";
-            connect(audioDevice, &QIODevice::readyRead, this, [=]()
-            {
-                if (!audioDevice)
-                {
-                    qWarning() << "audioDevice 在 readyRead 时是 nullptr！";
-                    return;
-                }
-                QByteArray audioData = audioDevice->readAll();
-                if (audioData.isEmpty())
-                {
-                    qWarning() << "音频数据为空！";
-                    return;
-                }
-                if (!vad)
-                {
-                    qWarning() << "VAD 未初始化！";
-                    return;
-                }
-                vad->processAudio(audioData, format);
-            });
-        }
+            QByteArray audioData = audioDevice->readAll();
+            vad->processAudio(audioData, format);
+        });
     }
     else
     {
         qInfo() << "不使用 VAD";
-        // 断开信号并释放音频设备
-        if (audioDevice)
-        {
-            qInfo() << "停止音频源并断开音频设备信号...";
-            // 停止音频源
-            if (audioSource && audioSource->state() != QAudio::StoppedState)
-            {
-                audioSource->stop();
-            }
-            // 断开信号
-            disconnect(audioDevice, &QIODevice::readyRead, this, nullptr);
-            // 关闭设备
-            audioDevice->close();
-            // 安全删除
-            audioDevice->deleteLater(); // 安全删除
-            audioDevice = nullptr;      // 清空指针
-        }
-        // 停止音频源并释放资源
-        if (audioSource)
-        {
-            if (audioSource->state() != QAudio::StoppedState)
-            {
-                qInfo() << "停止音频源...";
-                audioSource->stop();
-            }
-            delete audioSource;      // 释放资源
-            audioSource = nullptr;   // 清空指针
-        }
-        // 停止音频录制并释放资源
-        if (audioRecorder)
-        {
-            if (audioRecorder->recorderState() == QMediaRecorder::RecordingState)
-            {
-                qInfo() << "停止音频录制...";
-                audioRecorder->stop();
-            }
-            else
-            {
-                qWarning() << "audioRecorder 未处于录制状态，跳过停止！";
-            }
-            delete audioRecorder;    // 释放资源
-            audioRecorder = nullptr; // 清空指针
-        }
-        else
-        {
-            qWarning() << "audioRecorder 是 nullptr，跳过停止操作！";
-        }
+        audioSource->stop(); // 停止音频源
+        disconnect(audioDevice, &QIODevice::readyRead, nullptr, nullptr);  // 断开信号
     }
-    qInfo()<<"VAD启动完成";
+
 }
 //发送llm消息
 void galgamedialog::send_to_llm()

@@ -16,6 +16,7 @@ void VAD::processAudio(const QByteArray &audioData, const QAudioFormat &format)
     //简单的能量阈值检测
     if (energy > settings->value("/speechInput/energy").toInt()) //调整阈值
     {
+        //qDebug()<<"超过阈值";
         silentFrameCount = 0;
         emit voiceDetected(true);
     }
@@ -24,6 +25,7 @@ void VAD::processAudio(const QByteArray &audioData, const QAudioFormat &format)
         silentFrameCount++;
         if (silentFrameCount > 15) //连续 15 帧静音
         {
+            //qDebug()<<"连续 15 帧静音";
             emit voiceDetected(false);
         }
     }
