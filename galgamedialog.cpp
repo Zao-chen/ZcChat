@@ -85,58 +85,58 @@ galgamedialog::galgamedialog(QWidget *parent)
     else qWarning() << "无法初始化音频输入设备";
     //录音连接
     connect(audioRecorder_record, &QMediaRecorder::recorderStateChanged, this, [=](QMediaRecorder::RecorderState state)
-    {
-        if (state == QMediaRecorder::StoppedState) //如果停止录音，开始识别
-        {
-            qInfo()<<"结束录音->识别";
-            QString msg = UrlpostWithFile();
-            if(msg!="")
             {
-                ui->textEdit->setText(msg);
-                if(ui->checkBox_autoInput->isChecked())
+                if (state == QMediaRecorder::StoppedState) //如果停止录音，开始识别
                 {
-                    qInfo() << "自动发送！";
-                    send_to_llm();
-                }
-                if(settings->value("/speechInput/wake_enable").toBool()) //开启语音唤醒
-                {
-                    /*结束词检查*/
-                    bool containsAny = false;
-                    // 遍历 list，检查 msg 是否包含任意一个子字符串
-                    for (const QString &str : settings_actor->value("/speechInput/end_word").toString().split("|"))
+                    qInfo()<<"结束录音->识别";
+                    QString msg = UrlpostWithFile();
+                    if(msg!="")
                     {
-                        if (msg.contains(str))
+                        ui->textEdit->setText(msg);
+                        if(ui->checkBox_autoInput->isChecked())
                         {
-                            containsAny = true; // 如果包含，设置标志为 true
-                            break; // 找到匹配后立即退出循环
+                            qInfo() << "自动发送！";
+                            send_to_llm();
+                        }
+                        if(settings->value("/speechInput/wake_enable").toBool()) //开启语音唤醒
+                        {
+                            /*结束词检查*/
+                            bool containsAny = false;
+                            // 遍历 list，检查 msg 是否包含任意一个子字符串
+                            for (const QString &str : settings_actor->value("/speechInput/end_word").toString().split("|"))
+                            {
+                                if (msg.contains(str))
+                                {
+                                    containsAny = true; // 如果包含，设置标志为 true
+                                    break; // 找到匹配后立即退出循环
+                                }
+                            }
+                            if(containsAny)
+                            {
+                                qInfo() << "发现结束词";
+                                ui->checkBox_autoInput->setChecked(false);
+                            }
+                            /*唤醒词检查*/
+                            containsAny = false; // 初始化标志为 false
+                            // 遍历 list，检查 msg 是否包含任意一个子字符串
+                            for (const QString &str : settings_actor->value("/speechInput/wake_word").toString().split("|"))
+                            {
+                                if (msg.contains(str))
+                                {
+                                    containsAny = true; // 如果包含，设置标志为 true
+                                    break; // 找到匹配后立即退出循环
+                                }
+                            }
+                            if(containsAny)
+                            {
+                                qInfo() << "发现唤醒词";
+                                ui->checkBox_autoInput->setChecked(true);
+                                send_to_llm();
+                            }
                         }
                     }
-                    if(containsAny)
-                    {
-                        qInfo() << "发现结束词";
-                        ui->checkBox_autoInput->setChecked(false);
-                    }
-                    /*唤醒词检查*/
-                    containsAny = false; // 初始化标志为 false
-                    // 遍历 list，检查 msg 是否包含任意一个子字符串
-                    for (const QString &str : settings_actor->value("/speechInput/wake_word").toString().split("|"))
-                    {
-                        if (msg.contains(str))
-                        {
-                            containsAny = true; // 如果包含，设置标志为 true
-                            break; // 找到匹配后立即退出循环
-                        }
-                    }
-                    if(containsAny)
-                    {
-                        qInfo() << "发现唤醒词";
-                        ui->checkBox_autoInput->setChecked(true);
-                        send_to_llm();
-                    }
                 }
-            }
-        }
-    });
+            });
     /*VAD*/
     /*录音*/
     // 设置音频格式
@@ -149,25 +149,25 @@ galgamedialog::galgamedialog(QWidget *parent)
     vad = new VAD(this);
     //连接 VAD 的信号到槽函数
     connect(vad,&VAD::energy_to_main,this,[=](int energy)
-    {
-        emit energy_to_main(energy);
-    });
-    connect(vad, &VAD::voiceDetected, this, [&](bool detected)
-    {
-        if (detected && !is_record && !is_in_llm && settings->value("/speechInput/wake_enable").toBool()) //如果开启了语言唤醒并且有语言
-        {
-            on_pushButton_input_pressed();
-            is_record = true;
-        }
-        else if(!detected)
-        {
-            if (is_record && !is_in_llm && settings->value("/speechInput/wake_enable").toBool()) //语言唤醒结束
             {
-                on_pushButton_input_released();
-                is_record = false;
-            }
-        }
-    });
+                emit energy_to_main(energy);
+            });
+    connect(vad, &VAD::voiceDetected, this, [&](bool detected)
+            {
+                if (detected && !is_record && !is_in_llm && settings->value("/speechInput/wake_enable").toBool()) //如果开启了语言唤醒并且有语言
+                {
+                    on_pushButton_input_pressed();
+                    is_record = true;
+                }
+                else if(!detected)
+                {
+                    if (is_record && !is_in_llm && settings->value("/speechInput/wake_enable").toBool()) //语言唤醒结束
+                    {
+                        on_pushButton_input_released();
+                        is_record = false;
+                    }
+                }
+            });
     //创建音频输入对象
     audioSource = new QAudioSource(inputDevice, format, this);
     init_from_main();
@@ -197,10 +197,10 @@ QString galgamedialog::UrlpostLLM_openai() {
     QNetworkRequest request;
     // 添加用户消息到消息列表
     json_t userMessage =
-    {
-        {"role", "user"},
-        {"content", ui->textEdit->toPlainText().toStdString()}  // 从 UI 获取用户输入的内容
-    };
+        {
+            {"role", "user"},
+            {"content", ui->textEdit->toPlainText().toStdString()}  // 从 UI 获取用户输入的内容
+        };
     llm_messages.push_back(userMessage); // 保存用户消息
     // 设置 URL 和请求头
     request.setUrl(QUrl(settings->value("llm/openai_url").toString()));
@@ -208,16 +208,16 @@ QString galgamedialog::UrlpostLLM_openai() {
     request.setRawHeader("Authorization", "Bearer " + settings->value("llm/openai_key").toByteArray());
     // 构建 JSON 数据
     json_t rootObject =
-    {
-        {"model", settings->value("llm/openai_model").toString().toStdString()},
-        {"messages", json_t::array()} // 创建一个空数组
-    };
+        {
+            {"model", settings->value("llm/openai_model").toString().toStdString()},
+            {"messages", json_t::array()} // 创建一个空数组
+        };
     // 添加系统消息
     json_t systemMessage =
-    {
-        {"role", "system"},
-        {"content", settings_actor->value("llm/prompt").toString().toStdString()}
-    };
+        {
+            {"role", "system"},
+            {"content", settings_actor->value("llm/prompt").toString().toStdString()}
+        };
     rootObject["messages"].push_back(systemMessage); // 将系统消息添加到数组中
     // 将所有的用户和助手消息添加到 messages 数组中
     for (const auto& message : llm_messages) rootObject["messages"].push_back(message);
@@ -248,14 +248,14 @@ QString galgamedialog::UrlpostLLM()
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
     //直接解析 JSON 字符串，嵌入动态内容
     json_t rootObject =
-    {
-        {"messages", {
-                         {
-                             {"role", "user"},
-                             {"content", ui->textEdit->toPlainText().toStdString()}
-                         }
-                     }}
-    };
+        {
+            {"messages", {
+                             {
+                                 {"role", "user"},
+                                 {"content", ui->textEdit->toPlainText().toStdString()}
+                             }
+                         }}
+        };
     rootObject["messages"][0]["content"] = ui->textEdit->toPlainText().toStdString();
     //输出发送的 JSON
     qInfo() << "发送post：" << QString::fromStdString(rootObject.dump());
@@ -349,23 +349,23 @@ QString galgamedialog::UrlpostWithFile()
         //当请求完成时，退出事件循环
         QString accessToken;
         QObject::connect(reply, &QNetworkReply::finished, [&]()
-        {
-            if (reply->error() == QNetworkReply::NoError)
-            {
-                QByteArray response = reply->readAll();
-                auto jsonObj = nlohmann::json::parse(response.toStdString());
-                // 获取 access_token 并转换为 QString
-                accessToken = QString::fromStdString(jsonObj["access_token"].get<std::string>());
-                qInfo() << "语音识别-百度-token-获取到token:" << accessToken;
-            }
-            else
-            {
-                qCritical()<<tr("语音识别-百度-token-请求失败")<<reply->errorString();
-                return;
-            }
-            reply->deleteLater();
-            loop.quit(); //退出事件循环
-        });
+                         {
+                             if (reply->error() == QNetworkReply::NoError)
+                             {
+                                 QByteArray response = reply->readAll();
+                                 auto jsonObj = nlohmann::json::parse(response.toStdString());
+                                 // 获取 access_token 并转换为 QString
+                                 accessToken = QString::fromStdString(jsonObj["access_token"].get<std::string>());
+                                 qInfo() << "语音识别-百度-token-获取到token:" << accessToken;
+                             }
+                             else
+                             {
+                                 qCritical()<<tr("语音识别-百度-token-请求失败")<<reply->errorString();
+                                 return;
+                             }
+                             reply->deleteLater();
+                             loop.quit(); //退出事件循环
+                         });
         //进入事件循环，等待请求完成
         loop.exec();
         /*发送识别*/
@@ -490,15 +490,15 @@ void galgamedialog::mousePressEvent(QMouseEvent *event)
 {
     switch(event->button())
     {
-        case Qt::LeftButton:
-            isLeftPressDown = true;
-            this->mouseGrabber(); //返回当前抓取鼠标输入的窗口
-            m_movePoint = event->globalPosition().toPoint() - this->frameGeometry().topLeft();
-            break;
-        case Qt::RightButton:
-            break;
-        default:
-            galgamedialog::mousePressEvent(event);
+    case Qt::LeftButton:
+        isLeftPressDown = true;
+        this->mouseGrabber(); //返回当前抓取鼠标输入的窗口
+        m_movePoint = event->globalPosition().toPoint() - this->frameGeometry().topLeft();
+        break;
+    case Qt::RightButton:
+        break;
+    default:
+        galgamedialog::mousePressEvent(event);
     }
 }
 //鼠标移动事件
@@ -611,10 +611,10 @@ void galgamedialog::init_from_main()
         qInfo() << "启用VAD";
         audioDevice = audioSource->start();
         connect(audioDevice, &QIODevice::readyRead, this, [=]()
-        {
-            QByteArray audioData = audioDevice->readAll();
-            vad->processAudio(audioData, format);
-        });
+                {
+                    QByteArray audioData = audioDevice->readAll();
+                    vad->processAudio(audioData, format);
+                });
     }
     else
     {

@@ -20,7 +20,7 @@ signals:
 private:
     double calculateEnergy(const QVector<double> &samples);
     QVector<double> convertToPCM(const QByteArray &audioData, const QAudioFormat &format);
-    int silentFrameCount;
+    int silentFrameCount; //连续静音计算
 };
 
 #endif // VAD_H
