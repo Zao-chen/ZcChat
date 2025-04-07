@@ -97,7 +97,7 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     setting_ai_win->findChild < QLineEdit * > ("lineEdit_openai_model")->setText(settings->value("/llm/openai_model").toString());
     qInfo()<<"openai model："<<settings->value("/llm/openai_model").toString();
     setting_ai_win->findChild < QLineEdit * > ("lineEdit_openai_key")->setText(settings->value("/llm/openai_key").toString());
-    qInfo()<<"openai Key："<<settings->value("/llm/openai_key").toString();
+    //qInfo()<<"openai Key："<<settings->value("/llm/openai_key").toString();
     setting_ai_win->findChild < QCheckBox * > ("checkBox_feedback")->setChecked(settings->value("/llm/feedback").toBool());
     qInfo()<<"启用反馈："<<settings->value("/llm/feedback").toBool();
     /* 语音输入设置 */
@@ -114,9 +114,9 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     setting_voiceinput_win->findChild < QLineEdit * > ("lineEdit_url")->setText(settings->value("/speechInput/url").toString());
     qInfo()<<"语音识别 URL："<<settings->value("/speechInput/url").toString();
     setting_voiceinput_win->findChild < QLineEdit * > ("lineEdit_baiduapikey")->setText(settings->value("/speechInput/baidu_apikey").toString());
-    qInfo()<<"百度 API Key："<<settings->value("/speechInput/baidu_apikey").toString();
+    //qInfo()<<"百度 API Key："<<settings->value("/speechInput/baidu_apikey").toString();
     setting_voiceinput_win->findChild < QLineEdit * > ("lineEdit_baidusecretkey")->setText(settings->value("/speechInput/baidu_secretkey").toString());
-    qInfo()<<"百度 Secret Key："<<settings->value("/speechInput/baidu_secretkey").toString();
+    //qInfo()<<"百度 Secret Key："<<settings->value("/speechInput/baidu_secretkey").toString();
     //语音设置
     setting_voiceinput_win->findChild < QCheckBox * > ("checkBox_enable")->setChecked(settings->value("/speechInput/enable").toBool());
     qInfo()<<"启用语音输入："<<settings->value("/speechInput/enable").toBool();
