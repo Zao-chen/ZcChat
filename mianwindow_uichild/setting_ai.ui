@@ -295,25 +295,25 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>ElaLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">elalineedit.h</header>
+  </customwidget>
+  <customwidget>
    <class>ElaText</class>
    <extends>QLabel</extends>
    <header location="global">elatext.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header location="global">elacheckbox.h</header>
   </customwidget>
   <customwidget>
    <class>ElaScrollPageArea</class>
    <extends>QWidget</extends>
    <header location="global">elascrollpagearea.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ElaLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">elalineedit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ElaCheckBox</class>
-   <extends>QCheckBox</extends>
-   <header location="global">elacheckbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

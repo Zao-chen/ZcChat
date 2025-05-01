@@ -3,6 +3,9 @@
 #include "../mainwindow.h"
 #include <QStandardPaths>
 #include <QPlainTextEdit>
+#include <QDir>
+#include <QDesktopServices>
+#include <QProcess>
 
 setting_actor::setting_actor(QWidget *parent)
     : QWidget(parent)
@@ -77,5 +80,26 @@ void setting_actor::on_comboBox_ai_api_currentIndexChanged(int index)
 void setting_actor::on_textEdit_OpenaiPrompt_textChanged()
 {
     settings_actor->setValue("/llm/prompt",ui->textEdit_OpenaiPrompt->toPlainText());
+}
+
+
+void setting_actor::on_pushButton_viewhistory_clicked()
+{
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +"/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/history.ini";
+    QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+}
+
+void setting_actor::on_pushButton_resethistory_clicked()
+{
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+ "/ZcChat/characters_config/"+ settings->value("actor/name").toString()+ "/history.ini";
+    QFile::remove(path);
+    QString program = QCoreApplication::applicationFilePath();
+    //获取当前程序的路径
+    QStringList arguments = QCoreApplication::arguments();
+    //获取当前程序的启动参数
+    QProcess::startDetached(program, arguments);
+    //启动新进程
+    QCoreApplication::quit();
+    //退出当前程序
 }
 

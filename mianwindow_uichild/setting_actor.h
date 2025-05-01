@@ -36,6 +36,10 @@ private slots:
 
     void on_textEdit_OpenaiPrompt_textChanged();
 
+    void on_pushButton_viewhistory_clicked();
+
+    void on_pushButton_resethistory_clicked();
+
 private:
     QSettings *settings;
     QSettings *settings_actor;
