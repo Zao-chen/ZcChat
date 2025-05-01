@@ -38,141 +38,12 @@
    <property name="bottomMargin">
     <number>10</number>
    </property>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_name">
-     <property name="font">
-      <font>
-       <family>Microsoft YaHei</family>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string notr="true">TextLabel</string>
-     </property>
-     <property name="wordWrap">
-      <bool>false</bool>
-     </property>
-     <property name="indent">
-      <number>2</number>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QTextEdit" name="textEdit">
-     <property name="font">
-      <font>
-       <family>Microsoft YaHei</family>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="contextMenuPolicy">
-      <enum>Qt::ContextMenuPolicy::DefaultContextMenu</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QMenu {
-    background-color: #ffffff; /* 白色背景 */
-    border: none;              /* 无边框 */
-    border-radius: 8px;        /* 圆角半径 */
-    padding: 5px;              /* 内边距 */
-}
-
-QMenu::item {
-    padding: 8px 20px;         /* 菜单项的内边距 */
-    background-color: transparent; /* 默认背景色透明 */
-    border-radius: 4px;        /* 菜单项圆角 */
-}
-
-QMenu::item:selected {
-    background-color: #e0e0e0; /* 选中项的背景色 */
-    color: #000000;            /* 选中项的文字颜色 */
-}
-
-QMenu::separator {
-    height: 1px;
-    background: #dcdcdc;
-    margin: 5px 0;
-}
-QScrollArea {
-    border: none; /* 去除边框 */
-    background: transparent; /* 背景透明 */
-}
-
-QScrollBar:vertical, QScrollBar:horizontal {
-    border: none; /* 去除边框 */
-    background: transparent; /* 背景透明 */
-    width: 8px; /* 设置滚动条的宽度 */
-    height: 8px; /* 设置滚动条的高度 */
-}
-
-QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-    background: rgba(136, 136, 136, 0.5); /* 设置滚动条滑块的淡灰色 */
-    border-radius: 4px; /* 设置滑块的圆角 */
-}
-
-QScrollBar::handle:vertical:hover, QScrollBar::handle:horizontal:hover {
-    background: rgba(136, 136, 136, 0.8); /* 滑块悬停时的颜色 */
-}
-
-QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical,
-QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
-    background: transparent; /* 去除上下箭头 */
-    border: none; /* 去除箭头边框 */
-    height: 0px; /* 强制去除箭头按钮 */
-    width: 0px; /* 强制去除箭头按钮 */
-}
-
-QProgressBar {
-    border: none; /* 去除进度条边框 */
-    background: #f0f0f0; /* 进度条的背景颜色 */
-    height: 8px; /* 设置进度条的高度 */
-    margin-bottom: 10px; /* 为进度条下方留出空间 */
-}
-
-QProgressBar::chunk {
-    background: rgba(76, 175, 80, 0.5); /* 设置淡绿色的进度条颜色 */
-    border-radius: 4px; /* 设置进度条块的圆角 */
-}
-</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::Shape::NoFrame</enum>
-     </property>
-     <property name="acceptRichText">
-      <bool>true</bool>
-     </property>
-     <property name="placeholderText">
-      <string>说点什么吧（Shift+Enter换行 Enter发送）</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QPushButton" name="pushButton_next">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Microsoft YaHei</family>
-       <pointsize>30</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
+   <property name="horizontalSpacing">
+    <number>1</number>
+   </property>
+   <property name="verticalSpacing">
+    <number>2</number>
+   </property>
    <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="spacing">
@@ -292,6 +163,206 @@ QPushButton:pressed {
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_name">
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei</family>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string notr="true">TextLabel</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+     <property name="indent">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QTextEdit" name="textEdit">
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei</family>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::ContextMenuPolicy::DefaultContextMenu</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QMenu {
+    background-color: #ffffff; /* 白色背景 */
+    border: none;              /* 无边框 */
+    border-radius: 8px;        /* 圆角半径 */
+    padding: 5px;              /* 内边距 */
+}
+
+QMenu::item {
+    padding: 8px 20px;         /* 菜单项的内边距 */
+    background-color: transparent; /* 默认背景色透明 */
+    border-radius: 4px;        /* 菜单项圆角 */
+}
+
+QMenu::item:selected {
+    background-color: #e0e0e0; /* 选中项的背景色 */
+    color: #000000;            /* 选中项的文字颜色 */
+}
+
+QMenu::separator {
+    height: 1px;
+    background: #dcdcdc;
+    margin: 5px 0;
+}
+QScrollArea {
+    border: none; /* 去除边框 */
+    background: transparent; /* 背景透明 */
+}
+
+QScrollBar:vertical, QScrollBar:horizontal {
+    border: none; /* 去除边框 */
+    background: transparent; /* 背景透明 */
+    width: 8px; /* 设置滚动条的宽度 */
+    height: 8px; /* 设置滚动条的高度 */
+}
+
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background: rgba(136, 136, 136, 0.5); /* 设置滚动条滑块的淡灰色 */
+    border-radius: 4px; /* 设置滑块的圆角 */
+}
+
+QScrollBar::handle:vertical:hover, QScrollBar::handle:horizontal:hover {
+    background: rgba(136, 136, 136, 0.8); /* 滑块悬停时的颜色 */
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical,
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    background: transparent; /* 去除上下箭头 */
+    border: none; /* 去除箭头边框 */
+    height: 0px; /* 强制去除箭头按钮 */
+    width: 0px; /* 强制去除箭头按钮 */
+}
+
+QProgressBar {
+    border: none; /* 去除进度条边框 */
+    background: #f0f0f0; /* 进度条的背景颜色 */
+    height: 8px; /* 设置进度条的高度 */
+    margin-bottom: 10px; /* 为进度条下方留出空间 */
+}
+
+QProgressBar::chunk {
+    background: rgba(76, 175, 80, 0.5); /* 设置淡绿色的进度条颜色 */
+    border-radius: 4px; /* 设置进度条块的圆角 */
+}
+</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::NoFrame</enum>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="acceptRichText">
+      <bool>true</bool>
+     </property>
+     <property name="placeholderText">
+      <string>说点什么吧（Shift+Enter换行 Enter发送）</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="pushButton_next">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei</family>
+       <pointsize>30</pointsize>
+      </font>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QScrollBar" name="verticalScrollBar">
+     <property name="styleSheet">
+      <string notr="true">/* 去除滚动条的边框和背景 */
+QScrollBar:vertical {
+    border: none;              /* 去除边框 */
+    background: transparent;   /* 背景透明 */
+    width: 8px;                /* 设置滚动条的宽度 */
+}
+
+QScrollBar::handle:vertical {
+    background: rgba(136, 136, 136, 0.5);
+    border-radius: 4px;
+}
+
+
+/* 滑块悬停时的颜色变化 */
+QScrollBar::handle:vertical:hover {
+    background: rgba(136, 136, 136, 0.8);  /* 滑块悬停时的颜色 */
+}
+
+/* 去除滚动条上下箭头按钮 */
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background: transparent; /* 去除上下箭头 */
+    border: none;             /* 去除箭头边框 */
+    height: 0px;              /* 强制去除箭头按钮 */
+}
+
+/* 滚动条轨道样式 */
+QScrollBar::groove:vertical {
+    background: transparent;   /* 设置轨道背景为透明 */
+    border: none;               /* 去除轨道的边框 */
+    width: 8px;                 /* 设置轨道的宽度 */
+}
+
+/* 设置滚动条范围变化时的显示效果 */
+QScrollBar:vertical:disabled {
+    background: transparent;  /* 禁用时的背景色透明 */
+    border: none;              /* 禁用时的边框 */
+}
+</string>
+     </property>
+     <property name="maximum">
+      <number>10</number>
+     </property>
+     <property name="value">
+      <number>1</number>
+     </property>
+     <property name="sliderPosition">
+      <number>1</number>
+     </property>
+     <property name="tracking">
+      <bool>true</bool>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

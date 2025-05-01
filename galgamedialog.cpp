@@ -31,6 +31,7 @@
 #include <QNetworkInterface>
 #include <QStandardPaths>
 #include <QDebug>
+#include <QScrollBar>
 
 #include "third_party/json/json.hpp"
 using json_t = nlohmann::json;
@@ -51,6 +52,27 @@ galgamedialog::galgamedialog(QWidget *parent)
     /*内容初始化*/
     ui->pushButton_next->hide();
     ui->label_name->setText(tr("你"));
+
+    ui->verticalScrollBar->setVisible(false);
+    // 获取 textEdit 的滚动条
+    QScrollBar *scroll = ui->textEdit->verticalScrollBar();
+    // 滚动范围变更时，更新 slider 的最大值和可见性
+    connect(scroll, &QScrollBar::rangeChanged, this, [=](int min, int max) {
+        int newMax = max / 5;  // 将 max 除以 5，调整滑块的范围
+        ui->verticalScrollBar->setRange(min, newMax);
+        ui->verticalScrollBar->setEnabled(max > min);  // 禁用 slider 避免可操作但无效
+        ui->verticalScrollBar->setVisible(max > min);  // 可选：隐藏 slider
+    });
+
+    // 让外部滚动条控制 textEdit 的滚动条
+    connect(ui->verticalScrollBar, &QScrollBar::valueChanged, this, [=](int value) {
+        // 通过 value 来反向计算，并同步到 textEdit
+        QScrollBar *scroll = ui->textEdit->verticalScrollBar();
+        int newValue = value * 5;  // 将 value 放大，保持同步
+        scroll->setValue(newValue);
+    });
+
+
     /*子窗口*/
     history_win = new history(this);
     /*读取历史*/
