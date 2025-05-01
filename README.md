@@ -42,15 +42,18 @@
 
 > 如果出现`尝试创建文件时出错`请检查是否被杀毒软件拦截，并尝试使用管理员权限启动安装包。
 
-1. [讨论区](https://github.com/Zao-chen/ZcChat/discussions)找到现成的角色数据，或者自定义你的角色。
+2. [讨论区](https://github.com/Zao-chen/ZcChat/discussions)找到现成的角色数据，或者自定义你的角色。
 
 ### 🎭 Step 2 - 配置角色
 
 1. 将角色数据中的立绘放入 `{文档}/ZcChat/characters/{名称}` 文件夹。
    
    > 最终的项目结构应为 `{文档}/ZcChat/characters/{名称}/正常.png...`
+
 2. 在 `ZcChat > 通用设置 > 角色选择` 中选中角色。
+
 3. 在 `ZcChat > 角色配置` 设置立绘大小。
+
 4. 右键托盘重置立绘位置。
    
    > Tips：右键立绘可以打开和关闭对话框，在对话框滚轮可以打开和关闭历史。
@@ -60,14 +63,21 @@
 #### 方式1：Letta
 
 1. [安装Letta](https://github.com/letta-ai/letta?tab=readme-ov-file#-quickstart) 并启动。
+
 2. 创建agent，并在 `LettaADE > agent > Persona` 中填入角色数据的提示词（核心记忆）。
+
 3. 将Letta地址填入 `ZcChat > AI模型配置 > Letta地址`。
    
    > Letta默认地址为 `http://localhost:8283`
+
 4. 将agentID填入 `ZcChat > 角色配置 > AI模型 > agentID`。
 
 #### 方式2：Openai通用接口
+
 1. 将BaseUrl、Key填入 `ZcChat > AI模型配置 > Openai设定`。
+   
+   > BaseUrl应该类似于为 `https://api.openai.com/v1/completions`
+
 2. 在 `ZcChat > 角色配置 > AI模型` 中选择Openai并填入Persona角色数据的提示词（核心记忆）。
 
 **🎉🎉🎉至此，ZcChat已经可以基本使用了，以下是一些进阶功能的使用：🎉🎉🎉**
@@ -77,19 +87,23 @@
 #### 方式1：vits-simple-api
 
 1. [安装vits-simple-api](https://github.com/Artrajz/vits-simple-api/blob/main/README_zh.md) 并启动。
+
 2. 将URL填入 `ZcChat > 语言合成设置 > vits-simple-api地址`。
    
    > vits-simple-api默认地址为 `http://localhost:23456`
+
 3. `ZcChat > 角色配置 > 语音合成 ` 中配置相关项
 
 #### 方式2：其他语音合成工具
 
 1. 开启自定义模式。
+
 2. 填入API调用地址，确保输出为mp3文件，并使用 `{msg}` 作为文本占位符，例如：
    
    ```
    http://127.0.0.1:23456/voice/vits?id=0&text={msg}&format=mp3
    ```
+
 3. `ZcChat > 角色配置 > 语音合成 ` 中配置相关项
 
 ### 🎤 （可选）配置语音输入
@@ -97,6 +111,7 @@
 #### 方式1：whisper-asr-webservice
 
 1. [安装whisper-asr-webservice](https://github.com/ahmetoner/whisper-asr-webservice?tab=readme-ov-file#quick-usage) 并启动。
+
 2. 将URL填入 `ZcChat > 语言输入设置 > whisper-asr-webservice地址`。
    
    > 默认地址为 `http://localhost:9000`

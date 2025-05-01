@@ -5,12 +5,15 @@
 
 [![GitHub Release](https://img.shields.io/github/v/release/Zao-chen/ZcChat?include_prereleases&style=for-the-badge)](https://github.com/Zao-chen/ZcChat/releases)[![GitHub License](https://img.shields.io/github/license/Zao-chen/ZcChat?style=for-the-badge)](LICENSE)[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/commits)  
 [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Zao-chen/ZcChat/total?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/releases)[![GitHub Repo stars](https://img.shields.io/github/stars/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/stargazers)[![GitHub Discussions](https://img.shields.io/github/discussions/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/discussions)[![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/Zao-chen/ZcChat?style=for-the-badge)](https://github.com/Zao-chen/ZcChat/issues)  
+
 ### [中文](/README.md) English
 
 ---
 
-## 🎯 Project Overview  
+## 🎯 Project Overview
+
 [Video Demo](https://www.bilibili.com/video/BV1hA9SYYEbb)  
+
 ### ✨ Key Features
 
 - **Long-term Memory**: AI long-term memory implemented with Letta, developing and expanding the character's personality.
@@ -44,10 +47,12 @@ A diagram to understand how ZcChat works:
 ### 🎭 Step 2 - Configure Character
 
 1. Place character illustrations into the `{Document}/ZcChat/characters/{Name}` folder.  
+   
    > The final project structure should be `{Document}/ZcChat/characters/{Name}/normal.png...`
 2. Select the character in `ZcChat > General Settings > Character Selection`.
 3. Set the illustration size in `ZcChat > Character Configuration`.
 4. Right-click the tray to reset the illustration position.  
+   
    > Tip: Right-click the illustration to open or close the dialogue box. Scroll in the dialogue box to open or close history.
 
 ### 🤖 Step 3- Install and Configure LLM Model
@@ -55,14 +60,20 @@ A diagram to understand how ZcChat works:
 #### Method 1: Letta
 
 1. [Install Letta](https://github.com/letta-ai/letta?tab=readme-ov-file#-quickstart) and launch it.
+
 2. Create an agent and fill in the prompt words (core memory) of the role data in `LettaADE > agent > Persona`.
+
 3. Enter the Letta address in `ZcChat > AI Model Configuration > Letta Address`.
    
    > The default Letta address is `http://localhost:8283`
+
 4. Enter the agentID in `ZcChat > Role Configuration > AI Model > agentID`.
 
 #### Method 2: Openai General Interface
+
 1. Enter BaseUrl and Key in `ZcChat > AI Model Configuration > Openai Settings`.
+   
+   > The BaseUrl should be similar to `https://api.openai.com/v1/completions`
 2. Select Openai in `ZcChat > Role Configuration > AI Model` and fill in the prompt words (core memory) of the Persona role data.
 
 **🎉🎉🎉At this point, ZcChat is basically ready for use. Here are some advanced features: 🎉🎉🎉**
@@ -73,6 +84,7 @@ A diagram to understand how ZcChat works:
 
 1. [Install vits-simple-api](https://github.com/Artrajz/vits-simple-api/blob/main/README_zh.md) and start it.
 2. Enter the URL in `ZcChat > Language Synthesis Settings > vits-simple-api Address`.  
+   
    > The default vits-simple-api address is `http://localhost:23456`.
 3. Configure related items in `ZcChat > Character Configuration > Speech Synthesis`.
 
@@ -80,7 +92,8 @@ A diagram to understand how ZcChat works:
 
 1. Enable custom mode.
 2. Enter the API call address, ensuring the output is an MP3 file and use `{msg}` as the text placeholder, for example:  
-   ```  
+   
+   ```
    http://127.0.0.1:23456/voice/vits?id=0&text={msg}&format=mp3
    ```
 3. Configure related items in `ZcChat > Character Configuration > Speech Synthesis`.
@@ -91,6 +104,7 @@ A diagram to understand how ZcChat works:
 
 1. [Install whisper-asr-webservice](https://github.com/ahmetoner/whisper-asr-webservice?tab=readme-ov-file#quick-usage) and start it.
 2. Enter the URL in `ZcChat > Language Input Settings > whisper-asr-webservice Address`.  
+   
    > The default address is `http://localhost:9000`.
 
 #### Method 2: Baidu Speech Recognition
@@ -101,8 +115,9 @@ A diagram to understand how ZcChat works:
 ### 🔔 (Optional) Configure Voice Wake-up and Interruption
 
 1. First, configure the voice input.
-2. Check `Language Input Settings > Voice Energy Value` to find the appropriate threshold where the energy difference between speaking and silence is noticeable.
 
+2. Check `Language Input Settings > Voice Energy Value` to find the appropriate threshold where the energy difference between speaking and silence is noticeable.
+   
    Due to the simplicity of the VAD algorithm, voice wake-up and interruption require a good environment for accurate configuration.
 
 ### 💻 (Optional) Provide Computer Control Interface for the Desktop Companion
