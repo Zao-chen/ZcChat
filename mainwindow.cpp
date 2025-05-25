@@ -197,8 +197,8 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     /*自启动*/
     //运行自启动脚本
     if(settings->value("/soft/auto_open").toBool()) {
-        qInfo()<<"运行autoOpen.cmd……";
-        QDesktopServices::openUrl(QUrl::fromLocalFile("autoOpen.cmd"));
+        qInfo()<<"运行autoOpen.cmd……"<<QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/autoOpen.cmd";
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/autoOpen.cmd"));
     }
     /*获取能量定时器*/
     energyTimer = new QTimer(this);
