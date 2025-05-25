@@ -246,7 +246,17 @@ QString galgamedialog::UrlpostLLM_openai() {
     // 输出发送的 JSON 数据
     qInfo() << "发送 post 请求：" << QString::fromStdString(rootObject.dump());
     // 发起 POST 请求
+    ui->textEdit->clear();
+    ui->textEdit->setFocus();
+    //恢复初始格式
+    QFont f;
+    f.setPointSize(14);
+    ui->textEdit->selectAll();
+    ui->textEdit->setCurrentFont(f);
+    ui->textEdit->setTextColor(Qt::black);
+    ui->textEdit->setTextBackgroundColor(Qt::white);
     ui->textEdit->setText("...");
+
     QEventLoop loop;
     QNetworkReply* reply = naManager->post(request, QByteArray::fromStdString(rootObject.dump()));
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -281,6 +291,15 @@ QString galgamedialog::UrlpostLLM()
     rootObject["messages"][0]["content"] = ui->textEdit->toPlainText().toStdString();
     //输出发送的 JSON
     qInfo() << "发送post：" << QString::fromStdString(rootObject.dump());
+    ui->textEdit->clear();
+    ui->textEdit->setFocus();
+    //恢复初始格式
+    QFont f;
+    f.setPointSize(14);
+    ui->textEdit->selectAll();
+    ui->textEdit->setCurrentFont(f);
+    ui->textEdit->setTextColor(Qt::black);
+    ui->textEdit->setTextBackgroundColor(Qt::white);
     ui->textEdit->setText("...");
     //获取结果
     QEventLoop loop;

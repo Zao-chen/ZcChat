@@ -49,8 +49,11 @@ A diagram to understand how ZcChat works:
 1. Place character illustrations into the `{Document}/ZcChat/characters/{Name}` folder.  
    
    > The final project structure should be `{Document}/ZcChat/characters/{Name}/normal.png...`
+
 2. Select the character in `ZcChat > General Settings > Character Selection`.
+
 3. Set the illustration size in `ZcChat > Character Configuration`.
+
 4. Right-click the tray to reset the illustration position.  
    
    > Tip: Right-click the illustration to open or close the dialogue box. Scroll in the dialogue box to open or close history.
@@ -74,6 +77,7 @@ A diagram to understand how ZcChat works:
 1. Enter BaseUrl and Key in `ZcChat > AI Model Configuration > Openai Settings`.
    
    > The BaseUrl should be similar to `https://api.openai.com/v1/completions`
+
 2. Select Openai in `ZcChat > Role Configuration > AI Model` and fill in the prompt words (core memory) of the Persona role data.
 
 **🎉🎉🎉At this point, ZcChat is basically ready for use. Here are some advanced features: 🎉🎉🎉**
@@ -83,19 +87,23 @@ A diagram to understand how ZcChat works:
 #### Method 1: vits-simple-api
 
 1. [Install vits-simple-api](https://github.com/Artrajz/vits-simple-api/blob/main/README_zh.md) and start it.
+
 2. Enter the URL in `ZcChat > Language Synthesis Settings > vits-simple-api Address`.  
    
    > The default vits-simple-api address is `http://localhost:23456`.
+
 3. Configure related items in `ZcChat > Character Configuration > Speech Synthesis`.
 
 #### Method 2: Other Speech Synthesis Tools
 
 1. Enable custom mode.
+
 2. Enter the API call address, ensuring the output is an MP3 file and use `{msg}` as the text placeholder, for example:  
    
    ```
    http://127.0.0.1:23456/voice/vits?id=0&text={msg}&format=mp3
    ```
+
 3. Configure related items in `ZcChat > Character Configuration > Speech Synthesis`.
 
 ### 🎤 (Optional) Configure Voice Input
@@ -103,6 +111,7 @@ A diagram to understand how ZcChat works:
 #### Method 1: whisper-asr-webservice
 
 1. [Install whisper-asr-webservice](https://github.com/ahmetoner/whisper-asr-webservice?tab=readme-ov-file#quick-usage) and start it.
+
 2. Enter the URL in `ZcChat > Language Input Settings > whisper-asr-webservice Address`.  
    
    > The default address is `http://localhost:9000`.
