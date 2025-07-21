@@ -377,8 +377,8 @@ QString galgamedialog::UrlpostWithFile()
         QUrl url("https://aip.baidubce.com/oauth/2.0/token");
         QUrlQuery query;
         query.addQueryItem("grant_type", "client_credentials");
-        query.addQueryItem("client_id", settings->value("/speechInput/baidu_apikey").toString()); // 替换为你的实际client_id
-        query.addQueryItem("client_secret", settings->value("/speechInput/baidu_secretkey").toString()); // 替换为你的实际client_secret
+        query.addQueryItem("client_id", settings->value("/speechInput/baidu_apikey").toString());
+        query.addQueryItem("client_secret", settings->value("/speechInput/baidu_secretkey").toString());
         url.setQuery(query);
         //创建请求对象并设置头信息
         QNetworkRequest request(url);
@@ -428,7 +428,7 @@ QString galgamedialog::UrlpostWithFile()
             json["rate"] = 16000;                             // 采样率
             json["channel"] = 1;                              // 单声道
             json["token"] = accessToken.toStdString();        // access_token
-            json["cuid"] = QNetworkInterface::allInterfaces().first().hardwareAddress().toStdString(); // 设备ID
+            json["cuid"] = QUuid::createUuid().toString().toStdString(); // 设备ID
             json["speech"] = base64AudioData.toStdString();   // 音频数据 (Base64)
             json["len"] = audioData.size();                   // 音频长度 (字节数)
             // 将 JSON 转换为 QByteArray，注意使用 json.dump() 生成紧凑格式
