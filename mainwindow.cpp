@@ -37,7 +37,6 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     setUserInfoCardTitle("ZcChat " + local_version);
     qInfo()<<"当前运行版本:"<<local_version;
     setUserInfoCardSubTitle(tr("检测新版本中……"));
-    window()->resize(1280, 720);
     /*配置文件初始化*/
     //如果不存在就创建文件夹
     QString appFolder = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat";
@@ -54,8 +53,14 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     addPageNode(tr("语音合成设置"), setting_vits_win, ElaIconType::Speaker);
     setting_voiceinput_win = new setting_voiceinput(this);
     addPageNode(tr("语音输入设置"), setting_voiceinput_win, ElaIconType::CircleMicrophone);
+
+    QString actor_config;
+    addExpanderNode(tr("角色设置"), actor_config, ElaIconType::CameraViewfinder);
     setting_actor_win = new setting_actor(this);
-    addPageNode(tr("角色配置"), setting_actor_win, ElaIconType::Snowman);
+    addPageNode(tr("接口设置"), setting_actor_win , actor_config, ElaIconType::Snowman);
+    setting_actor_tachie_win = new setting_actor_tachie(this);
+    addPageNode(tr("立绘设置"), setting_actor_tachie_win , actor_config, ElaIconType::Snowman);
+
     /*窗口初始化*/
     qInfo()<<"初始化窗口……";
     dialog_win = new galgamedialog;
@@ -310,17 +315,19 @@ void MainWindow::reloadActorSetting() {
         setUserInfoCardPixmap(croppedPixmap);
     }
     /*重载*/
+    //全部
     qInfo()<<"设置角色!"<<settings->value("/actor/name").toString();
     setting_actor_win->findChild < ElaText * > ("label_editActor")->setText("当前配置角色：" + settings->value("/actor/name").toString());
+    setting_actor_tachie_win->findChild < ElaText * > ("label_editActor")->setText("当前配置角色：" + settings->value("/actor/name").toString());
+    //立绘
     if(settings_actor->value("/tachie/size").isNull()) settings_actor->setValue("/tachie/size",100);
-    setting_actor_win->findChild < QSpinBox * > ("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
-
+    setting_actor_tachie_win->findChild < QSpinBox * > ("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
+    //接口
     setting_actor_win->findChild < QComboBox * > ("comboBox_ai_api")->setCurrentIndex(settings_actor->value("/llm/llm").toInt());
     setting_actor_win->findChild < QStackedWidget * > ("stackedWidget_LLM")->setCurrentIndex(settings_actor->value("/llm/llm").toInt());
 
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
     setting_actor_win->findChild < QPlainTextEdit * > ("textEdit_OpenaiPrompt")->setPlainText(settings_actor->value("/llm/prompt").toString());
-
 
     setting_actor_win->findChild < QComboBox * > ("comboBox_vits_api")->setCurrentIndex(settings_actor->value("/vits/api").toInt());
     QComboBox * comboBox = setting_actor_win->findChild < QComboBox * > ("comboBox_vits_model");

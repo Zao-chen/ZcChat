@@ -8,6 +8,7 @@
 #include "mianwindow_uichild/setting_vits.h"
 #include "mianwindow_uichild/setting_voiceinput.h"
 #include "mianwindow_uichild/setting_actor.h"
+#include "mianwindow_uichild/setting_actor_tachie.h"
 #include "mianwindow_uichild/about.h"
 #include "ElaWindow.h"
 #include <QSystemTrayIcon>
@@ -35,6 +36,7 @@ public:
     setting_vits *setting_vits_win;
     setting_voiceinput *setting_voiceinput_win;
     setting_actor *setting_actor_win;
+    setting_actor_tachie *setting_actor_tachie_win;
     about *about_win;
     galgamedialog *dialog_win;
     tachie *tachie_win;

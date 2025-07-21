@@ -24,10 +24,6 @@ setting_actor::~setting_actor()
 }
 
 //设置修改
-void setting_actor::on_spinBox_tachie_size_valueChanged(int arg1)
-{
-    mainWin->ChangeSetting_tachieSize(arg1);
-}
 void setting_actor::on_lineEdit_llm_agent_textChanged(const QString &arg1)
 {
     settings_actor->setValue("/llm/agent",arg1);
@@ -60,10 +56,6 @@ void setting_actor::on_lineEdit_speechInput_wakeWord_textChanged(const QString &
 void setting_actor::on_lineEdit_speechInput_endWord_textChanged(const QString &arg1)
 {
     settings_actor->setValue("/speechInput/end_word",arg1);
-}
-void setting_actor::on_pushButton_resettachie_clicked()
-{
-    mainWin->resetTachie();
 }
 //重载窗口
 void setting_actor::refreshUI()

@@ -42,6 +42,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         dialog/messagewindow.h dialog/messagewindow.cpp dialog/messagewindow.ui
         utils/createwin.h utils/createwin.cpp
         mianwindow_uichild/about.h mianwindow_uichild/about.cpp mianwindow_uichild/about.ui
+        mianwindow_uichild/setting_actor_tachie.h mianwindow_uichild/setting_actor_tachie.cpp mianwindow_uichild/setting_actor_tachie.ui
+
 
 
     )

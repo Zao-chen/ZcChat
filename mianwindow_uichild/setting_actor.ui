@@ -7,13 +7,25 @@
     <x>0</x>
     <y>0</y>
     <width>911</width>
-    <height>693</height>
+    <height>753</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>911</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>753</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
    <property name="leftMargin">
     <number>20</number>
    </property>
@@ -27,198 +39,518 @@
     <number>20</number>
    </property>
    <item>
-    <widget class="ElaText" name="label">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-       <bold>true</bold>
-      </font>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
      </property>
-     <property name="text">
-      <string>角色配置</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="ElaText" name="label_editActor">
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>当前配置角色：</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="ElaText" name="label_50">
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>立绘大小</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="ElaScrollPageArea" name="widget_3" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_17" stretch="0,4,1,0,0">
-      <property name="leftMargin">
-       <number>15</number>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>869</width>
+        <height>711</height>
+       </rect>
       </property>
-      <property name="rightMargin">
-       <number>15</number>
-      </property>
-      <item>
-       <widget class="ElaText" name="label_22">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>立绘大小</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="ElaPushButton" name="pushButton_resettachie">
-        <property name="text">
-         <string>重置位置</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="ElaSpinBox" name="spinBox_tachie_size">
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-        <property name="value">
-         <number>50</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_46">
-        <property name="text">
-         <string>%</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="ElaText" name="label_11">
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>AI模型</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="ElaScrollPageArea" name="widget_21" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_27" stretch="2,0">
-      <property name="leftMargin">
-       <number>15</number>
-      </property>
-      <property name="rightMargin">
-       <number>15</number>
-      </property>
-      <item>
-       <widget class="ElaText" name="label_37">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>AI API</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="ElaComboBox" name="comboBox_ai_api">
-        <item>
-         <property name="text">
-          <string>Letta</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>OpenAI</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QStackedWidget" name="stackedWidget_LLM">
-     <property name="currentIndex">
-      <number>1</number>
-     </property>
-     <widget class="QWidget" name="page">
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="ElaScrollPageArea" name="widget_6" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="2,2">
+        <widget class="ElaText" name="label">
+         <property name="font">
+          <font>
+           <pointsize>20</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>角色配置-接口设置</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="ElaText" name="label_editActor">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>当前配置角色：</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="ElaText" name="label_11">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>AI模型</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="ElaScrollPageArea" name="widget_21" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_27" stretch="2,0">
           <property name="leftMargin">
            <number>15</number>
           </property>
           <property name="rightMargin">
            <number>15</number>
           </property>
-          <property name="bottomMargin">
-           <number>6</number>
-          </property>
           <item>
-           <widget class="ElaText" name="label_7">
+           <widget class="ElaText" name="label_37">
             <property name="font">
              <font>
               <pointsize>12</pointsize>
              </font>
             </property>
             <property name="text">
-             <string>agentID</string>
+             <string>AI API</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="ElaLineEdit" name="lineEdit_llm_agent">
+           <widget class="ElaComboBox" name="comboBox_ai_api">
+            <item>
+             <property name="text">
+              <string>Letta</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>OpenAI</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QStackedWidget" name="stackedWidget_LLM">
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <widget class="QWidget" name="page">
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="ElaScrollPageArea" name="widget_6" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="2,2">
+              <property name="leftMargin">
+               <number>15</number>
+              </property>
+              <property name="rightMargin">
+               <number>15</number>
+              </property>
+              <property name="bottomMargin">
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="ElaText" name="label_7">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>agentID</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ElaLineEdit" name="lineEdit_llm_agent">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_2">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="ElaScrollPageArea" name="widget_8" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="2,1,1">
+              <property name="leftMargin">
+               <number>15</number>
+              </property>
+              <property name="rightMargin">
+               <number>15</number>
+              </property>
+              <item>
+               <widget class="ElaText" name="label_12">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>上下文管理</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ElaPushButton" name="pushButton_viewhistory">
+                <property name="text">
+                 <string>编辑上下文</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ElaPushButton" name="pushButton_resethistory">
+                <property name="text">
+                 <string>重置上下文</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="ElaScrollPageArea" name="widget_7" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,1">
+              <property name="leftMargin">
+               <number>15</number>
+              </property>
+              <property name="rightMargin">
+               <number>15</number>
+              </property>
+              <item>
+               <widget class="ElaText" name="label_8">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Persona</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ElaPlainTextEdit" name="textEdit_OpenaiPrompt"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="ElaText" name="label_13">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>语音合成</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="ElaScrollPageArea" name="widget_20" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_26" stretch="2,0">
+          <property name="leftMargin">
+           <number>15</number>
+          </property>
+          <property name="rightMargin">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="ElaText" name="label_36">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>语音API</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ElaComboBox" name="comboBox_vits_api"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QStackedWidget" name="stackedWidget_vits">
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <widget class="QWidget" name="page_6">
+          <layout class="QVBoxLayout" name="verticalLayout_13" stretch="0,0">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="ElaScrollPageArea" name="widget_19" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_20" stretch="2,0">
+              <property name="leftMargin">
+               <number>15</number>
+              </property>
+              <property name="rightMargin">
+               <number>15</number>
+              </property>
+              <item>
+               <widget class="ElaText" name="label_27">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>语音模型</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ElaComboBox" name="comboBox_vits_model"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="ElaScrollPageArea" name="widget_15" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="2,2">
+              <property name="leftMargin">
+               <number>15</number>
+              </property>
+              <property name="rightMargin">
+               <number>15</number>
+              </property>
+              <item>
+               <widget class="ElaText" name="label_10">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>模型ID</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ElaLineEdit" name="lineEdit_vits_id">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>0</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_10">
+          <layout class="QVBoxLayout" name="verticalLayout_14" stretch="0,0,1">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="ElaScrollPageArea" name="widget_22" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_23" stretch="2,2">
+              <property name="leftMargin">
+               <number>15</number>
+              </property>
+              <property name="rightMargin">
+               <number>15</number>
+              </property>
+              <item>
+               <widget class="ElaText" name="label_31">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>请求地址</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="ElaLineEdit" name="lineEdit_vits_customUrl">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>http://127.0.0.1:23456/voice/vits?text={msg}&amp;id=1http://127.0.0.1:23456/voice/vits?id=0&amp;text={msg}&amp;format=mp3</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_33">
+             <property name="text">
+              <string>占符位：{msg}：回复的信息</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_7">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="ElaScrollPageArea" name="widget_23" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_25" stretch="2,0">
+          <property name="leftMargin">
+           <number>15</number>
+          </property>
+          <property name="rightMargin">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="ElaText" name="label_34">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>输出语言</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ElaComboBox" name="comboBox_vits_language"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="ElaText" name="label_49">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>语言输入</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="ElaScrollPageArea" name="widget_34" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_38" stretch="2,2">
+          <property name="leftMargin">
+           <number>15</number>
+          </property>
+          <property name="rightMargin">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="ElaText" name="label_40">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>语音唤醒关键词</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ElaLineEdit" name="lineEdit_speechInput_wakeWord">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -226,282 +558,7 @@
              </size>
             </property>
             <property name="text">
-             <string/>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="page_2">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="ElaScrollPageArea" name="widget_8" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="2,1,1">
-          <property name="leftMargin">
-           <number>15</number>
-          </property>
-          <property name="rightMargin">
-           <number>15</number>
-          </property>
-          <item>
-           <widget class="ElaText" name="label_12">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>上下文管理</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="ElaPushButton" name="pushButton_viewhistory">
-            <property name="text">
-             <string>编辑上下文</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="ElaPushButton" name="pushButton_resethistory">
-            <property name="text">
-             <string>重置上下文</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="ElaScrollPageArea" name="widget_7" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,1">
-          <property name="leftMargin">
-           <number>15</number>
-          </property>
-          <property name="rightMargin">
-           <number>15</number>
-          </property>
-          <item>
-           <widget class="ElaText" name="label_8">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Persona</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="ElaPlainTextEdit" name="textEdit_OpenaiPrompt"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="ElaText" name="label_13">
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>语音合成</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="ElaScrollPageArea" name="widget_20" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_26" stretch="2,0">
-      <property name="leftMargin">
-       <number>15</number>
-      </property>
-      <property name="rightMargin">
-       <number>15</number>
-      </property>
-      <item>
-       <widget class="ElaText" name="label_36">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>语音API</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="ElaComboBox" name="comboBox_vits_api"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QStackedWidget" name="stackedWidget_vits">
-     <property name="currentIndex">
-      <number>1</number>
-     </property>
-     <widget class="QWidget" name="page_6">
-      <layout class="QVBoxLayout" name="verticalLayout_13" stretch="0,0">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>10</number>
-       </property>
-       <item>
-        <widget class="ElaScrollPageArea" name="widget_19" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_20" stretch="2,0">
-          <property name="leftMargin">
-           <number>15</number>
-          </property>
-          <property name="rightMargin">
-           <number>15</number>
-          </property>
-          <item>
-           <widget class="ElaText" name="label_27">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>语音模型</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="ElaComboBox" name="comboBox_vits_model"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="ElaScrollPageArea" name="widget_15" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="2,2">
-          <property name="leftMargin">
-           <number>15</number>
-          </property>
-          <property name="rightMargin">
-           <number>15</number>
-          </property>
-          <item>
-           <widget class="ElaText" name="label_10">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>模型ID</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="ElaLineEdit" name="lineEdit_vits_id">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="page_10">
-      <layout class="QVBoxLayout" name="verticalLayout_14" stretch="0,0,1">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="ElaScrollPageArea" name="widget_22" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_23" stretch="2,2">
-          <property name="leftMargin">
-           <number>15</number>
-          </property>
-          <property name="rightMargin">
-           <number>15</number>
-          </property>
-          <item>
-           <widget class="ElaText" name="label_31">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>请求地址</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="ElaLineEdit" name="lineEdit_vits_customUrl">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>http://127.0.0.1:23456/voice/vits?text={msg}&amp;id=1http://127.0.0.1:23456/voice/vits?id=0&amp;text={msg}&amp;format=mp3</string>
+             <string>早晨|草城|早贞</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
@@ -512,14 +569,54 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_33">
+        <widget class="QLabel" name="label_35">
          <property name="text">
-          <string>占符位：{msg}：回复的信息</string>
+          <string>请使用&quot;|&quot;对关键词进行模糊匹配</string>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_7">
+        <widget class="ElaScrollPageArea" name="widget_35" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_37" stretch="2,2">
+          <property name="leftMargin">
+           <number>15</number>
+          </property>
+          <property name="rightMargin">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="ElaText" name="label_48">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>结束对话关键词</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ElaLineEdit" name="lineEdit_speechInput_endWord">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>结束对话|结束，对话</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
          </property>
@@ -533,132 +630,6 @@
        </item>
       </layout>
      </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="ElaScrollPageArea" name="widget_23" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_25" stretch="2,0">
-      <property name="leftMargin">
-       <number>15</number>
-      </property>
-      <property name="rightMargin">
-       <number>15</number>
-      </property>
-      <item>
-       <widget class="ElaText" name="label_34">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>输出语言</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="ElaComboBox" name="comboBox_vits_language"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="ElaText" name="label_49">
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>语言输入</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="ElaScrollPageArea" name="widget_34" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_38" stretch="2,2">
-      <property name="leftMargin">
-       <number>15</number>
-      </property>
-      <property name="rightMargin">
-       <number>15</number>
-      </property>
-      <item>
-       <widget class="ElaText" name="label_40">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>语音唤醒关键词</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="ElaLineEdit" name="lineEdit_speechInput_wakeWord">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>早晨|草城|早贞</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="label_35">
-     <property name="text">
-      <string>请使用&quot;|&quot;对关键词进行模糊匹配</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="ElaScrollPageArea" name="widget_35" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_37" stretch="2,2">
-      <property name="leftMargin">
-       <number>15</number>
-      </property>
-      <property name="rightMargin">
-       <number>15</number>
-      </property>
-      <item>
-       <widget class="ElaText" name="label_48">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>结束对话关键词</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="ElaLineEdit" name="lineEdit_speechInput_endWord">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>结束对话|结束，对话</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
   </layout>
@@ -679,11 +650,6 @@
    <extends>QWidget</extends>
    <header location="global">elascrollpagearea.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ElaSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header location="global">elaspinbox.h</header>
   </customwidget>
   <customwidget>
    <class>ElaComboBox</class>
