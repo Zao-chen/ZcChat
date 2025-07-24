@@ -726,7 +726,8 @@ void galgamedialog::send_to_llm()
                 {"content", content}  // 从 UI 获取用户输入的内容
             };
             llm_messages.push_back(userMessage); // 保存用户消息
-            for (int i = 0; i < llm_messages.size(); ++i) {
+            for (int i = 0; i < llm_messages.size(); ++i)
+            {
                 QString key = QString("Messages/%1").arg(i);
                 chathistory->setValue(key + "/role", QString::fromStdString(llm_messages[i]["role"]));
                 chathistory->setValue(key + "/content", QString::fromStdString(llm_messages[i]["content"]));
@@ -741,6 +742,11 @@ void galgamedialog::send_to_llm()
             qCritical() << "发生错误：" << e.what();
         }
     }
+
+    // 创建正则表达式，匹配 <think> 到 </think> 之间的内容（非贪婪）
+    QRegularExpression regex("<think>.*?</think>", QRegularExpression::DotMatchesEverythingOption);
+    message = message.replace(regex, "");
+
     qInfo() << "读取到message" << message;
     //信息判断
     if(message.isNull())
