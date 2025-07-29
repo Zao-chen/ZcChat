@@ -2,6 +2,7 @@
 #define SETTING_ACTOR_TACHIE_H
 
 #include <QWidget>
+#include "setting_actor_tachie_listchild.h"
 
 class MainWindow;
 
@@ -19,12 +20,13 @@ public:
 
 private slots:
     void on_spinBox_tachie_size_valueChanged(int arg1);
-
     void on_pushButton_resettachie_clicked();
 
 private:
     Ui::setting_actor_tachie *ui;
     MainWindow *mainWin;
+
+    setting_actor_tachie_listchild *ui_setting_actor_tachie_listchild_win;
 };
 
 #endif // SETTING_ACTOR_TACHIE_H

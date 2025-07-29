@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_4">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="widgetResizable">
@@ -28,7 +28,7 @@
         <height>772</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0,1">
+      <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0,0,100">
        <item>
         <widget class="ElaText" name="label">
          <property name="font">
@@ -128,17 +128,49 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
+        <widget class="ElaText" name="label_51">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
+         <property name="text">
+          <string>立绘列表</string>
          </property>
-        </spacer>
+        </widget>
+       </item>
+       <item>
+        <widget class="ElaScrollPageArea" name="widget_4" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_18" stretch="0">
+          <property name="sizeConstraint">
+           <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
+          </property>
+          <property name="leftMargin">
+           <number>15</number>
+          </property>
+          <property name="rightMargin">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QScrollArea" name="scrollArea_tachieList">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents_2">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>854</width>
+               <height>578</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout"/>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>

@@ -2,6 +2,7 @@
 #include "ui_setting_actor_tachie.h"
 
 #include "../mainwindow.h"
+#include <QDir>
 
 setting_actor_tachie::setting_actor_tachie(QWidget *parent)
     : QWidget(parent)
@@ -9,6 +10,36 @@ setting_actor_tachie::setting_actor_tachie(QWidget *parent)
 {
     ui->setupUi(this);
     mainWin = qobject_cast<MainWindow *>(this->parent());
+
+    QSettings * settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
+
+    QDir dir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+             + "/ZcChat/characters/"
+             + settings->value("actor/name").toString());
+
+    QStringList nameFilters;
+    nameFilters << "*.png" << "*.jpg" << "*.jpeg" << "*.bmp" << "*.gif";
+    QStringList files = dir.entryList(nameFilters, QDir::Files | QDir::NoDotAndDotDot);
+
+    QWidget *container = ui->scrollArea_tachieList->widget(); // 获取内部容器
+    QVBoxLayout *layout = qobject_cast<QVBoxLayout *>(container->layout());
+    if (!layout) return;
+
+    for (const QString& file : files) {
+        qDebug() << "找到立绘:" << file;
+
+        QString filePath = dir.absoluteFilePath(file); // 获取完整路径
+        QPixmap img(filePath); // 读取为图片
+        if (img.isNull()) {
+            qWarning() << "图片加载失败:" << filePath;
+            continue;
+        }
+
+        auto *setting_actor_tachie_listchild_new = new setting_actor_tachie_listchild(file, img, container);
+        layout->addWidget(setting_actor_tachie_listchild_new);
+    }
+
+
 }
 
 setting_actor_tachie::~setting_actor_tachie()

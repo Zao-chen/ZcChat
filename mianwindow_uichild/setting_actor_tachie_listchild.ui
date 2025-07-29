@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>setting_actor_tachie_listchild</class>
+ <widget class="QWidget" name="setting_actor_tachie_listchild">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>851</width>
+    <height>353</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QLabel" name="label_image">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>150</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_name">
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="ElaComboBox" name="comboBox_anime">
+     <item>
+      <property name="text">
+       <string>无动画</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>向上晃动一次</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>左右晃动一次</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>放大（靠近）</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>缩小（远离）</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>颤抖</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="ElaComboBox" name="comboBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <item>
+      <property name="text">
+       <string>无粒子</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ElaComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">elacombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

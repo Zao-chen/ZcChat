@@ -43,6 +43,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         utils/createwin.h utils/createwin.cpp
         mianwindow_uichild/about.h mianwindow_uichild/about.cpp mianwindow_uichild/about.ui
         mianwindow_uichild/setting_actor_tachie.h mianwindow_uichild/setting_actor_tachie.cpp mianwindow_uichild/setting_actor_tachie.ui
+        mianwindow_uichild/setting_actor_tachie_listchild.h mianwindow_uichild/setting_actor_tachie_listchild.cpp mianwindow_uichild/setting_actor_tachie_listchild.ui
 
 
 
