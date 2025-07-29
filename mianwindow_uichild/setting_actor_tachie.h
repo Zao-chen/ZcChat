@@ -16,6 +16,7 @@ class setting_actor_tachie : public QWidget
 
 public:
     explicit setting_actor_tachie(QWidget *parent = nullptr);
+    void getTachieList();
     ~setting_actor_tachie();
 
 private slots:
@@ -25,7 +26,6 @@ private slots:
 private:
     Ui::setting_actor_tachie *ui;
     MainWindow *mainWin;
-
     setting_actor_tachie_listchild *ui_setting_actor_tachie_listchild_win;
 };
 
