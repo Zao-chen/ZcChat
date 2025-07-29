@@ -7,7 +7,7 @@
 #include "mianwindow_uichild/setting_ai.h"
 #include "mianwindow_uichild/setting_vits.h"
 #include "mianwindow_uichild/setting_voiceinput.h"
-#include "mianwindow_uichild/setting_actor.h"
+#include "mianwindow_uichild/setting_actor_interface.h"
 #include "mianwindow_uichild/setting_actor_tachie.h"
 #include "mianwindow_uichild/about.h"
 #include "ElaWindow.h"

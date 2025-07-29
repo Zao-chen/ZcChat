@@ -1,5 +1,5 @@
-#ifndef SETTING_ACTOR_H
-#define SETTING_ACTOR_H
+#ifndef SETTING_ACTOR_INTERFACE_H
+#define SETTING_ACTOR_INTERFACE_H
 
 #include <QWidget>
 #include <QSettings>
@@ -42,4 +42,4 @@ private:
     MainWindow *mainWin;
 };
 
-#endif // SETTING_ACTOR_H
+#endif // SETTING_ACTOR_INTERFACE_H

@@ -1,5 +1,5 @@
-#include "setting_actor.h"
-#include "ui_setting_actor.h"
+#include "setting_actor_interface.h"
+#include "ui_setting_actor_interface.h"
 #include "../mainwindow.h"
 #include <QStandardPaths>
 #include <QPlainTextEdit>

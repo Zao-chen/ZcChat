@@ -36,7 +36,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         mianwindow_uichild/setting_ai.h mianwindow_uichild/setting_ai.cpp mianwindow_uichild/setting_ai.ui
         mianwindow_uichild/setting_vits.h mianwindow_uichild/setting_vits.cpp mianwindow_uichild/setting_vits.ui
         mianwindow_uichild/setting_voiceinput.h mianwindow_uichild/setting_voiceinput.cpp mianwindow_uichild/setting_voiceinput.ui
-        mianwindow_uichild/setting_actor.h mianwindow_uichild/setting_actor.cpp mianwindow_uichild/setting_actor.ui
+        mianwindow_uichild/setting_actor_interface.h mianwindow_uichild/setting_actor_interface.cpp mianwindow_uichild/setting_actor_interface.ui
         galgamedialog_uichild/history.h galgamedialog_uichild/history.cpp galgamedialog_uichild/history.ui
         galgamedialog_uichild/historychild.h galgamedialog_uichild/historychild.cpp galgamedialog_uichild/historychild.ui
         dialog/messagewindow.h dialog/messagewindow.cpp dialog/messagewindow.ui
