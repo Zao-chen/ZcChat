@@ -151,7 +151,9 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     });
     setting_actor_win->findChild < QComboBox * > ("comboBox_vits_language")->addItems({
         "ja",
-        "zh"
+        "zh",
+        "en",
+        "auto"
     });
     /*托盘*/
     qInfo()<<"初始化托盘……";
