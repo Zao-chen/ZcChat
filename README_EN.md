@@ -92,7 +92,7 @@ A diagram to understand how ZcChat works:
    
    > The default vits-simple-api address is `http://localhost:23456`.
 
-3. Configure related items in `ZcChat > Character Configuration > Speech Synthesis`.
+3. Configure related items in `ZcChat > Character Configuration > Speech Synthesis`.(More parameters can be directly added in the form of URLs in the ID, such as 4&length=1.20)
 
 #### Method 2: Other Speech Synthesis Tools
 
