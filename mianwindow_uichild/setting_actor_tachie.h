@@ -16,12 +16,12 @@ class setting_actor_tachie : public QWidget
 
 public:
     explicit setting_actor_tachie(QWidget *parent = nullptr);
-    void getTachieList();
     ~setting_actor_tachie();
 
 private slots:
     void on_spinBox_tachie_size_valueChanged(int arg1);
     void on_pushButton_resettachie_clicked();
+    void on_pushButton_loadtachie_clicked();
 
 private:
     Ui::setting_actor_tachie *ui;
