@@ -145,19 +145,17 @@
 
 [Letta使用不同LLM文档](https://docs.letta.com/models/openai)，设置环境变量即可。
 
+当然，你也可以绕过Letta直接使用OpenAI通用接口。
+
 ### 🌐 如何自定义base url？我想用一些第三方内容，比如说DeepSeek、GPT_API_free。
 
 添加环境变量 `OPENAI_API_BASE` 即可。
 
-### 🚨 更新/降级Letta后数据库报错，无法启动？
-
-通常是由于Letta版本更新导致数据库格式变化。如果不介意数据丢失，可以删除用户文件夹下的 `.letta` 文件夹后重新启动。
-
-参考：[#1896](https://github.com/letta-ai/letta/issues/1896) [#1501](https://github.com/letta-ai/letta/issues/1501)
-
 ### 📝 对话不久后会出现格式错误？
 
 可能是AI忘记了或受到误导性词语的影响。尝试改进提示词，或用命令的语气告诉AI使用正确的格式回复。效果取决于所使用的模型。
+
+或者你可以开启[回复格式增强](https://github.com/Zao-chen/ZcChat/wiki/%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E5%A2%9E%E5%BC%BA)功能
 
 ### ⁉️ 为什么不使用Live2d？
 
@@ -165,7 +163,7 @@
 
 ### 🌏 如何纯本地运行
 
-你需要使用Letta Desktop而不是Docker部署，Letta Desktop是一个纯本地运行的ADE。然后连接如ollama等本地LLM。
+Letta支持纯本地部署，当然你也可以使用如Ollama等工具并使用OpenAI通用接口。
 
 ---
 

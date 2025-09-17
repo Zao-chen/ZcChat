@@ -143,21 +143,19 @@ A diagram to understand how ZcChat works:
 
 ### 🤔 How can I use other LLMs like OpenAI, Gemini, etc.?
 
-Refer to the [Letta documentation for using different LLMs](https://docs.letta.com/models/openai) to set the environment variable.
+[Letta uses different LLM documents](https://docs.letta.com/models/openai), and setting environment variables is sufficient.
+
+Of course, you can also bypass Letta and directly use the OpenAI general interface.
 
 ### 🌐 How can I customize the base URL? I want to use third-party content like DeepSeek or GPT_API_free.
 
 Add the environment variable `OPENAI_API_BASE`.
 
-### 🚨 Database error after updating/downgrading Letta, unable to start?
-
-This is often due to database format changes when updating Letta. If data loss isn't an issue, you can delete the `.letta` folder in your user directory and restart.
-
-Refer to: [#1896](https://github.com/letta-ai/letta/issues/1896) [#1501](https://github.com/letta-ai/letta/issues/1501)
-
 ### 📝 Dialogue format error after a short period?
 
 It may be because the AI forgot or was misled by certain words. Try improving the prompt or telling the AI to reply in the correct format. The result depends on the model used.
+
+Alternatively, you can enable the [Enhanced Response Formatting](https://github.com/Zao-chen/ZcChat/wiki/%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E5%A2%9E%E5%BC%8强) feature.
 
 ### ⁉️ Why not use Live2D?
 
@@ -165,7 +163,7 @@ The main feature of this project is the use of Galgame-style illustrations, whic
 
 ### 🌏 How to run entirely locally?
 
-You need to use Letta Desktop instead of Docker deployment. Letta Desktop is a fully local ADE. Then, connect to a local LLM like ollama.
+Letta supports pure local deployment, and of course, you can also use tools like Ollama and utilize the OpenAI general interface.
 
 ---
 
