@@ -327,9 +327,10 @@ void MainWindow::reloadActorSetting() {
     //接口
     setting_actor_win->findChild < QComboBox * > ("comboBox_ai_api")->setCurrentIndex(settings_actor->value("/llm/llm").toInt());
     setting_actor_win->findChild < QStackedWidget * > ("stackedWidget_LLM")->setCurrentIndex(settings_actor->value("/llm/llm").toInt());
-
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
     setting_actor_win->findChild < QPlainTextEdit * > ("textEdit_OpenaiPrompt")->setPlainText(settings_actor->value("/llm/prompt").toString());
+    setting_actor_win->findChild < QCheckBox * > ("checkBox_addthreetime")->setChecked(settings_actor->value("/llm/threetime").toBool());
+    qInfo()<<"启用增强："<<settings_actor->value("/llm/threetime").toBool();
 
     setting_actor_win->findChild < QComboBox * > ("comboBox_vits_api")->setCurrentIndex(settings_actor->value("/vits/api").toInt());
     QComboBox * comboBox = setting_actor_win->findChild < QComboBox * > ("comboBox_vits_model");

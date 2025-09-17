@@ -95,3 +95,15 @@ void setting_actor::on_pushButton_resethistory_clicked()
     //退出当前程序
 }
 
+
+void setting_actor::on_pushButton_question_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/Zao-chen/ZcChat/wiki/%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E5%A2%9E%E5%BC%BA"));
+}
+
+
+void setting_actor::on_checkBox_addthreetime_clicked(bool checked)
+{
+    settings_actor->setValue("/llm/threetime",checked);
+}
+

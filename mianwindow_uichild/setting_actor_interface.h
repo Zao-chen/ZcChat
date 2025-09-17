@@ -35,6 +35,10 @@ private slots:
     void on_pushButton_viewhistory_clicked();
     void on_pushButton_resethistory_clicked();
 
+    void on_pushButton_question_clicked();
+
+    void on_checkBox_addthreetime_clicked(bool checked);
+
 private:
     QSettings *settings;
     QSettings *settings_actor;

@@ -211,8 +211,13 @@ void galgamedialog::keyReleaseEvent(QKeyEvent* event)
             send_to_llm();
     keys.removeAll(event->key());
 }
-/*openaipost请求*/
-QString galgamedialog::UrlpostLLM_openai() {
+
+
+
+
+/*openai post请求*/
+QString galgamedialog::UrlpostLLM_openai(std::string user,std::string system,bool msgonly)
+{
     qInfo() << "发送 API openai 请求……";
     is_in_llm = true;
     QNetworkAccessManager* naManager = new QNetworkAccessManager(this);
@@ -221,9 +226,11 @@ QString galgamedialog::UrlpostLLM_openai() {
     json_t userMessage =
         {
             {"role", "user"},
-            {"content", ui->textEdit->toPlainText().toStdString()}  // 从 UI 获取用户输入的内容
+            {"content", user}  // 从 UI 获取用户输入的内容
         };
-    llm_messages.push_back(userMessage); // 保存用户消息
+
+    if(!msgonly) llm_messages.push_back(userMessage); // 保存用户消息
+
     // 设置 URL 和请求头
     request.setUrl(QUrl(settings->value("llm/openai_url").toString()));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
@@ -238,11 +245,13 @@ QString galgamedialog::UrlpostLLM_openai() {
     json_t systemMessage =
         {
             {"role", "system"},
-            {"content", settings_actor->value("llm/prompt").toString().toStdString()}
+            {"content", system}
         };
     rootObject["messages"].push_back(systemMessage); // 将系统消息添加到数组中
     // 将所有的用户和助手消息添加到 messages 数组中
-    for (const auto& message : llm_messages) rootObject["messages"].push_back(message);
+
+    if(!msgonly) for (const auto& message : llm_messages) rootObject["messages"].push_back(message);
+
     // 输出发送的 JSON 数据
     qInfo() << "发送 post 请求：" << QString::fromStdString(rootObject.dump());
     // 发起 POST 请求
@@ -256,7 +265,6 @@ QString galgamedialog::UrlpostLLM_openai() {
     ui->textEdit->setTextColor(Qt::black);
     ui->textEdit->setTextBackgroundColor(Qt::white);
     ui->textEdit->setText("...");
-
     QEventLoop loop;
     QNetworkReply* reply = naManager->post(request, QByteArray::fromStdString(rootObject.dump()));
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -663,8 +671,53 @@ void galgamedialog::init_from_main()
         audioSource->stop(); // 停止音频源
         disconnect(audioDevice, &QIODevice::readyRead, nullptr, nullptr);  // 断开信号
     }
-
 }
+
+
+std::string galgamedialog::getOpenAiFeedbackContant(QString orig,bool msgonly)
+{
+    try
+    {
+        // 解析 JSON 响应
+        json_t responseJson = json_t::parse(orig.toStdString());
+        // 输出整个解析后的 JSON
+        qInfo() << "解析后的 JSON：" << QString::fromStdString(responseJson.dump());
+        // 检查是否有错误信息
+        if (responseJson.contains("error")) {
+            // 处理错误信息
+            std::string errorMessage = responseJson["error"]["message"];
+            qCritical() << "API 错误：" << QString::fromStdString(errorMessage);
+        }
+        // 访问嵌套的内容 "content"
+        std::string content = responseJson["choices"][0]["message"]["content"];
+        // 打印内容
+        qInfo() << "模型回复内容：" << QString::fromStdString(content);
+        if(!msgonly)
+        {
+            json_t userMessage = {
+                {"role", "assistant"},
+                {"content", content}  // 从 UI 获取用户输入的内容
+            };
+            llm_messages.push_back(userMessage); // 保存用户消息
+            for (int i = 0; i < llm_messages.size(); ++i)
+            {
+                QString key = QString("Messages/%1").arg(i);
+                chathistory->setValue(key + "/role", QString::fromStdString(llm_messages[i]["role"]));
+                chathistory->setValue(key + "/content", QString::fromStdString(llm_messages[i]["content"]));
+            }
+        }
+        return content;
+    }
+    catch (const nlohmann::json::parse_error& e) {
+        // 捕获并输出解析错误
+        qCritical() << "解析 JSON 错误：" << e.what();
+    }
+    catch (const std::exception& e) {
+        // 捕获其他异常
+        qCritical() << "发生错误：" << e.what();
+    }
+}
+
 //发送llm消息
 void galgamedialog::send_to_llm()
 {
@@ -703,43 +756,25 @@ void galgamedialog::send_to_llm()
     else
     {
         message = "正常|[error] opeanai请求错误 |错误error";
-        QString result_from_llm = UrlpostLLM_openai();
-        try
+        QString result_from_llm;
+        if(settings_actor->value("llm/threetime").toBool())
         {
-            // 解析 JSON 响应
-            json_t responseJson = json_t::parse(result_from_llm.toStdString());
-            // 输出整个解析后的 JSON
-            qInfo() << "解析后的 JSON：" << QString::fromStdString(responseJson.dump());
-            // 检查是否有错误信息
-            if (responseJson.contains("error")) {
-                // 处理错误信息
-                std::string errorMessage = responseJson["error"]["message"];
-                qCritical() << "API 错误：" << QString::fromStdString(errorMessage);
-            }
-            // 访问嵌套的内容 "content"
-            std::string content = responseJson["choices"][0]["message"]["content"];
-            // 打印内容
-            qInfo() << "模型回复内容：" << QString::fromStdString(content);
-            message = QString::fromStdString(content);
-            json_t userMessage = {
-                {"role", "assistant"},
-                {"content", content}  // 从 UI 获取用户输入的内容
-            };
-            llm_messages.push_back(userMessage); // 保存用户消息
-            for (int i = 0; i < llm_messages.size(); ++i)
-            {
-                QString key = QString("Messages/%1").arg(i);
-                chathistory->setValue(key + "/role", QString::fromStdString(llm_messages[i]["role"]));
-                chathistory->setValue(key + "/content", QString::fromStdString(llm_messages[i]["content"]));
-            }
+            qInfo("格式增强已开启");
+            result_from_llm = QString::fromStdString(getOpenAiFeedbackContant(UrlpostLLM_openai(ui->textEdit->toPlainText().toStdString(),settings_actor->value("llm/prompt").toString().toStdString(),false),true));
+            qInfo()<<"对话返回："<<result_from_llm;
+            QString emo = QString::fromStdString(getOpenAiFeedbackContant(UrlpostLLM_openai("",(QString::fromStdString("在说这句话的时候是什么心情？,请在以下选项中选择一个:开心，伤心;只输出结果;")+result_from_llm).toStdString(),true),true));
+            qInfo()<<"心情："<<emo;
+            QString ja= QString::fromStdString(getOpenAiFeedbackContant(UrlpostLLM_openai("",(QString::fromStdString("翻译成日语,只输出结果:")+result_from_llm).toStdString(),true),true));
+            qInfo()<<"日语："<<ja;
+            result_from_llm = emo + "|" + result_from_llm +  + "|" + ja;
+            qInfo()<<"最后输出内容："<<result_from_llm;
+            message = result_from_llm;
         }
-        catch (const nlohmann::json::parse_error& e) {
-            // 捕获并输出解析错误
-            qCritical() << "解析 JSON 错误：" << e.what();
-        }
-        catch (const std::exception& e) {
-            // 捕获其他异常
-            qCritical() << "发生错误：" << e.what();
+        else
+        {
+            qInfo("格式增强未开启");
+            result_from_llm = UrlpostLLM_openai(ui->textEdit->toPlainText().toStdString(),settings_actor->value("llm/prompt").toString().toStdString(),false);
+            message = QString::fromStdString(getOpenAiFeedbackContant(result_from_llm,false));
         }
     }
 

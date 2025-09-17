@@ -67,7 +67,9 @@ private:
     /*网络*/
     QNetworkAccessManager *m_manager;
     QString UrlpostLLM();
-    QString UrlpostLLM_openai();
+    QString UrlpostLLM_openai(std::string user,std::string system,bool msgonly);
+    std::string getOpenAiFeedbackContant(QString orig,bool msgonly);
+
     QString UrlpostWithFile();
     QByteArray getUrl(const QString &input);
     /*逐字显示*/
