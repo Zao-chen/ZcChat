@@ -776,17 +776,29 @@ void galgamedialog::send_to_llm()
             }
             QString joined = names.join(",");
             std::string result = joined.toStdString();
+            //发送心情请求
             QString emo = QString::fromStdString(
                 getOpenAiFeedbackContant(
                     UrlpostLLM_openai(
                         "",
-                        (QString("在说这句话的时候是什么心情和动作？,请在以下选项中选择一个:{emo};只输出结果:")
+                        (QString(settings_actor->value("llm/prompt_emo").toString())
                              .replace("{emo}", QString::fromStdString(result))   // 确保是 QString
                          + result_from_llm).toStdString(),
                         true),
                     true));
             qInfo()<<"心情："<<emo;
-            QString ja= QString::fromStdString(getOpenAiFeedbackContant(UrlpostLLM_openai("",(QString::fromStdString("翻译成日语,只输出结果:")+result_from_llm).toStdString(),true),true));
+            //发送翻译请求
+            QString ja = QString::fromStdString(
+                getOpenAiFeedbackContant(
+                    UrlpostLLM_openai(
+                        "",
+                        (settings_actor->value("llm/prompt_emo").toString() + result_from_llm).toStdString(),
+                        true
+                        ),
+                    true
+                    )
+                );
+
             qInfo()<<"日语："<<ja;
             result_from_llm = emo + "|" + result_from_llm +  + "|" + ja;
             qInfo()<<"最后输出内容："<<result_from_llm;
@@ -795,7 +807,25 @@ void galgamedialog::send_to_llm()
         else
         {
             qInfo("格式增强未开启");
-            result_from_llm = UrlpostLLM_openai(ui->textEdit->toPlainText().toStdString(),settings_actor->value("llm/prompt").toString().toStdString(),false);
+            /* 获取全部立绘 */
+            QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+                           + "/ZcChat/characters/"
+                           + settings->value("actor/name").toString();
+
+            QDir dir(path);
+            QStringList nameFilters;
+            nameFilters << "*.png";
+            QStringList fileList = dir.entryList(nameFilters, QDir::Files);
+            QStringList names;
+            for (const QString &file : fileList) {
+                names << QFileInfo(file).completeBaseName(); // 去掉扩展名
+            }
+            QString joined = names.join(",");
+            QString promptTemplate = settings_actor->value("llm/prompt_style").toString();
+            promptTemplate = promptTemplate.replace("{emo}", joined);
+            QString Prompt_style = promptTemplate + result_from_llm;
+            /*发送请求*/
+            result_from_llm = UrlpostLLM_openai(ui->textEdit->toPlainText().toStdString(),settings_actor->value("llm/prompt").toString().toStdString()+Prompt_style.toStdString(),false);
             message = QString::fromStdString(getOpenAiFeedbackContant(result_from_llm,false));
         }
     }

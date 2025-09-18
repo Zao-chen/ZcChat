@@ -117,11 +117,13 @@ void setting_actor::on_textEdit_OpenaiPrompt_style_textChanged()
 void setting_actor::on_lineEdit_vits_Prompt_emo_textChanged(const QString &arg1)
 {
     settings_actor->setValue("/llm/prompt_emo",arg1);
+    qDebug()<<arg1;
 }
 //翻译提示词
 void setting_actor::on_lineEdit_vits_Prompt_la_textChanged(const QString &arg1)
 {
     settings_actor->setValue("/llm/prompt_la",arg1);
+    qDebug()<<arg1<<"111";
 }
 //刷新配置
 void setting_actor::reloadActorSettings() {

@@ -292,7 +292,6 @@ void MainWindow::show_dialogwin_from_tachie() {
 }
 /*重载角色配置*/
 void MainWindow::reloadActorSetting() {
-    already_init=false;
     qInfo()<<"重载角色配置……";
     QSettings * settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
     QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
@@ -333,8 +332,11 @@ void MainWindow::reloadActorSetting() {
     setting_actor_win->findChild < QPlainTextEdit * > ("textEdit_OpenaiPrompt")->setPlainText(settings_actor->value("/llm/prompt").toString());
     setting_actor_win->findChild < QPlainTextEdit * > ("textEdit_OpenaiPrompt_style")->setPlainText(settings_actor->value("/llm/prompt_style").toString());
 
-    setting_actor_win->findChild < QLineEdit * > ("lineEdit_vits_Prompt_emo")->setText(settings_actor->value("/llm/prompt_emo").toString());
-    setting_actor_win->findChild < QLineEdit * > ("lineEdit_vits_Prompt_la")->setText(settings_actor->value("/llm/prompt_la").toString());
+    setting_actor_win->findChild<QLineEdit*>("lineEdit_vits_Prompt_emo")
+        ->setText(settings_actor->value("/llm/prompt_emo", "在说这句话的时候是什么心情和动作？请在以下选项中选择一个:{emo};只输出结果").toString());
+    setting_actor_win->findChild<QLineEdit*>("lineEdit_vits_Prompt_la")
+        ->setText(settings_actor->value("/llm/prompt_la", "翻译成日语,只输出结果:").toString());
+
 
     setting_actor_win->findChild < QCheckBox * > ("checkBox_addthreetime")->setChecked(settings_actor->value("/llm/threetime").toBool());
     qInfo()<<"启用增强："<<settings_actor->value("/llm/threetime").toBool();
@@ -353,7 +355,6 @@ void MainWindow::reloadActorSetting() {
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_vits_id")->setText(settings_actor->value("/vits/id").toString());
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_speechInput_wakeWord")->setText(settings_actor->value("/speechInput/wake_word").toString());
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_speechInput_endWord")->setText(settings_actor->value("/speechInput/end_word").toString());
-    already_init=true;
 }
 /*get请求（用于获取版本）*/
 QByteArray MainWindow::getUrl(const QString & input) {

@@ -48,8 +48,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>918</width>
-        <height>798</height>
+        <width>921</width>
+        <height>825</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -448,7 +448,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>在说这句话的时候是什么心情？,请在以下选项中选择一个:开心，伤心;只输出结果:</string>
+                 <string/>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
@@ -497,7 +497,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>翻译成日语,只输出结果:</string>
+                 <string/>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
@@ -509,6 +509,13 @@
            </item>
           </layout>
          </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>占符位：{emo}：所有的立绘表情列表</string>
+         </property>
         </widget>
        </item>
        <item>
@@ -553,7 +560,7 @@
        <item>
         <widget class="QStackedWidget" name="stackedWidget_vits">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page_6">
           <layout class="QVBoxLayout" name="verticalLayout_13" stretch="0,0">
