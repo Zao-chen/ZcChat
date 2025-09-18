@@ -292,6 +292,7 @@ void MainWindow::show_dialogwin_from_tachie() {
 }
 /*重载角色配置*/
 void MainWindow::reloadActorSetting() {
+    already_init=false;
     qInfo()<<"重载角色配置……";
     QSettings * settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
     QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
@@ -325,12 +326,21 @@ void MainWindow::reloadActorSetting() {
     if(settings_actor->value("/tachie/size").isNull()) settings_actor->setValue("/tachie/size",100);
     setting_actor_tachie_win->findChild < QSpinBox * > ("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
     //接口
+    setting_actor_win->reloadActorSettings();
     setting_actor_win->findChild < QComboBox * > ("comboBox_ai_api")->setCurrentIndex(settings_actor->value("/llm/llm").toInt());
     setting_actor_win->findChild < QStackedWidget * > ("stackedWidget_LLM")->setCurrentIndex(settings_actor->value("/llm/llm").toInt());
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
     setting_actor_win->findChild < QPlainTextEdit * > ("textEdit_OpenaiPrompt")->setPlainText(settings_actor->value("/llm/prompt").toString());
+    setting_actor_win->findChild < QPlainTextEdit * > ("textEdit_OpenaiPrompt_style")->setPlainText(settings_actor->value("/llm/prompt_style").toString());
+
+    setting_actor_win->findChild < QLineEdit * > ("lineEdit_vits_Prompt_emo")->setText(settings_actor->value("/llm/prompt_emo").toString());
+    setting_actor_win->findChild < QLineEdit * > ("lineEdit_vits_Prompt_la")->setText(settings_actor->value("/llm/prompt_la").toString());
+
     setting_actor_win->findChild < QCheckBox * > ("checkBox_addthreetime")->setChecked(settings_actor->value("/llm/threetime").toBool());
     qInfo()<<"启用增强："<<settings_actor->value("/llm/threetime").toBool();
+
+    setting_actor_win->findChild < QStackedWidget * > ("stackedWidget_style")->setCurrentIndex(settings_actor->value("/llm/threetime").toBool());
+
 
     setting_actor_win->findChild < QComboBox * > ("comboBox_vits_api")->setCurrentIndex(settings_actor->value("/vits/api").toInt());
     QComboBox * comboBox = setting_actor_win->findChild < QComboBox * > ("comboBox_vits_model");
@@ -343,6 +353,7 @@ void MainWindow::reloadActorSetting() {
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_vits_id")->setText(settings_actor->value("/vits/id").toString());
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_speechInput_wakeWord")->setText(settings_actor->value("/speechInput/wake_word").toString());
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_speechInput_endWord")->setText(settings_actor->value("/speechInput/end_word").toString());
+    already_init=true;
 }
 /*get请求（用于获取版本）*/
 QByteArray MainWindow::getUrl(const QString & input) {
@@ -380,7 +391,8 @@ void MainWindow::ChangeSetting_tachieSize(int arg1) {
 }
 //角色选择修改
 void MainWindow::ChangeSetting_ActorChoose(const QString & arg1) {
-    if(already_init) {
+    if(already_init)
+    {
         saveSetting("/actor/name", arg1);
         reloadActorSetting();
         emit init_to_tachie(isPin);

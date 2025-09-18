@@ -105,5 +105,38 @@ void setting_actor::on_pushButton_question_clicked()
 void setting_actor::on_checkBox_addthreetime_clicked(bool checked)
 {
     settings_actor->setValue("/llm/threetime",checked);
+    ui->stackedWidget_style->setCurrentIndex(checked);
 }
 
+//格式提示词
+void setting_actor::on_textEdit_OpenaiPrompt_style_textChanged()
+{
+    settings_actor->setValue("/llm/prompt_style",ui->textEdit_OpenaiPrompt_style->toPlainText());
+}
+//心情提示词
+void setting_actor::on_lineEdit_vits_Prompt_emo_textChanged(const QString &arg1)
+{
+    settings_actor->setValue("/llm/prompt_emo",arg1);
+}
+//翻译提示词
+void setting_actor::on_lineEdit_vits_Prompt_la_textChanged(const QString &arg1)
+{
+    settings_actor->setValue("/llm/prompt_la",arg1);
+}
+//刷新配置
+void setting_actor::reloadActorSettings() {
+    // 先删除旧的 settings_actor
+    delete settings_actor;
+    settings_actor = nullptr;
+
+    // 重新读取 actor 名称
+    QString actorName = settings->value("actor/name").toString();
+
+    // 新建 settings_actor
+    settings_actor = new QSettings(
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+            + "/ZcChat/characters_config/" + actorName + "/config.ini",
+        QSettings::IniFormat,
+        this
+        );
+}

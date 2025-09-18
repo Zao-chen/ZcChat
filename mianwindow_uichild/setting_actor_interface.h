@@ -18,6 +18,7 @@ class setting_actor : public QWidget
 public:
     explicit setting_actor(QWidget *parent = nullptr);
     void refreshUI(); //重载窗口
+    void reloadActorSettings(); //重载设置
     ~setting_actor();
 
 private slots:
@@ -38,6 +39,12 @@ private slots:
     void on_pushButton_question_clicked();
 
     void on_checkBox_addthreetime_clicked(bool checked);
+
+    void on_textEdit_OpenaiPrompt_style_textChanged();
+
+    void on_lineEdit_vits_Prompt_emo_textChanged(const QString &arg1);
+
+    void on_lineEdit_vits_Prompt_la_textChanged(const QString &arg1);
 
 private:
     QSettings *settings;

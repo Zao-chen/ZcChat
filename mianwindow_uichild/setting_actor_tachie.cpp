@@ -86,4 +86,3 @@ void setting_actor_tachie::on_pushButton_loadtachie_clicked()
     }
     ui->progressBar->setVisible(false);
 }
-

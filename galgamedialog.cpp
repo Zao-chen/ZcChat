@@ -762,7 +762,29 @@ void galgamedialog::send_to_llm()
             qInfo("格式增强已开启");
             result_from_llm = QString::fromStdString(getOpenAiFeedbackContant(UrlpostLLM_openai(ui->textEdit->toPlainText().toStdString(),settings_actor->value("llm/prompt").toString().toStdString(),false),true));
             qInfo()<<"对话返回："<<result_from_llm;
-            QString emo = QString::fromStdString(getOpenAiFeedbackContant(UrlpostLLM_openai("",(QString::fromStdString("在说这句话的时候是什么心情？,请在以下选项中选择一个:开心，伤心;只输出结果;")+result_from_llm).toStdString(),true),true));
+            /*获取全部立绘*/
+            QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+                           + "/ZcChat/characters/"
+                           + settings->value("actor/name").toString();
+            QDir dir(path);
+            QStringList nameFilters;
+            nameFilters << "*.png";
+            QStringList fileList = dir.entryList(nameFilters, QDir::Files);
+            QStringList names;
+            for (const QString &file : fileList) {
+                names << QFileInfo(file).completeBaseName(); // 去掉扩展名
+            }
+            QString joined = names.join(",");
+            std::string result = joined.toStdString();
+            QString emo = QString::fromStdString(
+                getOpenAiFeedbackContant(
+                    UrlpostLLM_openai(
+                        "",
+                        (QString("在说这句话的时候是什么心情和动作？,请在以下选项中选择一个:{emo};只输出结果:")
+                             .replace("{emo}", QString::fromStdString(result))   // 确保是 QString
+                         + result_from_llm).toStdString(),
+                        true),
+                    true));
             qInfo()<<"心情："<<emo;
             QString ja= QString::fromStdString(getOpenAiFeedbackContant(UrlpostLLM_openai("",(QString::fromStdString("翻译成日语,只输出结果:")+result_from_llm).toStdString(),true),true));
             qInfo()<<"日语："<<ja;
