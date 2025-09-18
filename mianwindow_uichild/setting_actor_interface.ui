@@ -264,7 +264,7 @@
                  </font>
                 </property>
                 <property name="text">
-                 <string>Persona</string>
+                 <string>角色提示词</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
@@ -347,7 +347,7 @@
        <item>
         <widget class="QStackedWidget" name="stackedWidget_style">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page_5">
           <layout class="QVBoxLayout" name="verticalLayout_4">

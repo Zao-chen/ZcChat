@@ -69,7 +69,6 @@ private:
     QString UrlpostLLM();
     QString UrlpostLLM_openai(std::string user,std::string system,bool msgonly);
     std::string getOpenAiFeedbackContant(QString orig,bool msgonly);
-
     QString UrlpostWithFile();
     QByteArray getUrl(const QString &input);
     /*逐字显示*/
@@ -100,7 +99,6 @@ private:
     QSettings *settings; //声明 settings 为成员变量
     QSettings *settings_actor;
     QSettings *chathistory; //声明 settings 为成员变量
-
     QList<json_t> llm_messages; // 用于存储对话消息
 };
 #endif // GALGAMEDIALOG_H

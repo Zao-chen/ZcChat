@@ -30,7 +30,9 @@
 using json_t = nlohmann::json;
 MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWindow)
 {
-    /*窗口初始化*/
+    /*
+     * 窗口初始化
+     */
     qInfo()<<"MainWindow初始化……";
     ui->setupUi(this);
     setWindowIcon(QIcon(":/img/img/logo.png"));
@@ -53,14 +55,13 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     addPageNode(tr("语音合成设置"), setting_vits_win, ElaIconType::Speaker);
     setting_voiceinput_win = new setting_voiceinput(this);
     addPageNode(tr("语音输入设置"), setting_voiceinput_win, ElaIconType::CircleMicrophone);
-
+    //角色窗口
     QString actor_config;
     addExpanderNode(tr("角色设置"), actor_config, ElaIconType::CameraViewfinder);
     setting_actor_win = new setting_actor(this);
     addPageNode(tr("接口设置"), setting_actor_win , actor_config, ElaIconType::Snowman);
     setting_actor_tachie_win = new setting_actor_tachie(this);
-    addPageNode(tr("立绘设置"), setting_actor_tachie_win , actor_config, ElaIconType::Snowman);
-
+    addPageNode(tr("立绘设置"), setting_actor_tachie_win , actor_config, ElaIconType::GingerbreadMan);
     /*窗口初始化*/
     qInfo()<<"初始化窗口……";
     dialog_win = new galgamedialog;
@@ -94,7 +95,7 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     qInfo()<<"逐字显示时间："<<settings->value("/dialog/time").toInt();
     setting_general_win->findChild < QSpinBox * > ("spinBox_dialogscale")->setValue(settings->value("/dialog/size").toInt());
     qInfo()<<"对话框缩放："<<settings->value("/dialog/size").toInt();
-    /* AI 模型设置 */
+    /*AI 模型设置*/
     setting_ai_win->findChild < QLineEdit * > ("lineEdit_url")->setText(settings->value("/llm/url").toString());
     qInfo()<<"LLM URL："<<settings->value("/llm/url").toString();
     setting_ai_win->findChild < QLineEdit * > ("lineEdit_openai_url")->setText(settings->value("/llm/openai_url").toString());
@@ -105,7 +106,7 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     //qInfo()<<"openai Key："<<settings->value("/llm/openai_key").toString();
     setting_ai_win->findChild < QCheckBox * > ("checkBox_feedback")->setChecked(settings->value("/llm/feedback").toBool());
     qInfo()<<"启用反馈："<<settings->value("/llm/feedback").toBool();
-    /* 语音输入设置 */
+    /*语音输入设置*/
     //基础设置
     setting_voiceinput_win->findChild < QComboBox * > ("comboBox_api")->addItems({
         "whisper-asrwebservice",
@@ -113,9 +114,7 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     });
     setting_voiceinput_win->findChild < QComboBox * > ("comboBox_api")->setCurrentIndex(settings->value("/speechInput/api").toInt());
     qInfo()<<"语音识别 API："<<settings->value("/speechInput/api").toInt();
-
     setting_voiceinput_win->findChild < QStackedWidget * > ("stackedWidget_speechInput")->setCurrentIndex(settings->value("/speechInput/api").toInt());
-
     setting_voiceinput_win->findChild < QLineEdit * > ("lineEdit_url")->setText(settings->value("/speechInput/url").toString());
     qInfo()<<"语音识别 URL："<<settings->value("/speechInput/url").toString();
     setting_voiceinput_win->findChild < QLineEdit * > ("lineEdit_baiduapikey")->setText(settings->value("/speechInput/baidu_apikey").toString());
@@ -133,29 +132,34 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     qInfo()<<"语音输入能量阈值："<<settings->value("/speechInput/energy").toInt();
     setting_voiceinput_win->findChild < QSpinBox * > ("spinBox_size")->setValue(settings->value("/speechInput/size").toInt());
     qInfo()<<"语音输入尺寸阈值："<<settings->value("/speechInput/size").toInt();
-    /* 语音合成设置 */
+    /*语音合成设置*/
     setting_vits_win->findChild < QCheckBox * > ("checkBox_enable")->setChecked(settings->value("/vits/enable").toBool());
     qInfo()<<"启用 VITS："<<settings->value("/vits/enable").toBool();
     setting_vits_win->findChild < QLineEdit * > ("lineEdit_url")->setText(settings->value("/vits/url").toString());
     qInfo()<<"VITS URL："<<settings->value("/vits/url").toString();
-    /* 角色设置 */
-    setting_actor_win->findChild < QComboBox * > ("comboBox_vits_api")->addItems({
+    /*角色设置*/
+    setting_actor_win->findChild < QComboBox * > ("comboBox_vits_api")->addItems
+    ({
         "vits-simple-api",
         "自定义"
     });
-    setting_actor_win->findChild < QComboBox * > ("comboBox_vits_model")->addItems({
+    setting_actor_win->findChild < QComboBox * > ("comboBox_vits_model")->addItems
+    ({
         "vits",
         "w2v2-vits",
         "bert-vits2",
         "gpt-sovits"
     });
-    setting_actor_win->findChild < QComboBox * > ("comboBox_vits_language")->addItems({
+    setting_actor_win->findChild < QComboBox * > ("comboBox_vits_language")->addItems
+    ({
         "ja",
         "zh",
         "en",
         "auto"
     });
-    /*托盘*/
+    /*
+     * 托盘
+     */
     qInfo()<<"初始化托盘……";
     //初始化托盘
     m_sysTrayIcon = new QSystemTrayIcon(this);
@@ -201,9 +205,12 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     connect(this, SIGNAL(init_to_dialog()), dialog_win, SLOT(init_from_main()));
     connect(dialog_win, SIGNAL(energy_to_main(int)), this, SLOT(getEnergy_from_gal(int)));
     connect(this, SIGNAL(resetlocation_to_tachie()), tachie_win, SLOT(resetlocation_from_main()));
-    /*自启动*/
+    /*
+     * 自启动
+     */
     //运行自启动脚本
-    if(settings->value("/soft/auto_open").toBool()) {
+    if(settings->value("/soft/auto_open").toBool())
+    {
         qInfo()<<"运行autoOpen.cmd……"<<QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/autoOpen.cmd";
         QDesktopServices::openUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/autoOpen.cmd"));
     }
@@ -212,31 +219,40 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     connect(energyTimer, & QTimer::timeout, this, & MainWindow::updateEnergyDisplay);
     energyTimer->start(100);
     //每100毫秒触发一次
-    /*新版本获取*/
+    /*
+     * 新版本获取
+     */
     qInfo()<<"获取新版本消息……";
     m_manager = new QNetworkAccessManager(this);
-    //新建QNetworkAccessManager对象
     already_init = true;
     reply = getUrl("https://api.github.com/repos/Zao-chen/ZcChat/releases/latest");
     try
     {
         auto jsonData = json_t::parse(reply.toUtf8());
         if(jsonData.contains("tag_name")) tagName = QString::fromStdString(jsonData["tag_name"]);
-    } catch (const std::exception & e) {
-        qWarning()<<"版本获取失败，json解析错误: "<<e.what();
-        tagName.clear();
-        //如果解析失败，设置为空
     }
-    if(local_version.contains("beta")) {
+    catch (const std::exception & e)
+    {
+        qWarning()<<"版本获取失败，json解析错误: "<<e.what();
+        tagName.clear(); //如果解析失败，设置为空
+    }
+    if(local_version.contains("beta"))
+    {
         qInfo()<<"正在运行beta版" + local_version + "，最新正式版" + tagName;
         setUserInfoCardSubTitle(tr("你正在运行beta版，遇到问题请提issue。最新正式版：") + tagName);
-    } else if(reply == "error" || tagName.isEmpty()) {
+    }
+    else if(reply == "error" || tagName.isEmpty())
+    {
         qWarning()<<"获取新版本失败："<<reply;
         setUserInfoCardSubTitle(tr("获取新版本失败"));
-    } else if(local_version != tagName) {
+    }
+    else if(local_version != tagName)
+    {
         qInfo()<<"发现新版本" + tagName;
         setUserInfoCardSubTitle(tr("发现新版本") + tagName + tr("\n可以前往“关于”界面进行更新"));
-    } else {
+    }
+    else
+    {
         qInfo()<<"当前为最新版本" + local_version;
         setUserInfoCardSubTitle(tr("当前为最新版本^_^"));
     }
@@ -245,15 +261,17 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     addFooterNode(tr("关于"), about_win, *new QString(""), 0, ElaIconType::User);
     qInfo()<<"MainWindow加载完成！";
 }
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow()
+{
     qInfo()<<"MainWindow关闭……";
     delete ui;
 }
 /*对话框显示隐藏*/
-void MainWindow::show_dialogwin_from_tachie() {
-    if(isDialogOpen) {
-        dialog_win->handleWheelDown();
-        //隐藏历史窗口
+void MainWindow::show_dialogwin_from_tachie()
+{
+    if(isDialogOpen)
+    {
+        dialog_win->handleWheelDown(); //隐藏历史窗口
         qInfo()<<"隐藏对话框……";
         //设置窗口透明度效果
         QGraphicsOpacityEffect * opacityEffect = new QGraphicsOpacityEffect(dialog_win);
@@ -261,54 +279,48 @@ void MainWindow::show_dialogwin_from_tachie() {
         //创建淡出动画
         QPropertyAnimation * animation = new QPropertyAnimation(opacityEffect, "opacity");
         animation->setDuration(150);
-        //动画持续时间（毫秒）
         animation->setStartValue(1.0);
-        //开始时完全不透明
         animation->setEndValue(0.0);
-        //结束时完全透明
-        //动画结束后关闭窗口
         connect(animation, & QPropertyAnimation::finished, dialog_win, & QWidget::close);
         //启动动画
         animation->start();
         isDialogOpen = false;
-    } else {
+    }
+    else
+    {
         qInfo()<<"显示对话框……";
         dialog_win->show();
         //设置窗口透明度效果
         QGraphicsOpacityEffect * opacityEffect = new QGraphicsOpacityEffect(dialog_win);
         dialog_win->setGraphicsEffect(opacityEffect);
-        //确保设置到目标窗口
         //创建动画，设置属性为 opacity
         QPropertyAnimation * animation = new QPropertyAnimation(opacityEffect, "opacity");
         animation->setDuration(150);
-        //动画持续时间（毫秒）
         animation->setStartValue(0.0);
-        //起始透明度（0.0 表示完全透明）
         animation->setEndValue(1.0);
-        //结束透明度（1.0 表示完全不透明）
         animation->start();
         isDialogOpen = true;
     }
 }
 /*重载角色配置*/
-void MainWindow::reloadActorSetting() {
+void MainWindow::reloadActorSetting()
+{
     qInfo()<<"重载角色配置……";
     QSettings * settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
     QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
                    + "/ZcChat/characters_config/"
                    + settings->value("actor/name").toString();
     QDir dir(path);
-    if (!dir.exists())
-    {
-        dir.mkpath(path);
-    }
+    if (!dir.exists()) dir.mkpath(path);
     QSettings * settings_actor = new QSettings(path+"/config.ini", QSettings::IniFormat);
     /*呆毛图标设置*/
     QString imagePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/正常.png";
     QPixmap originalPixmap(imagePath);
-    if(originalPixmap.isNull()) {
+    if(originalPixmap.isNull())
+    {
         qWarning("无法加载图片: %s", qPrintable(imagePath));
-    } else {
+    } else
+    {
         int x = (originalPixmap.width() - 128) / 2;
         int y;
         x = qMax(0, x);
@@ -324,26 +336,22 @@ void MainWindow::reloadActorSetting() {
     //立绘
     if(settings_actor->value("/tachie/size").isNull()) settings_actor->setValue("/tachie/size",100);
     setting_actor_tachie_win->findChild < QSpinBox * > ("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
-    //接口
+    /*接口*/
+    //llm
     setting_actor_win->reloadActorSettings();
     setting_actor_win->findChild < QComboBox * > ("comboBox_ai_api")->setCurrentIndex(settings_actor->value("/llm/llm").toInt());
     setting_actor_win->findChild < QStackedWidget * > ("stackedWidget_LLM")->setCurrentIndex(settings_actor->value("/llm/llm").toInt());
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
     setting_actor_win->findChild < QPlainTextEdit * > ("textEdit_OpenaiPrompt")->setPlainText(settings_actor->value("/llm/prompt").toString());
-    setting_actor_win->findChild < QPlainTextEdit * > ("textEdit_OpenaiPrompt_style")->setPlainText(settings_actor->value("/llm/prompt_style").toString());
-
+    setting_actor_win->findChild<QPlainTextEdit*>("textEdit_OpenaiPrompt_style")->setPlainText(settings_actor->value("/llm/prompt_style", "以下是我必须遵循的事项：\n我精通中文和日语，在与用户交谈时，无论他们使用何种语言，我都必须始终提供双语回复。\n我会在每句话之前添加我的心情和动作，我的心情必须选择以下单词之一：{emo}\n我应该严格按照这个格式回答{心情}|{中文}|{日语}").toString());
     setting_actor_win->findChild<QLineEdit*>("lineEdit_vits_Prompt_emo")
         ->setText(settings_actor->value("/llm/prompt_emo", "在说这句话的时候是什么心情和动作？请在以下选项中选择一个:{emo};只输出结果").toString());
     setting_actor_win->findChild<QLineEdit*>("lineEdit_vits_Prompt_la")
         ->setText(settings_actor->value("/llm/prompt_la", "翻译成日语,只输出结果:").toString());
-
-
     setting_actor_win->findChild < QCheckBox * > ("checkBox_addthreetime")->setChecked(settings_actor->value("/llm/threetime").toBool());
     qInfo()<<"启用增强："<<settings_actor->value("/llm/threetime").toBool();
-
     setting_actor_win->findChild < QStackedWidget * > ("stackedWidget_style")->setCurrentIndex(settings_actor->value("/llm/threetime").toBool());
-
-
+    //vits
     setting_actor_win->findChild < QComboBox * > ("comboBox_vits_api")->setCurrentIndex(settings_actor->value("/vits/api").toInt());
     QComboBox * comboBox = setting_actor_win->findChild < QComboBox * > ("comboBox_vits_model");
     QString model = settings_actor->value("/vits/vitsmodel").toString();
@@ -357,7 +365,8 @@ void MainWindow::reloadActorSetting() {
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_speechInput_endWord")->setText(settings_actor->value("/speechInput/end_word").toString());
 }
 /*get请求（用于获取版本）*/
-QByteArray MainWindow::getUrl(const QString & input) {
+QByteArray MainWindow::getUrl(const QString & input)
+{
     QEventLoop loop;
     QNetworkReply * reply = m_manager->get(QNetworkRequest(QUrl(input)));
     connect(reply, & QNetworkReply::finished, & loop, & QEventLoop::quit);
@@ -366,32 +375,35 @@ QByteArray MainWindow::getUrl(const QString & input) {
     else return "error";
 }
 /*保存配置函数*/
-void MainWindow::saveSetting(const QString & key,
-                             const QVariant & value) {
+void MainWindow::saveSetting(const QString & key,const QVariant & value)
+{
     static QScopedPointer < QSettings > settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat));
     //使用 QScopedPointer 来自动管理资源。
     settings->setValue(key, value);
 }
-void MainWindow::saveActorSetting(const QString & key,
-                                  const QVariant & value) {
+void MainWindow::saveActorSetting(const QString & key,const QVariant & value)
+{
     QScopedPointer < QSettings > settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat));
     //使用 QScopedPointer 来自动管理资源。
     QSettings * settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
     settings_actor->setValue(key, value);
 }
 /*配置项修改和保存*/
-/*保存立绘位置*/
-void MainWindow::changeTachieLocation_from_tachie(int x, int y) {
+//保存立绘位置
+void MainWindow::changeTachieLocation_from_tachie(int x, int y)
+{
     saveSetting("/tachie/location_x", x);
     saveSetting("/tachie/location_y", y);
 }
 //立绘大小修改
-void MainWindow::ChangeSetting_tachieSize(int arg1) {
+void MainWindow::ChangeSetting_tachieSize(int arg1)
+{
     saveActorSetting("/tachie/size", arg1);
     emit init_to_tachie(isPin);
 }
 //角色选择修改
-void MainWindow::ChangeSetting_ActorChoose(const QString & arg1) {
+void MainWindow::ChangeSetting_ActorChoose(const QString & arg1)
+{
     if(already_init)
     {
         saveSetting("/actor/name", arg1);
@@ -400,16 +412,17 @@ void MainWindow::ChangeSetting_ActorChoose(const QString & arg1) {
     }
 }
 //语言修改
-void MainWindow::ChangeSetting_Lan(const QString & arg1) {
+void MainWindow::ChangeSetting_Lan(const QString & arg1)
+{
     QTranslator translator;
     qInfo()<<"切换语言到"<<arg1;
-    if(translator.load(":/translations/translations/" + arg1 + ".qm")) {
+    if(translator.load(":/translations/translations/" + arg1 + ".qm"))
+    {
         qInfo()<<"切换成功"<<arg1;
         qApp->installTranslator( & translator);
         saveSetting("/soft/lan", arg1);
-    } else {
-        qCritical()<<tr("加载翻译文件失败：")<<arg1;
     }
+    else qCritical()<<tr("加载翻译文件失败：")<<arg1;
     /*刷新界面*/
     ui->retranslateUi(this);
     setting_actor_win->refreshUI();
@@ -420,22 +433,26 @@ void MainWindow::ChangeSetting_Lan(const QString & arg1) {
     dialog_win->refreshUI();
 }
 //vits模型修改
-void MainWindow::ChangeSetting_VitsModel(const QString & arg1) {
+void MainWindow::ChangeSetting_VitsModel(const QString & arg1){
     if(already_init) saveActorSetting("/vits/vitsmodel", arg1);
 }
 //开机自启修改
-void MainWindow::ChangeSetting_AutoStart(bool checked) {
+void MainWindow::ChangeSetting_AutoStart(bool checked)
+{
     saveSetting("/soft/auto_start", checked);
     QString application_name = QApplication::applicationName();
     //获取应用名称
     QSettings * nsettings = new QSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
     //创建QSetting, 需要添加QSetting头文件
-    if(checked) {
+    if(checked)
+    {
         QString application_path = QApplication::applicationFilePath();
         //找到应用的目录
         nsettings->setValue(application_name, application_path.replace("/", "\\"));
         //写入注册表
-    } else {
+    }
+    else
+    {
         nsettings->remove(application_name);
         //从注册表中删除
     }

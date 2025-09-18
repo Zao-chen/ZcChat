@@ -94,20 +94,17 @@ void setting_actor::on_pushButton_resethistory_clicked()
     QCoreApplication::quit();
     //退出当前程序
 }
-
-
+/*这是什么*/
 void setting_actor::on_pushButton_question_clicked()
 {
     QDesktopServices::openUrl(QUrl("https://github.com/Zao-chen/ZcChat/wiki/%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E5%A2%9E%E5%BC%BA"));
 }
-
-
+/*开启增强*/
 void setting_actor::on_checkBox_addthreetime_clicked(bool checked)
 {
     settings_actor->setValue("/llm/threetime",checked);
     ui->stackedWidget_style->setCurrentIndex(checked);
 }
-
 //格式提示词
 void setting_actor::on_textEdit_OpenaiPrompt_style_textChanged()
 {
