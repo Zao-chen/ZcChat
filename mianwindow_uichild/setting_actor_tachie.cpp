@@ -7,6 +7,8 @@
 setting_actor_tachie::setting_actor_tachie(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::setting_actor_tachie)
+    , settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat, this))
+    , settings_actor(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat))
 {
     ui->setupUi(this);
     mainWin = qobject_cast<MainWindow *>(this->parent());
@@ -86,3 +88,9 @@ void setting_actor_tachie::on_pushButton_loadtachie_clicked()
     }
     ui->progressBar->setVisible(false);
 }
+
+void setting_actor_tachie::on_lineEdit_Default_textChanged(const QString &arg1)
+{
+    settings_actor->setValue("/tachie/default",arg1);
+}
+

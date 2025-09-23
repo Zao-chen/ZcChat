@@ -2,6 +2,7 @@
 #define SETTING_ACTOR_TACHIE_H
 
 #include <QWidget>
+#include <QSettings>
 #include "setting_actor_tachie_listchild.h"
 
 class MainWindow;
@@ -23,9 +24,13 @@ private slots:
     void on_pushButton_resettachie_clicked();
     void on_pushButton_loadtachie_clicked();
 
+    void on_lineEdit_Default_textChanged(const QString &arg1);
+
 private:
     Ui::setting_actor_tachie *ui;
     MainWindow *mainWin;
+    QSettings *settings;
+    QSettings *settings_actor;
     setting_actor_tachie_listchild *ui_setting_actor_tachie_listchild_win;
 };
 
