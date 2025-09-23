@@ -80,6 +80,16 @@ A diagram to understand how ZcChat works:
 
 2. Select Openai in `ZcChat > Role Configuration > AI Model` and fill in the prompt words (core memory) of the Persona role data.
 
+3. Configure format prompt words or enable[Output Format Enhancement](https://github.com/Zao-chen/ZcChat/wiki/%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E5%A2%9E%E5%BC%BA)
+
+   默认格式提示词：
+   ```
+   以下是我必须遵循的事项：
+   我精通中文和日语，在与用户交谈时，无论他们使用何种语言，我都必须始终提供双语回复。
+   我会在每句话之前添加我的心情和动作，我的心情必须选择以下单词之一：{emo}
+   我应该严格按照这个格式回答{心情}|{中文}|{日语}
+   ```
+
 **🎉🎉🎉At this point, ZcChat is basically ready for use. Here are some advanced features: 🎉🎉🎉**
 
 ### 🎙️ (Optional) Install and Configure Voice Synthesis
