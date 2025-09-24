@@ -769,7 +769,7 @@ void galgamedialog::send_to_llm()
             QString emo = QString::fromStdString(
                 getOpenAiFeedbackContant(
                     UrlpostLLM_openai(
-                        "",
+                        " ",
                         (QString(settings_actor->value("llm/prompt_emo").toString())
                              .replace("{emo}", QString::fromStdString(result))   //确保是 QString
                          + result_from_llm).toStdString(),
@@ -780,7 +780,7 @@ void galgamedialog::send_to_llm()
             QString ja = QString::fromStdString(
                 getOpenAiFeedbackContant(
                     UrlpostLLM_openai(
-                        "",
+                        " ",
                         (settings_actor->value("llm/prompt_emo").toString() + result_from_llm).toStdString(),
                         true
                         ),
