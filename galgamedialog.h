@@ -98,6 +98,7 @@ private:
     //配置文件
     QSettings *settings; //声明 settings 为成员变量
     QSettings *settings_actor;
+    QSettings *settings_characters_config;
     QSettings *chathistory; //声明 settings 为成员变量
     QList<json_t> llm_messages; // 用于存储对话消息
 };

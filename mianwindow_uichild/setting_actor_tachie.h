@@ -30,7 +30,8 @@ private:
     Ui::setting_actor_tachie *ui;
     MainWindow *mainWin;
     QSettings *settings;
-    QSettings *settings_actor;
+    QSettings *settings_charactersConfig_config;
+    QSettings *settings_characters_config;
     setting_actor_tachie_listchild *ui_setting_actor_tachie_listchild_win;
 };
 

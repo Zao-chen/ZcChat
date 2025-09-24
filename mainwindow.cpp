@@ -45,11 +45,18 @@ MainWindow::MainWindow(QWidget * parent): ElaWindow(parent), ui(new Ui::MainWind
     QDir dir1(appFolder);
     if(!dir1.exists()) dir1.mkpath(".");
     QSettings * settings = new QSettings(appFolder + "/Setting.ini", QSettings::IniFormat);
+
     QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
                    + "/ZcChat/characters_config/"
                    + settings->value("actor/name").toString();
     QSettings * settings_actor = new QSettings(path+"/config.ini", QSettings::IniFormat);
-    setUserInfoCardPixmap(QPixmap(appFolder + "/characters/" + settings->value("actor/name").toString() + "/"+settings_actor->value("/tachie/default").toString()+".png"));
+
+    QString path1 = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+                   + "/ZcChat/characters_config/"
+                   + settings->value("actor/name").toString();
+    QSettings * settings_characters_config = new QSettings(path1+"/config.ini", QSettings::IniFormat);
+
+    setUserInfoCardPixmap(QPixmap(appFolder + "/characters/" + settings->value("actor/name").toString() + "/"+settings_characters_config->value("/tachie/default").toString()+".png"));
     /*子页面初始化*/
     setting_general_win = new setting_general(this);
     addPageNode(tr("通用设置"), setting_general_win, ElaIconType::House);
@@ -348,11 +355,11 @@ void MainWindow::reloadActorSetting()
     //立绘
     if(settings_actor->value("/tachie/size").isNull()) settings_actor->setValue("/tachie/size",100);
     setting_actor_tachie_win->findChild < QSpinBox * > ("spinBox_tachie_size")->setValue(settings_actor->value("/tachie/size").toInt());
-    if (settings_actor->value("/tachie/default").toString().isNull())
+    if (settings_characters_config->value("/tachie/default").toString().isNull())
     {
-        settings_actor->setValue("/tachie/default","正常");
+        settings_characters_config->setValue("/tachie/default","正常");
     }
-    setting_actor_tachie_win->findChild<QLineEdit*>("lineEdit_Default")->setText(settings_actor->value("/tachie/default", "正常").toString());
+    setting_actor_tachie_win->findChild<QLineEdit*>("lineEdit_Default")->setText(settings_characters_config->value("/tachie/default", "正常").toString());
     /*接口*/
     //llm
     setting_actor_win->reloadActorSettings();

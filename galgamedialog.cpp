@@ -41,6 +41,7 @@ galgamedialog::galgamedialog(QWidget *parent)
     , ui(new Ui::galgamedialog)
     , settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat, this))
     , settings_actor(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat))
+    , settings_characters_config(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat))
     , chathistory(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/history.ini", QSettings::IniFormat))
 {
     qInfo()<<"初始化galgamedialog……";
@@ -749,7 +750,7 @@ void galgamedialog::send_to_llm()
         if(settings_actor->value("llm/threetime").toBool())
         {
             qInfo("格式增强已开启");
-            result_from_llm = QString::fromStdString(getOpenAiFeedbackContant(UrlpostLLM_openai(ui->textEdit->toPlainText().toStdString(),settings_actor->value("llm/prompt").toString().toStdString(),false),true));
+            result_from_llm = QString::fromStdString(getOpenAiFeedbackContant(UrlpostLLM_openai(ui->textEdit->toPlainText().toStdString(),settings_characters_config->value("llm/prompt").toString().toStdString(),false),true));
             qInfo()<<"对话返回："<<result_from_llm;
             /*获取全部立绘*/
             QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
@@ -770,7 +771,7 @@ void galgamedialog::send_to_llm()
                 getOpenAiFeedbackContant(
                     UrlpostLLM_openai(
                         " ",
-                        (QString(settings_actor->value("llm/prompt_emo").toString())
+                        (QString(settings_characters_config->value("llm/prompt_emo").toString())
                              .replace("{emo}", QString::fromStdString(result))   //确保是 QString
                          + result_from_llm).toStdString(),
                         true),
@@ -781,7 +782,7 @@ void galgamedialog::send_to_llm()
                 getOpenAiFeedbackContant(
                     UrlpostLLM_openai(
                         " ",
-                        (settings_actor->value("llm/prompt_emo").toString() + result_from_llm).toStdString(),
+                        (settings_characters_config->value("llm/prompt_la").toString() + result_from_llm).toStdString(),
                         true
                         ),
                     true
@@ -808,11 +809,11 @@ void galgamedialog::send_to_llm()
                 names << QFileInfo(file).completeBaseName(); //去掉扩展名
             }
             QString joined = names.join(",");
-            QString promptTemplate = settings_actor->value("llm/prompt_style").toString();
+            QString promptTemplate = settings_characters_config->value("llm/prompt_style").toString();
             promptTemplate = promptTemplate.replace("{emo}", joined);
             QString Prompt_style = promptTemplate + result_from_llm;
             /*发送请求*/
-            result_from_llm = UrlpostLLM_openai(ui->textEdit->toPlainText().toStdString(),settings_actor->value("llm/prompt").toString().toStdString()+Prompt_style.toStdString(),false);
+            result_from_llm = UrlpostLLM_openai(ui->textEdit->toPlainText().toStdString(),settings_characters_config->value("llm/prompt").toString().toStdString()+Prompt_style.toStdString(),false);
             message = QString::fromStdString(getOpenAiFeedbackContant(result_from_llm,false));
         }
     }
