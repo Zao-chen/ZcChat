@@ -10,7 +10,8 @@
 setting_actor::setting_actor(QWidget *parent)
     : QWidget(parent)
     , settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat, this))
-    , settings_actor(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat))
+    , settings_charactersConfig_config(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat))
+    , settings_characters_config(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat))
 
     , ui(new Ui::setting_actor)
 {
@@ -26,7 +27,7 @@ setting_actor::~setting_actor()
 //设置修改
 void setting_actor::on_lineEdit_llm_agent_textChanged(const QString &arg1)
 {
-    settings_actor->setValue("/llm/agent",arg1);
+    settings_charactersConfig_config->setValue("/llm/agent",arg1);
 }
 void setting_actor::on_comboBox_vits_api_currentIndexChanged(int index)
 {
@@ -39,11 +40,11 @@ void setting_actor::on_comboBox_vits_model_currentTextChanged(const QString &arg
 }
 void setting_actor::on_lineEdit_vits_id_textChanged(const QString &arg1)
 {
-    settings_actor->setValue("/vits/id",arg1);
+    settings_charactersConfig_config->setValue("/vits/id",arg1);
 }
 void setting_actor::on_lineEdit_vits_customUrl_textChanged(const QString &arg1)
 {
-    settings_actor->setValue("/vits/custom_url",arg1);
+    settings_charactersConfig_config->setValue("/vits/custom_url",arg1);
 }
 void setting_actor::on_comboBox_vits_language_currentTextChanged(const QString &arg1)
 {
@@ -51,11 +52,11 @@ void setting_actor::on_comboBox_vits_language_currentTextChanged(const QString &
 }
 void setting_actor::on_lineEdit_speechInput_wakeWord_textChanged(const QString &arg1)
 {
-    settings_actor->setValue("/speechInput/wake_word",arg1);
+    settings_characters_config->setValue("/speechInput/wake_word",arg1);
 }
 void setting_actor::on_lineEdit_speechInput_endWord_textChanged(const QString &arg1)
 {
-    settings_actor->setValue("/speechInput/end_word",arg1);
+    settings_characters_config->setValue("/speechInput/end_word",arg1);
 }
 //重载窗口
 void setting_actor::refreshUI()
@@ -67,11 +68,11 @@ void setting_actor::refreshUI()
 void setting_actor::on_comboBox_ai_api_currentIndexChanged(int index)
 {
     ui->stackedWidget_LLM->setCurrentIndex(index);
-    settings_actor->setValue("/llm/llm",index);
+    settings_charactersConfig_config->setValue("/llm/llm",index);
 }
 void setting_actor::on_textEdit_OpenaiPrompt_textChanged()
 {
-    settings_actor->setValue("/llm/prompt",ui->textEdit_OpenaiPrompt->toPlainText());
+    settings_characters_config->setValue("/llm/prompt",ui->textEdit_OpenaiPrompt->toPlainText());
 }
 
 
@@ -102,37 +103,35 @@ void setting_actor::on_pushButton_question_clicked()
 /*开启增强*/
 void setting_actor::on_checkBox_addthreetime_clicked(bool checked)
 {
-    settings_actor->setValue("/llm/threetime",checked);
+    settings_charactersConfig_config->setValue("/llm/threetime",checked);
     ui->stackedWidget_style->setCurrentIndex(checked);
 }
 //格式提示词
 void setting_actor::on_textEdit_OpenaiPrompt_style_textChanged()
 {
-    settings_actor->setValue("/llm/prompt_style",ui->textEdit_OpenaiPrompt_style->toPlainText());
+    settings_characters_config->setValue("/llm/prompt_style",ui->textEdit_OpenaiPrompt_style->toPlainText());
 }
 //心情提示词
 void setting_actor::on_lineEdit_vits_Prompt_emo_textChanged(const QString &arg1)
 {
-    settings_actor->setValue("/llm/prompt_emo",arg1);
-    qDebug()<<arg1;
+    settings_characters_config->setValue("/llm/prompt_emo",arg1);
 }
 //翻译提示词
 void setting_actor::on_lineEdit_vits_Prompt_la_textChanged(const QString &arg1)
 {
-    settings_actor->setValue("/llm/prompt_la",arg1);
-    qDebug()<<arg1<<"111";
+    settings_characters_config->setValue("/llm/prompt_la",arg1);
 }
 //刷新配置
 void setting_actor::reloadActorSettings() {
     // 先删除旧的 settings_actor
-    delete settings_actor;
-    settings_actor = nullptr;
+    delete settings_charactersConfig_config;
+    settings_charactersConfig_config = nullptr;
 
     // 重新读取 actor 名称
     QString actorName = settings->value("actor/name").toString();
 
     // 新建 settings_actor
-    settings_actor = new QSettings(
+    settings_charactersConfig_config = new QSettings(
         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
             + "/ZcChat/characters_config/" + actorName + "/config.ini",
         QSettings::IniFormat,

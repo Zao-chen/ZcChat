@@ -311,12 +311,20 @@ void MainWindow::reloadActorSetting()
 {
     qInfo()<<"重载角色配置……";
     QSettings * settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
+
     QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
                    + "/ZcChat/characters_config/"
                    + settings->value("actor/name").toString();
     QDir dir(path);
     if (!dir.exists()) dir.mkpath(path);
     QSettings * settings_actor = new QSettings(path+"/config.ini", QSettings::IniFormat);
+
+    QString path1 = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+                   + "/ZcChat/characters/"
+                   + settings->value("actor/name").toString();
+    QSettings * settings_characters_config = new QSettings(path1+"/config.ini", QSettings::IniFormat);
+
+
     /*呆毛图标设置*/
     QString imagePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/"+settings_actor->value("/tachie/default").toString()+".png";
     QPixmap originalPixmap(imagePath);
@@ -351,12 +359,12 @@ void MainWindow::reloadActorSetting()
     setting_actor_win->findChild < QComboBox * > ("comboBox_ai_api")->setCurrentIndex(settings_actor->value("/llm/llm").toInt());
     setting_actor_win->findChild < QStackedWidget * > ("stackedWidget_LLM")->setCurrentIndex(settings_actor->value("/llm/llm").toInt());
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_llm_agent")->setText(settings_actor->value("/llm/agent").toString());
-    setting_actor_win->findChild < QPlainTextEdit * > ("textEdit_OpenaiPrompt")->setPlainText(settings_actor->value("/llm/prompt").toString());
-    setting_actor_win->findChild<QPlainTextEdit*>("textEdit_OpenaiPrompt_style")->setPlainText(settings_actor->value("/llm/prompt_style", "以下是我必须遵循的事项：\n我精通中文和日语，在与用户交谈时，无论他们使用何种语言，我都必须始终提供双语回复。\n我会在每句话之前添加我的心情和动作，我的心情必须选择以下单词之一：{emo}\n我应该严格按照这个格式回答{心情}|{中文}|{日语}").toString());
+    setting_actor_win->findChild < QPlainTextEdit * > ("textEdit_OpenaiPrompt")->setPlainText(settings_characters_config->value("/llm/prompt").toString());
+    setting_actor_win->findChild<QPlainTextEdit*>("textEdit_OpenaiPrompt_style")->setPlainText(settings_characters_config->value("/llm/prompt_style", "以下是我必须遵循的事项：\n我精通中文和日语，在与用户交谈时，无论他们使用何种语言，我都必须始终提供双语回复。\n我会在每句话之前添加我的心情和动作，我的心情必须选择以下单词之一：{emo}\n我应该严格按照这个格式回答{心情}|{中文}|{日语}").toString());
     setting_actor_win->findChild<QLineEdit*>("lineEdit_vits_Prompt_emo")
-        ->setText(settings_actor->value("/llm/prompt_emo", "在说这句话的时候是什么心情和动作？请在以下选项中选择一个:{emo};只输出结果").toString());
+        ->setText(settings_characters_config->value("/llm/prompt_emo", "在说这句话的时候是什么心情和动作？请在以下选项中选择一个:{emo};只输出结果").toString());
     setting_actor_win->findChild<QLineEdit*>("lineEdit_vits_Prompt_la")
-        ->setText(settings_actor->value("/llm/prompt_la", "翻译成日语,只输出结果:").toString());
+        ->setText(settings_characters_config->value("/llm/prompt_la", "翻译成日语,只输出结果:").toString());
     setting_actor_win->findChild < QCheckBox * > ("checkBox_addthreetime")->setChecked(settings_actor->value("/llm/threetime").toBool());
     qInfo()<<"启用增强："<<settings_actor->value("/llm/threetime").toBool();
     setting_actor_win->findChild < QStackedWidget * > ("stackedWidget_style")->setCurrentIndex(settings_actor->value("/llm/threetime").toBool());
@@ -370,8 +378,8 @@ void MainWindow::reloadActorSetting()
     QString language = settings_actor->value("/vits/lan").toString();
     comboBox2->setCurrentIndex(comboBox2->findText(language) != -1 ? comboBox2->findText(language) : -1);
     setting_actor_win->findChild < QLineEdit * > ("lineEdit_vits_id")->setText(settings_actor->value("/vits/id").toString());
-    setting_actor_win->findChild < QLineEdit * > ("lineEdit_speechInput_wakeWord")->setText(settings_actor->value("/speechInput/wake_word").toString());
-    setting_actor_win->findChild < QLineEdit * > ("lineEdit_speechInput_endWord")->setText(settings_actor->value("/speechInput/end_word").toString());
+    setting_actor_win->findChild < QLineEdit * > ("lineEdit_speechInput_wakeWord")->setText(settings_characters_config->value("/speechInput/wake_word").toString());
+    setting_actor_win->findChild < QLineEdit * > ("lineEdit_speechInput_endWord")->setText(settings_characters_config->value("/speechInput/end_word").toString());
 }
 /*get请求（用于获取版本）*/
 QByteArray MainWindow::getUrl(const QString & input)

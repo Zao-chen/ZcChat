@@ -42,7 +42,8 @@ private slots:
 
 private:
     QSettings *settings;
-    QSettings *settings_actor;
+    QSettings *settings_charactersConfig_config;
+    QSettings *settings_characters_config;
     Ui::setting_actor *ui;
     MainWindow *mainWin;
 };
