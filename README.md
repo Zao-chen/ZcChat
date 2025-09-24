@@ -47,39 +47,25 @@
 
 ### 🎭 Step 2 - 配置角色
 
-1. 将角色数据中的立绘放入 `{文档}/ZcChat/characters/{名称}` 文件夹。
+1. 解压角色数据放入 `{文档}/ZcChat/characters/{名称}` 文件夹。
    
    > 最终的项目结构应为 `{文档}/ZcChat/characters/{名称}/正常.png...`
 
 2. 在 `ZcChat > 通用设置 > 角色选择` 中选中角色。
-
-3. 在 `ZcChat > 角色配置` 设置立绘大小。
-
-4. 右键托盘重置立绘位置。
    
    > Tips：右键立绘可以打开和关闭对话框，在对话框滚轮可以打开和关闭历史。
 
 ### 🤖 Step 3- 安装配置LLM模型
 
-#### 方式1：Letta
+#### 方式1：Openai通用接口
 
-1. [安装Letta](https://github.com/letta-ai/letta?tab=readme-ov-file#-quickstart) 并启动。
-
-2. 创建agent，并在 `LettaADE > agent > Persona` 中填入角色数据的提示词（核心记忆）。
-
-3. 将Letta地址填入 `ZcChat > AI模型配置 > Letta地址`。
-   
-   > Letta默认地址为 `http://localhost:8283`
-
-4. 将agentID填入 `ZcChat > 角色配置 > AI模型 > agentID`。
-
-#### 方式2：Openai通用接口
-
-1. 将BaseUrl、Key填入 `ZcChat > AI模型配置 > Openai设定`。
+1. 将BaseUrl、Key填入 `ZcChat > AI模型配置 > OpenAI API设定`。
    
    > BaseUrl应该类似于为 `https://api.openai.com/v1/completions`
 
-2. 在 `ZcChat > 角色配置 > AI模型` 中选择Openai并填入Persona角色数据的提示词（核心记忆）。
+2. 在 `ZcChat > 角色设置> 接口设置` 中选择OpenAI并填入角色提示词。
+
+   （部分提示词可能已经内置在了角色数据中，无需额外配置）
 
 3. 配置格式提示词或者开启[输出格式增强](https://github.com/Zao-chen/ZcChat/wiki/%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E5%A2%9E%E5%BC%BA)
 
@@ -90,6 +76,21 @@
    我会在每句话之前添加我的心情和动作，我的心情必须选择以下单词之一：{emo}
    我应该严格按照这个格式回答{心情}|{中文}|{日语}
    ```
+
+#### 方式2：Letta
+> [Letta](https://www.letta.com/) 是一个可以提供长期记忆和学习功能的AI代理
+
+1. [安装Letta](https://github.com/letta-ai/letta?tab=readme-ov-file#-quickstart) 并启动。
+
+2. 创建agent，并在 `LettaADE > agent > Persona` 中填入角色提示词+格式提示词。
+
+3. 将Letta地址填入 `ZcChat > AI模型配置 > Letta地址`。
+   
+   > Letta默认地址为 `http://localhost:8283`
+
+4. 在 `ZcChat > 角色设置> 接口设置` 中选择Letta并填入角色提示词。
+
+5. 将agentID填入 `ZcChat > 角色设置 > 接口设置 > agentID`。
 
 **🎉🎉🎉至此，ZcChat已经可以基本使用了，以下是一些进阶功能的使用：🎉🎉🎉**
 
@@ -152,15 +153,11 @@
 
 ## ❓ 常见问题 (F&Q)
 
-### 🤔 如何使用其他LLM，如OpenAI、Gemini等？
+### 🤔 如何使用其他LLM，如OpenAI、Gemini、DeepSeek等？
 
-[Letta使用不同LLM文档](https://docs.letta.com/models/openai)，设置环境变量即可。
+你可以使用Openai通用接口，市面上几乎所有AI都支持这个协议。
 
-当然，你也可以绕过Letta直接使用OpenAI通用接口。
-
-### 🌐 如何自定义base url？我想用一些第三方内容，比如说DeepSeek、GPT_API_free。
-
-添加环境变量 `OPENAI_API_BASE` 即可。
+如果你使用Letta，可以看 [Letta文档](https://docs.letta.com/models/openai)
 
 ### 📝 对话不久后会出现格式错误？
 
