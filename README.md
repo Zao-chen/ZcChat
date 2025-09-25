@@ -88,7 +88,7 @@
    
    > Letta默认地址为 `http://localhost:8283`
 
-4. 在 `ZcChat > 角色设置> 接口设置` 中选择Letta并填入角色提示词。
+4. 在 `ZcChat > 角色设置> 接口设置` 中选择Letta。
 
 5. 将agentID填入 `ZcChat > 角色设置 > 接口设置 > agentID`。
 

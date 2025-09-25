@@ -90,7 +90,7 @@ One diagram to understand how ZcChat works:
 
    > Default address: `http://localhost:8283`
 
-4. Select Letta in `ZcChat > Character Settings > API Settings` and fill in the character prompt.
+4. Select Letta in `ZcChat > Character Settings > API Settings`
 
 5. Enter the agentID in `ZcChat > Character Settings > API Settings > agentID`.
 
