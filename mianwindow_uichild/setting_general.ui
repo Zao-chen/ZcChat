@@ -427,11 +427,6 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>ElaSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header location="global">elaspinbox.h</header>
-  </customwidget>
-  <customwidget>
    <class>ElaComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">elacombobox.h</header>
@@ -440,6 +435,11 @@
    <class>ElaCheckBox</class>
    <extends>QCheckBox</extends>
    <header location="global">elacheckbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header location="global">elaspinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

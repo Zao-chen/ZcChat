@@ -75,13 +75,23 @@
     </widget>
    </item>
    <item>
-    <widget class="ElaComboBox" name="comboBox">
+    <widget class="ElaComboBox" name="comboBox_ptc">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <item>
       <property name="text">
        <string>无粒子</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>生气</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>疑惑</string>
       </property>
      </item>
     </widget>

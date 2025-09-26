@@ -34,11 +34,9 @@ setting_actor_tachie_listchild::~setting_actor_tachie_listchild()
 {
     delete ui;
 }
-
+//动画切换
 void setting_actor_tachie_listchild::on_comboBox_anime_currentIndexChanged(int index)
 {
-
-
     QScopedPointer < QSettings > settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat));
     //使用 QScopedPointer 来自动管理资源。
     // 构造 anim.ini 路径（假设你有成员变量存放角色路径，或者通过参数传入）
@@ -52,7 +50,19 @@ void setting_actor_tachie_listchild::on_comboBox_anime_currentIndexChanged(int i
     animSettings.setValue("/"+ui->label_name->text().split(".")[0]+"/animation", index);
 
     animSettings.sync(); // 确保立即写入磁盘
-
 }
+void setting_actor_tachie_listchild::on_comboBox_ptc_currentIndexChanged(int index)
+{
+    QScopedPointer < QSettings > settings(new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat));
+    //使用 QScopedPointer 来自动管理资源。
+    QString animIniPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+                          + "/ZcChat/characters/"
+                          + settings->value("actor/name").toString()   // 需要有 actorName 成员变量保存当前角色名
+                          + "/ptc.ini";
 
+    QSettings animSettings(animIniPath, QSettings::IniFormat);
+    animSettings.setValue("/"+ui->label_name->text().split(".")[0]+"/particle", index);
+
+    animSettings.sync(); // 确保立即写入磁盘
+}
 

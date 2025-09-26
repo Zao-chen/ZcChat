@@ -18,6 +18,8 @@ public:
 private slots:
     void on_comboBox_anime_currentIndexChanged(int index);
 
+    void on_comboBox_ptc_currentIndexChanged(int index);
+
 private:
     Ui::setting_actor_tachie_listchild *ui;
 };

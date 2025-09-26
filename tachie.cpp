@@ -12,6 +12,7 @@
 #include <QStandardPaths>
 #include <QTimer>
 #include <QThread>
+#include <QMovie>
 
 tachie::tachie(QWidget *parent) :
     QWidget(parent),
@@ -169,9 +170,6 @@ void tachie::changetachie_from_galdialog(QString name)
         ui->label->setScaledContents(true); // 关键：让 pixmap 跟随 label 大小变化
         break;
     }
-
-
-
     case 4: //缩小
     {
         //获取 QLabel 的原始几何和宽高比
@@ -245,6 +243,53 @@ void tachie::changetachie_from_galdialog(QString name)
     }
     //启动动画
     animationGroup->start();
+
+    // 脱离布局
+    QLayout *layout = ui->label_lz->parentWidget()->layout();
+    if (layout) {
+        layout->removeWidget(ui->label_lz);
+    }
+
+
+    /*立绘粒子*/
+    ui->label_lz->clear();
+    QSettings *par_config = new QSettings(
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
+            "/ZcChat/characters/" + settings->value("actor/name").toString() + "/ptc.ini",
+        QSettings::IniFormat
+        );
+
+    QString gifPath;
+    switch (par_config->value(name + "/particle").toInt()) {
+    case 1: gifPath = "particle/生气.gif"; break;
+    case 2: gifPath = "particle/疑惑.gif"; break;
+    default: gifPath = ""; break;
+    }
+
+    if (!gifPath.isEmpty()) {
+        QMovie *movie = new QMovie(gifPath);
+        ui->label_lz->setMovie(movie);
+        ui->label_lz->setScaledContents(false);
+        movie->start();
+
+        QWidget *parentWidget = ui->label_lz->parentWidget();
+        if (parentWidget) {
+            QSize gifSize = movie->frameRect().size();
+            int targetWidth = parentWidget->width() / 1.5;
+            int targetHeight = gifSize.height() * targetWidth / gifSize.width();
+
+            ui->label_lz->setFixedSize(targetWidth, targetHeight);
+
+            int x = (parentWidget->width() - targetWidth) / 2;
+            int y = 0;
+            ui->label_lz->move(x, y);
+
+            ui->label_lz->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+            ui->label_lz->setScaledContents(true);
+            ui->label_lz->setFixedSize(targetWidth, targetHeight);
+        }
+    }
+
     });
 }
 tachie::~tachie()
