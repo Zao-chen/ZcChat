@@ -316,7 +316,7 @@ QString galgamedialog::UrlpostLLM()
 /*语言识别post请求*/
 QString galgamedialog::UrlpostWithFile()
 {
-    QFile *file = new QFile( QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat" + "/output.m4a");
+    QFile *file = new QFile( QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "ZcChat/output.m4a");
     if(file->size()<=settings->value("/speechInput/size").toInt())
     {
         qInfo()<<file->size()<<" 文件太小，认定为噪音";
@@ -606,18 +606,44 @@ void galgamedialog::paintEvent(QPaintEvent *event)
 void galgamedialog::on_pushButton_input_pressed()
 {
     qInfo()<<"开始录音";
-    if(settings->value("/speechInput/interrupt").toBool()) player->stop();
-    if (audioRecorder_record->recorderState() == QMediaRecorder::StoppedState)
-    {
+    if (settings->value("/speechInput/interrupt").toBool() && player) {
+        qInfo() << "[录音] 打断当前播放";
+        player->stop();
+    }
+
+    if (!audioRecorder_record) {
+        qWarning() << "[录音] audioRecorder_record 未初始化";
+    } else if (QMediaDevices::defaultAudioInput().isNull()) {
+        qWarning() << "[录音] 没有检测到音频输入设备";
+    } else if (audioRecorder_record->recorderState() != QMediaRecorder::StoppedState) {
+        qWarning() << "[录音] 当前不在 StoppedState，state="
+                   << audioRecorder_record->recorderState();
+    } else {
+        // 确保输出目录存在
+        QString path = QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"ZcChat";
+
+        if (!QDir().mkpath(path)) {
+            qWarning() << "[录音] 创建输出目录失败:" << path;
+        } else {
+            qInfo() << "[录音] 输出目录已就绪:" << path;
+        }
+
         QMediaFormat format;
-        format.setAudioCodec(QMediaFormat::AudioCodec::AAC); //对应编码器
+        format.setAudioCodec(QMediaFormat::AudioCodec::AAC); // 对应编码器
         audioRecorder_record->setMediaFormat(format);
-        audioRecorder_record->setAudioSampleRate(44100); //设置采样率
-        audioRecorder_record->setAudioChannelCount(2); //设置声道数
-        audioRecorder_record->setQuality(QMediaRecorder::HighQuality); //设置录制质量
-        audioRecorder_record->setOutputLocation(QUrl::fromLocalFile( QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat" + "/output.m4a"));
+        audioRecorder_record->setAudioSampleRate(44100);     // 设置采样率
+        audioRecorder_record->setAudioChannelCount(2);       // 设置声道数
+        audioRecorder_record->setQuality(QMediaRecorder::HighQuality); // 设置录制质量
+
+        QString outputFile = path + "/output.m4a";
+        audioRecorder_record->setOutputLocation(QUrl::fromLocalFile(outputFile));
+
+        qInfo() << "[录音] 开始录音 ->" << outputFile;
         audioRecorder_record->record();
     }
+
+
+    qDebug()<<"成功设置";
 }
 void galgamedialog::on_pushButton_input_released()
 {
