@@ -233,7 +233,8 @@ QString galgamedialog::UrlpostLLM_openai(std::string user,std::string system,boo
     json_t rootObject =
         {
             {"model", settings->value("llm/openai_model").toString().toStdString()},
-            {"messages", json_t::array()} //创建一个空数组
+            {"stream", false},
+            {"messages", json_t::array()}
         };
     //添加系统消息
     json_t systemMessage =
@@ -690,49 +691,89 @@ void galgamedialog::init_from_main()
         disconnect(audioDevice, &QIODevice::readyRead, nullptr, nullptr);  //断开信号
     }
 }
+// 自动兼容各种 LLM 返回格式
+QString extractLLMContent(const json_t& obj)
+{
+    // 1. OpenAI 格式：choices → message → content
+    if (obj.contains("choices") && obj["choices"].is_array()) {
+        try {
+            auto& choice = obj["choices"][0];
+
+            // 1.1 Chat Completion
+            if (choice.contains("message") && choice["message"].contains("content")) {
+                return QString::fromStdString(choice["message"]["content"]);
+            }
+
+            // 1.2 Stream delta（用于流式）
+            if (choice.contains("delta") && choice["delta"].contains("content")) {
+                return QString::fromStdString(choice["delta"]["content"]);
+            }
+        } catch (...) {}
+    }
+
+    // 2. Ollama 格式：message → content
+    if (obj.contains("message") && obj["message"].contains("content")) {
+        return QString::fromStdString(obj["message"]["content"]);
+    }
+
+    // 3. LM Studio 模式：response 或 text
+    if (obj.contains("response")) {
+        return QString::fromStdString(obj["response"]);
+    }
+    if (obj.contains("text")) {
+        return QString::fromStdString(obj["text"]);
+    }
+
+    // 4. 通用兜底：尝试搜索名为 content 的字段
+    if (obj.contains("content")) {
+        if (obj["content"].is_string())
+            return QString::fromStdString(obj["content"]);
+    }
+
+    // 5. 实在没有内容
+    return QString();
+}
+
 //OpenAI返回Json解析
 std::string galgamedialog::getOpenAiFeedbackContant(QString orig,bool msgonly)
 {
-    try
-    {
-        //解析 JSON 响应
+    try {
         json_t responseJson = json_t::parse(orig.toStdString());
-        //输出整个解析后的 JSON
+
         qInfo() << "解析后的 JSON：" << QString::fromStdString(responseJson.dump());
-        //检查是否有错误信息
+
         if (responseJson.contains("error")) {
-            //处理错误信息
-            std::string errorMessage = responseJson["error"]["message"];
-            qCritical() << "API 错误：" << QString::fromStdString(errorMessage);
+            qCritical() << "API 错误："
+                        << QString::fromStdString(responseJson["error"]["message"]);
         }
-        //访问嵌套的内容 "content"
-        std::string content = responseJson["choices"][0]["message"]["content"];
-        //打印内容
-        qInfo() << "模型回复内容：" << QString::fromStdString(content);
-        if(!msgonly)
-        {
+
+        QString content = extractLLMContent(responseJson);
+
+        qInfo() << "模型回复内容：" << content;
+
+        if (!msgonly) {
             json_t userMessage = {
                 {"role", "assistant"},
-                {"content", content}  //从 UI 获取用户输入的内容
+                {"content", content.toStdString()}
             };
-            llm_messages.push_back(userMessage); //保存用户消息
-            for (int i = 0; i < llm_messages.size(); ++i)
-            {
+            llm_messages.push_back(userMessage);
+
+            for (int i = 0; i < llm_messages.size(); ++i) {
                 QString key = QString("Messages/%1").arg(i);
-                chathistory->setValue(key + "/role", QString::fromStdString(llm_messages[i]["role"]));
-                chathistory->setValue(key + "/content", QString::fromStdString(llm_messages[i]["content"]));
+                chathistory->setValue(key + "/role",
+                                      QString::fromStdString(llm_messages[i]["role"]));
+                chathistory->setValue(key + "/content",
+                                      QString::fromStdString(llm_messages[i]["content"]));
             }
         }
-        return content;
-    }
-    catch (const nlohmann::json::parse_error& e) {
-        //捕获并输出解析错误
-        qCritical() << "解析 JSON 错误：" << e.what();
+
+        return content.toStdString();
     }
     catch (const std::exception& e) {
-        //捕获其他异常
-        qCritical() << "发生错误：" << e.what();
+        qCritical() << "解析失败：" << e.what();
+        return "";
     }
+
 }
 //发送llm消息
 void galgamedialog::send_to_llm()

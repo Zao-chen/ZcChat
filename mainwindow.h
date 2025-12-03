@@ -29,7 +29,7 @@ signals:
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    QString local_version = "v5.1.0-beta";
+    QString local_version = "v5.3.0-beta";
     /*菜单窗口创建*/
     setting_general *setting_general_win;
     setting_ai *setting_ai_win;
