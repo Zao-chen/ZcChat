@@ -17,7 +17,7 @@ history::history(QWidget *parent)
     setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
     setWindowOpacity(0.9);
     setAttribute(Qt::WA_TranslucentBackground);
-    // 获取 scrollAreaWidgetContents 的布局，如果没有，创建一个布局
+    //获取 scrollAreaWidgetContents 的布局，如果没有，创建一个布局
     QVBoxLayout *layout = qobject_cast<QVBoxLayout *>(ui->scrollAreaWidgetContents->layout());
     ui->scrollArea->setWidgetResizable(true);
     connect(ui->scrollArea->verticalScrollBar(), &QScrollBar::rangeChanged, this, [=]()
@@ -30,14 +30,14 @@ history::~history()
 {
     delete ui;
 }
-void history::addChildWindow(QString name,QString msg) {
+/*添加历史*/
+void history::addChildWindow(QString name,QString msg)
+{
     QVBoxLayout *layout = qobject_cast<QVBoxLayout *>(ui->scrollAreaWidgetContents->layout());
     if (!layout) return;
     historychild *newChild = new historychild(name,msg,this);
     layout->addWidget(newChild);
-    // 添加子窗口后，滑动到最底部
-    // 等待布局更新后滑动到最底部
-    qInfo() << "添加日志：" << msg;
+    qInfo() << "添加历史：" << msg;
 }
 /*圆角边框*/
 void history::paintEvent(QPaintEvent *event)

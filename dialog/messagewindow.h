@@ -16,11 +16,10 @@ public:
     ~messagewindow();
 
 private slots:
-    void on_pushButton_copy_clicked();
-    void on_pushButton_open_clicked();
+    void on_pushButton_copy_clicked(); //复制报错内容
+    void on_pushButton_open_clicked(); //打开日志
 
 private:
-    void showModal(const QString &message);
     Ui::messagewindow *ui;
 };
 

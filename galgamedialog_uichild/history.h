@@ -15,12 +15,12 @@ class history : public QWidget
 
 public:
     explicit history(QWidget *parent = nullptr);
-    void addChildWindow(QString name,QString msg);  // 供外部调用的接口
+    void addChildWindow(QString name,QString msg); //供外部调用的接口
     ~history();
 
 private:
     Ui::history *ui;
-    QVBoxLayout *scrollLayout;         // 子窗口布局
+    QVBoxLayout *scrollLayout; // 子窗口布局
     /*重绘*/
     virtual void paintEvent(QPaintEvent *event) override;
 };

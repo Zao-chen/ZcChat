@@ -18,7 +18,7 @@ public:
     ~historychild();
 
 private slots:
-    void on_pushButton_reSpawnVoice_clicked(bool checked);
+    void on_pushButton_reSpawnVoice_clicked(bool checked); //重新播放语音
 
 private:
     Ui::historychild *ui;

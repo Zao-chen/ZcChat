@@ -107,6 +107,7 @@ void tachie::changetachie_from_galdialog(QString name)
 
     ui->label->show();
     QTimer::singleShot(300, this, [=]() {
+
     /*立绘动画*/
     QSettings *config = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/anim.ini", QSettings::IniFormat);
     //创建动画组
@@ -192,7 +193,7 @@ void tachie::changetachie_from_galdialog(QString name)
         animation->start(QAbstractAnimation::DeleteWhenStopped);
         break;
     }
-    case 5:
+    case 5: //颤抖
     {
         QPoint basePos = ui->label->pos();
         int offset = 4; // 颤抖幅度
@@ -249,7 +250,6 @@ void tachie::changetachie_from_galdialog(QString name)
     if (layout) {
         layout->removeWidget(ui->label_lz);
     }
-
 
     /*立绘粒子*/
     ui->label_lz->clear();
