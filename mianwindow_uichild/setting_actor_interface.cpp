@@ -64,11 +64,20 @@ void setting_actor::refreshUI()
     ui->retranslateUi(this);
 }
 
-
+//修改LLM使用
 void setting_actor::on_comboBox_ai_api_currentIndexChanged(int index)
 {
     ui->stackedWidget_LLM->setCurrentIndex(index);
     settings_charactersConfig_config->setValue("/llm/llm",index);
+    if(index==0)
+    {
+        if(ui->checkBox_addthreetime->isChecked()) ui->checkBox_addthreetime->click();
+        ui->checkBox_addthreetime->setEnabled(false);
+    }
+    else
+    {
+        ui->checkBox_addthreetime->setEnabled(true);
+    }
 }
 void setting_actor::on_textEdit_OpenaiPrompt_textChanged()
 {
