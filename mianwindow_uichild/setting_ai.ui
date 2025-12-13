@@ -6,26 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>733</width>
-    <height>481</height>
+    <width>1150</width>
+    <height>801</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
-   <property name="leftMargin">
-    <number>8</number>
-   </property>
-   <property name="topMargin">
-    <number>8</number>
-   </property>
-   <property name="rightMargin">
-    <number>8</number>
-   </property>
-   <property name="bottomMargin">
-    <number>8</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="widgetResizable">
@@ -36,11 +24,11 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>715</width>
-        <height>463</height>
+        <width>1130</width>
+        <height>781</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0,0,0,1">
+      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0,0,0,0,0,1">
        <item>
         <widget class="ElaText" name="label">
          <property name="font">
@@ -99,7 +87,7 @@
              <string>http://localhost:8283</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -151,7 +139,7 @@
              <string>https://api.openai.com/v1/responses</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -191,7 +179,7 @@
              <string>gpt-4o-mini</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -231,7 +219,7 @@
              <string>sk-xxxx</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -246,7 +234,54 @@
           </font>
          </property>
          <property name="text">
-          <string>高级设定（选填）</string>
+          <string>高级设定</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="ElaScrollPageArea" name="widget_9" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="2,2">
+          <property name="leftMargin">
+           <number>15</number>
+          </property>
+          <property name="rightMargin">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="ElaText" name="label_10">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>回复后处理</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ElaLineEdit" name="lineEdit_postProcessing">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>&lt;think&gt;.*?&lt;\\/think&gt;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>将会删除模型回复中的某些内容，比如说多余的回车什么的。支持正则，</string>
          </property>
         </widget>
        </item>
@@ -296,7 +331,7 @@
        <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
+          <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -325,14 +360,14 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>ElaLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">elalineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>ElaCheckBox</class>
    <extends>QCheckBox</extends>
    <header location="global">elacheckbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">elalineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

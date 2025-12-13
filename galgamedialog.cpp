@@ -884,9 +884,16 @@ void galgamedialog::send_to_llm()
             message = QString::fromStdString(getOpenAiFeedbackContant(result_from_llm,false));
         }
     }
-    //创建正则表达式，匹配 <think> 到 </think> 之间的内容（非贪婪）
-    QRegularExpression regex("<think>.*?</think>", QRegularExpression::DotMatchesEverythingOption);
-    message = message.replace(regex, "");
+
+    //获取配置的后处理正则
+    QString postprocess_pattern = settings->value("/llm/post_processing").toString();
+    //删除message中匹配正则的内容
+    if (!postprocess_pattern.isEmpty()) {
+        QRegularExpression postprocess_regex(postprocess_pattern, QRegularExpression::DotMatchesEverythingOption);
+        message = message.replace(postprocess_regex, "");
+    }
+    //输出postprocess_pattern
+    qInfo() << "后处理正则：" << postprocess_pattern;
 
     qInfo() << "读取到message" << message;
     //信息判断

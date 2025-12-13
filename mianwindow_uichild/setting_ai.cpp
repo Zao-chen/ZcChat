@@ -51,3 +51,10 @@ void setting_ai::on_lineEdit_openai_model_textChanged(const QString &arg1)
     settings->setValue("/llm/openai_model",arg1);
 }
 
+
+void setting_ai::on_lineEdit_postProcessing_textChanged(const QString &arg1)
+{
+    //保存到settings
+    settings->setValue("/llm/post_processing",arg1);
+}
+

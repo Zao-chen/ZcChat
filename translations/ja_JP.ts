@@ -234,53 +234,53 @@
     <message>
         <location filename="../galgamedialog.cpp" line="55"/>
         <location filename="../galgamedialog.cpp" line="87"/>
-        <location filename="../galgamedialog.cpp" line="575"/>
-        <location filename="../galgamedialog.cpp" line="740"/>
+        <location filename="../galgamedialog.cpp" line="576"/>
+        <location filename="../galgamedialog.cpp" line="781"/>
         <source>你</source>
         <translation>あなた</translation>
     </message>
     <message>
-        <location filename="../galgamedialog.cpp" line="339"/>
+        <location filename="../galgamedialog.cpp" line="340"/>
         <source>语音识别-whisper-打开录音文件失败</source>
         <translation>音声認識-Whisper-録音ファイルのオープンに失敗しました</translation>
     </message>
     <message>
-        <location filename="../galgamedialog.cpp" line="366"/>
+        <location filename="../galgamedialog.cpp" line="367"/>
         <source>语音识别-whisper-错误:</source>
         <translation>音声認識-Whisper-エラー:</translation>
     </message>
     <message>
-        <location filename="../galgamedialog.cpp" line="404"/>
+        <location filename="../galgamedialog.cpp" line="405"/>
         <source>语音识别-百度-token-请求失败</source>
         <translation>音声認識-百度-token-リクエスト失敗</translation>
     </message>
     <message>
-        <location filename="../galgamedialog.cpp" line="417"/>
+        <location filename="../galgamedialog.cpp" line="418"/>
         <source>语音识别-百度-识别-打开文件失败</source>
         <translation>音声認識-バイドゥ-認識-ファイルを開くのに失敗しました</translation>
     </message>
     <message>
-        <location filename="../galgamedialog.cpp" line="453"/>
+        <location filename="../galgamedialog.cpp" line="454"/>
         <source>语音识别-百度-识别失败：</source>
         <translation>音声認識 - Baidu - 認識失敗：</translation>
     </message>
     <message>
-        <location filename="../galgamedialog.cpp" line="471"/>
+        <location filename="../galgamedialog.cpp" line="472"/>
         <source>输入的 JSON 为空</source>
         <translation>入力されたJSONが空です</translation>
     </message>
     <message>
-        <location filename="../galgamedialog.cpp" line="493"/>
+        <location filename="../galgamedialog.cpp" line="494"/>
         <source>语音识别-百度-识别-Json解析错误: </source>
         <translation>音声認識-バイドゥ-認識-Json解析エラー: </translation>
     </message>
     <message>
-        <location filename="../galgamedialog.cpp" line="1020"/>
+        <location filename="../galgamedialog.cpp" line="1061"/>
         <source>[error] Vits错误，请检查Vits配置或者关闭语言输出</source>
         <translation>[エラー] Vitsエラーが発生しました。Vitsの設定を確認するか、言語出力を無効にしてください</translation>
     </message>
     <message>
-        <location filename="../galgamedialog.cpp" line="1021"/>
+        <location filename="../galgamedialog.cpp" line="1062"/>
         <source>Vits错误，请检查Vits配置或者关闭语言输出</source>
         <translation>Vitsエラーが発生しました。Vitsの設定を確認するか、言語出力を無効にしてください</translation>
     </message>

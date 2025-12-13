@@ -29,7 +29,8 @@ signals:
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    QString local_version = "v5.3.0-beta";
+    QString local_version = "v5.3.0";
+
     /*菜单窗口创建*/
     setting_general *setting_general_win;
     setting_ai *setting_ai_win;
@@ -40,6 +41,7 @@ public:
     about *about_win;
     galgamedialog *dialog_win;
     tachie *tachie_win;
+
     /*设置时候的一些传递*/
     //通用设置
     void ChangeSetting_ActorChoose(const QString &arg1);
