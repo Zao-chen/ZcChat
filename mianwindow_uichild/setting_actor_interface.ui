@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>953</width>
-    <height>670</height>
+    <width>1102</width>
+    <height>899</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -36,8 +36,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>919</width>
-        <height>846</height>
+        <width>1082</width>
+        <height>879</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -508,7 +508,7 @@
        </item>
        <item>
         <widget class="ElaScrollPageArea" name="widget_9" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="">
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
           <property name="leftMargin">
            <number>15</number>
           </property>
@@ -925,6 +925,26 @@
    <header location="global">elaplaintextedit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>comboBox_ai_api</tabstop>
+  <tabstop>lineEdit_llm_agent</tabstop>
+  <tabstop>pushButton_question</tabstop>
+  <tabstop>checkBox_addthreetime</tabstop>
+  <tabstop>textEdit_OpenaiPrompt_style</tabstop>
+  <tabstop>comboBox_vits_api</tabstop>
+  <tabstop>lineEdit_vits_customUrl</tabstop>
+  <tabstop>comboBox_vits_language</tabstop>
+  <tabstop>lineEdit_speechInput_wakeWord</tabstop>
+  <tabstop>lineEdit_speechInput_endWord</tabstop>
+  <tabstop>lineEdit_vits_Prompt_la</tabstop>
+  <tabstop>textEdit_OpenaiPrompt</tabstop>
+  <tabstop>comboBox_vits_model</tabstop>
+  <tabstop>lineEdit_vits_id</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>pushButton_viewhistory</tabstop>
+  <tabstop>pushButton_resethistory</tabstop>
+  <tabstop>lineEdit_vits_Prompt_emo</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
