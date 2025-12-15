@@ -28,7 +28,7 @@
         <height>781</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0,0,0,0,0,1">
+      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0,0,0,0,1">
        <item>
         <widget class="ElaText" name="label">
          <property name="font">
@@ -87,7 +87,7 @@
              <string>http://localhost:8283</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -122,6 +122,9 @@
               <pointsize>12</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>模型的Url地址，需要具体Url</string>
+            </property>
             <property name="text">
              <string>BaseUrl</string>
             </property>
@@ -139,7 +142,7 @@
              <string>https://api.openai.com/v1/responses</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -162,6 +165,9 @@
               <pointsize>12</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>模型名称</string>
+            </property>
             <property name="text">
              <string>Model</string>
             </property>
@@ -179,7 +185,7 @@
              <string>gpt-4o-mini</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -219,7 +225,7 @@
              <string>sk-xxxx</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -254,6 +260,9 @@
               <pointsize>12</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>将会删除模型回复中的某些内容，比如说多余的回车什么的。支持正则，</string>
+            </property>
             <property name="text">
              <string>回复后处理</string>
             </property>
@@ -271,18 +280,11 @@
              <string>&lt;think&gt;.*?&lt;\\/think&gt;</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>将会删除模型回复中的某些内容，比如说多余的回车什么的。支持正则，</string>
-         </property>
         </widget>
        </item>
        <item>
@@ -300,6 +302,9 @@
              <font>
               <pointsize>12</pointsize>
              </font>
+            </property>
+            <property name="toolTip">
+             <string>如果格式错误，是否需要忽略报错并尝试输出</string>
             </property>
             <property name="text">
              <string>忽略格式错误返回</string>
@@ -331,7 +336,7 @@
        <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>

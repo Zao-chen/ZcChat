@@ -33,6 +33,9 @@
      </property>
      <item>
       <widget class="QPushButton" name="pushButton_reSpawnVoice">
+       <property name="toolTip">
+        <string>再次生成并播放语音</string>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
     background-color: transparent;  /* 无背景 */

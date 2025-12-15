@@ -36,8 +36,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>677</width>
-        <height>421</height>
+        <width>663</width>
+        <height>425</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0,0,0,0,0,0,1">
@@ -136,6 +136,9 @@
              <font>
               <pointsize>12</pointsize>
              </font>
+            </property>
+            <property name="toolTip">
+             <string>ZcChat是否随开机自启</string>
             </property>
             <property name="text">
              <string>开机自启</string>

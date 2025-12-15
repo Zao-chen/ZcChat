@@ -94,6 +94,9 @@
               <pointsize>12</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>选择AI请求的格式，url在”AI模型配置”中设置</string>
+            </property>
             <property name="text">
              <string>AI API</string>
             </property>
@@ -119,7 +122,7 @@
        <item>
         <widget class="QStackedWidget" name="stackedWidget_LLM">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QVBoxLayout" name="verticalLayout">
@@ -171,7 +174,7 @@
                  <string/>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -214,7 +217,7 @@
                  <string>上下文管理</string>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -251,11 +254,14 @@
                   <pointsize>12</pointsize>
                  </font>
                 </property>
+                <property name="toolTip">
+                 <string>角色的初始化配置，例如角色名称、性格……</string>
+                </property>
                 <property name="text">
                  <string>角色提示词</string>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -300,7 +306,7 @@
           <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -335,7 +341,7 @@
        <item>
         <widget class="QStackedWidget" name="stackedWidget_style">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page_5">
           <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -366,6 +372,9 @@
                  <font>
                   <pointsize>12</pointsize>
                  </font>
+                </property>
+                <property name="toolTip">
+                 <string>模型回复输出格式规范</string>
                 </property>
                 <property name="text">
                  <string>输出格式提示词</string>
@@ -422,6 +431,9 @@
                   <pointsize>12</pointsize>
                  </font>
                 </property>
+                <property name="toolTip">
+                 <string>让模型输出心情的提示词</string>
+                </property>
                 <property name="text">
                  <string>选择心情提示词</string>
                 </property>
@@ -439,7 +451,7 @@
                  <string/>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -471,6 +483,9 @@
                   <pointsize>12</pointsize>
                  </font>
                 </property>
+                <property name="toolTip">
+                 <string>让模型进行翻译的提示词</string>
+                </property>
                 <property name="text">
                  <string>翻译提示词</string>
                 </property>
@@ -488,7 +503,7 @@
                  <string/>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -642,7 +657,7 @@
                  <string>0</string>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -698,7 +713,7 @@
                  <string>http://127.0.0.1:23456/voice/vits?text={msg}&amp;id=1http://127.0.0.1:23456/voice/vits?id=0&amp;text={msg}&amp;format=mp3</string>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -715,7 +730,7 @@
            <item>
             <spacer name="verticalSpacer_7">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -784,6 +799,9 @@
               <pointsize>12</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>如果识别到关键词就会开始模型对话</string>
+            </property>
             <property name="text">
              <string>语音唤醒关键词</string>
             </property>
@@ -801,7 +819,7 @@
              <string>早晨|草城|早贞</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -831,6 +849,9 @@
               <pointsize>12</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>如果识别到关键词就会结束模型对话</string>
+            </property>
             <property name="text">
              <string>结束对话关键词</string>
             </property>
@@ -848,7 +869,7 @@
              <string>结束对话|结束，对话</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -858,7 +879,7 @@
        <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -871,7 +892,7 @@
        <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>

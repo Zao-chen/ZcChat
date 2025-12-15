@@ -97,6 +97,9 @@ QPushButton:pressed {
          <pointsize>10</pointsize>
         </font>
        </property>
+       <property name="toolTip">
+        <string>语音识别完成后将会直接发送</string>
+       </property>
        <property name="styleSheet">
         <string notr="true">QCheckBox {
     background-color: transparent;  /* 无背景 */

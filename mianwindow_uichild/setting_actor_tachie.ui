@@ -90,7 +90,7 @@
           <item>
            <spacer name="horizontalSpacer_4">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -143,6 +143,9 @@
               <pointsize>12</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>开始运行/找不到对应文件时的默认立绘</string>
+            </property>
             <property name="text">
              <string>默认立绘</string>
             </property>
@@ -151,7 +154,7 @@
           <item>
            <spacer name="horizontalSpacer_5">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -191,6 +194,9 @@
        </item>
        <item>
         <widget class="ElaPushButton" name="pushButton_loadtachie">
+         <property name="toolTip">
+          <string>加载立绘并允许对立绘进行编辑，立绘数量和大小会影响加载速度</string>
+         </property>
          <property name="text">
           <string>刷新并加载所有立绘</string>
          </property>
@@ -210,7 +216,7 @@
         <widget class="ElaScrollPageArea" name="widget_4" native="true">
          <layout class="QHBoxLayout" name="horizontalLayout_18" stretch="0">
           <property name="sizeConstraint">
-           <enum>QLayout::SetMaximumSize</enum>
+           <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
           </property>
           <property name="leftMargin">
            <number>15</number>
@@ -257,6 +263,11 @@
    <header location="global">elapushbutton.h</header>
   </customwidget>
   <customwidget>
+   <class>ElaProgressBar</class>
+   <extends>QProgressBar</extends>
+   <header location="global">elaprogressbar.h</header>
+  </customwidget>
+  <customwidget>
    <class>ElaScrollPageArea</class>
    <extends>QWidget</extends>
    <header location="global">elascrollpagearea.h</header>
@@ -271,11 +282,6 @@
    <class>ElaSpinBox</class>
    <extends>QSpinBox</extends>
    <header location="global">elaspinbox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ElaProgressBar</class>
-   <extends>QProgressBar</extends>
-   <header location="global">elaprogressbar.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

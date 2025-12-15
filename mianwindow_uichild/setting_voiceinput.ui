@@ -36,8 +36,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>696</width>
-        <height>515</height>
+        <width>682</width>
+        <height>517</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0,0,0,0,0,0,1">
@@ -299,6 +299,9 @@
               <pointsize>12</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>将会在对话框出现一个麦克风，长按可以进行语音识别</string>
+            </property>
             <property name="text">
              <string>启用长按输入</string>
             </property>
@@ -366,6 +369,9 @@
              <font>
               <pointsize>12</pointsize>
              </font>
+            </property>
+            <property name="toolTip">
+             <string>角色在说话时是否可以进行打断</string>
             </property>
             <property name="text">
              <string>对话打断</string>
@@ -451,7 +457,7 @@
           </font>
          </property>
          <property name="text">
-          <string>当声音能量超过这个值，会认定为有人说话并开始录音知道能量小于这个值，即值越小越灵敏。</string>
+          <string>当声音能量超过这个值，会认定为有人说话并开始录音直到能量小于这个值，即值越小越灵敏。</string>
          </property>
         </widget>
        </item>
@@ -533,14 +539,14 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>ElaSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header location="global">elaspinbox.h</header>
-  </customwidget>
-  <customwidget>
    <class>ElaComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">elacombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElaCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header location="global">elacheckbox.h</header>
   </customwidget>
   <customwidget>
    <class>ElaLineEdit</class>
@@ -548,9 +554,9 @@
    <header location="global">elalineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>ElaCheckBox</class>
-   <extends>QCheckBox</extends>
-   <header location="global">elacheckbox.h</header>
+   <class>ElaSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header location="global">elaspinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
