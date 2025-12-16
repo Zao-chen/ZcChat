@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 
 class ElaImageCardPrivate;
 class ELA_EXPORT ElaImageCard : public QWidget
@@ -13,10 +13,9 @@ class ELA_EXPORT ElaImageCard : public QWidget
     Q_PROPERTY_CREATE_Q_H(QImage, CardImage);
     Q_PROPERTY_CREATE_Q_H(int, BorderRadius)
     Q_PROPERTY_CREATE_Q_H(bool, IsPreserveAspectCrop)
-    Q_PROPERTY_CREATE_Q_H(qreal, MaximumAspectRatio)
 public:
     explicit ElaImageCard(QWidget* parent = nullptr);
-    ~ElaImageCard();
+    ~ElaImageCard() override;
 
 protected:
     virtual void paintEvent(QPaintEvent* event) override;

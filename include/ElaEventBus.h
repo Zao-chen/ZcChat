@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "Def.h"
-#include "singleton.h"
-#include "stdafx.h"
+#include "ElaDef.h"
+#include "ElaProperty.h"
+#include "ElaSingleton.h"
 class ElaEventPrivate;
 class ELA_EXPORT ElaEvent : public QObject
 {
@@ -19,7 +19,7 @@ class ELA_EXPORT ElaEvent : public QObject
 public:
     explicit ElaEvent(QObject* parent = nullptr);
     explicit ElaEvent(QString eventName, QString functionName, QObject* parent = nullptr);
-    ~ElaEvent();
+    ~ElaEvent() override;
     ElaEventBusType::EventBusReturnType registerAndInit();
 };
 
@@ -32,7 +32,7 @@ class ELA_EXPORT ElaEventBus : public QObject
 
 private:
     explicit ElaEventBus(QObject* parent = nullptr);
-    ~ElaEventBus();
+    ~ElaEventBus() override;
 
 public:
     ElaEventBusType::EventBusReturnType post(const QString& eventName, const QVariantMap& data = {});

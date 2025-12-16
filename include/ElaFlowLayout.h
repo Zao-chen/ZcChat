@@ -5,7 +5,7 @@
 #include <QMap>
 #include <QStyle>
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 class ElaFlowLayoutPrivate;
 class ELA_EXPORT ElaFlowLayout : public QLayout
 {
@@ -14,7 +14,7 @@ class ELA_EXPORT ElaFlowLayout : public QLayout
 public:
     explicit ElaFlowLayout(QWidget* parent, int margin = -1, int hSpacing = -1, int vSpacing = -1);
     explicit ElaFlowLayout(int margin = -1, int hSpacing = -1, int vSpacing = -1);
-    ~ElaFlowLayout();
+    ~ElaFlowLayout() override;
 
     void addItem(QLayoutItem* item) override;
     int horizontalSpacing() const;

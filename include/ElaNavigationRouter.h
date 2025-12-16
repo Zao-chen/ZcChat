@@ -4,9 +4,8 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "Def.h"
-#include "singleton.h"
-#include "stdafx.h"
+#include "ElaDef.h"
+#include "ElaSingleton.h"
 
 class ElaNavigationRouterPrivate;
 class ELA_EXPORT ElaNavigationRouter : public QObject
@@ -17,14 +16,16 @@ class ELA_EXPORT ElaNavigationRouter : public QObject
     Q_PROPERTY_CREATE_Q_H(int, MaxRouteCount)
 private:
     explicit ElaNavigationRouter(QObject* parent = nullptr);
-    ~ElaNavigationRouter();
+    ~ElaNavigationRouter() override;
 
 Q_SIGNALS:
-    Q_SIGNAL void navigationRouterStateChanged(bool state);
+    Q_SIGNAL void navigationRouterStateChanged(ElaNavigationRouterType::RouteMode routeMode);
 
 public:
     ElaNavigationRouterType::NavigationRouteType navigationRoute(QObject* routeObject, QString routeFunctionName, const QVariantMap& routeData = {}, Qt::ConnectionType connectionType = Qt::AutoConnection);
+    void clearNavigationRoute();
     void navigationRouteBack();
+    void navigationRouteForward();
 };
 
 #endif // ELANAVIGATIONROUTER_H

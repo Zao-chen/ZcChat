@@ -8,8 +8,8 @@
 #include <QObject>
 #include <QPainter>
 
-#include "Def.h"
-#include "stdafx.h"
+#include "ElaDef.h"
+#include "ElaProperty.h"
 
 class ElaGraphicsItem;
 class ElaGraphicsScenePrivate;

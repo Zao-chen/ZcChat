@@ -4,8 +4,8 @@
 #include <QMenu>
 #include <QWidget>
 
-#include "Def.h"
-#include "stdafx.h"
+#include "ElaDef.h"
+#include "ElaProperty.h"
 class ElaMenuPrivate;
 class ELA_EXPORT ElaMenu : public QMenu
 {

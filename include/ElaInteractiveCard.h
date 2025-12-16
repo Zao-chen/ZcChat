@@ -4,8 +4,8 @@
 #include <QPixmap>
 #include <QPushButton>
 
-#include "Def.h"
-#include "stdafx.h"
+#include "ElaDef.h"
+#include "ElaProperty.h"
 
 class ElaInteractiveCardPrivate;
 class ELA_EXPORT ElaInteractiveCard : public QPushButton

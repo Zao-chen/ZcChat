@@ -3,7 +3,7 @@
 
 #include <QPushButton>
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 class ElaCalendarPickerPrivate;
 class ELA_EXPORT ElaCalendarPicker : public QPushButton
 {

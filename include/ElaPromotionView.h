@@ -4,7 +4,7 @@
 #include <QPixmap>
 #include <QWidget>
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 class ElaPromotionCard;
 class ElaPromotionViewPrivate;
 class ELA_EXPORT ElaPromotionView : public QWidget

@@ -4,8 +4,8 @@
 #include <QPushButton>
 #include <QWidget>
 
-#include "Def.h"
-#include "stdafx.h"
+#include "ElaDef.h"
+#include "ElaProperty.h"
 class ElaMessageButtonPrivate;
 class ELA_EXPORT ElaMessageButton : public QPushButton
 {

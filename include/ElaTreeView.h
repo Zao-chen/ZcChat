@@ -3,7 +3,7 @@
 
 #include <QTreeView>
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 
 class ElaTreeViewPrivate;
 class ELA_EXPORT ElaTreeView : public QTreeView

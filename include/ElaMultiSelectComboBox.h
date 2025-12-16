@@ -2,7 +2,7 @@
 #define ELAMULTISELECTCOMBOBOX_H
 #include <QComboBox>
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 class ElaMultiSelectComboBoxPrivate;
 class ELA_EXPORT ElaMultiSelectComboBox : public QComboBox
 {

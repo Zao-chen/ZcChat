@@ -4,8 +4,8 @@
 #include <QPixmap>
 #include <QPushButton>
 
-#include "Def.h"
-#include "stdafx.h"
+#include "ElaDef.h"
+#include "ElaProperty.h"
 class ElaAcrylicUrlCardPrivate;
 class ELA_EXPORT ElaAcrylicUrlCard : public QPushButton
 {
@@ -29,7 +29,7 @@ class ELA_EXPORT ElaAcrylicUrlCard : public QPushButton
 
 public:
     explicit ElaAcrylicUrlCard(QWidget* parent = nullptr);
-    ~ElaAcrylicUrlCard();
+    ~ElaAcrylicUrlCard() override;
     void setCardPixmapSize(int width, int height);
 
 protected:

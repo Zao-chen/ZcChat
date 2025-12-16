@@ -3,9 +3,9 @@
 
 #include <QObject>
 
-#include "Def.h"
-#include "singleton.h"
-#include "stdafx.h"
+#include "ElaDef.h"
+#include "ElaProperty.h"
+#include "ElaSingleton.h"
 
 #define eTheme ElaTheme::getInstance()
 #define ElaThemeColor(themeMode, themeColor) eTheme->getThemeColor(themeMode, ElaThemeType::themeColor)

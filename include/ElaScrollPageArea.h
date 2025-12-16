@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 class ElaScrollPageAreaPrivate;
 class ELA_EXPORT ElaScrollPageArea : public QWidget
 {
@@ -12,7 +12,7 @@ class ELA_EXPORT ElaScrollPageArea : public QWidget
     Q_PROPERTY_CREATE_Q_H(int, BorderRadius)
 public:
     explicit ElaScrollPageArea(QWidget* parent = nullptr);
-    ~ElaScrollPageArea();
+    ~ElaScrollPageArea() override;
 
 protected:
     virtual void paintEvent(QPaintEvent* event) override;

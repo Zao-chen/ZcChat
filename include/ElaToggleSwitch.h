@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 class ElaToggleSwitchPrivate;
 class ELA_EXPORT ElaToggleSwitch : public QWidget
 {
@@ -12,7 +12,7 @@ class ELA_EXPORT ElaToggleSwitch : public QWidget
 
 public:
     explicit ElaToggleSwitch(QWidget* parent = nullptr);
-    ~ElaToggleSwitch();
+    ~ElaToggleSwitch() override;
     void setIsToggled(bool isToggled);
     bool getIsToggled() const;
 Q_SIGNALS:

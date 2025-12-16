@@ -3,7 +3,7 @@
 
 #include <QRadioButton>
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 class ElaRadioButtonPrivate;
 class ELA_EXPORT ElaRadioButton : public QRadioButton
 {
@@ -12,7 +12,10 @@ class ELA_EXPORT ElaRadioButton : public QRadioButton
 public:
     explicit ElaRadioButton(QWidget* parent = nullptr);
     explicit ElaRadioButton(const QString& text, QWidget* parent = nullptr);
-    ~ElaRadioButton();
+    ~ElaRadioButton() override;
+
+protected:
+    virtual void paintEvent(QPaintEvent* event) override;
 };
 
 #endif // ELARADIOBUTTON_H

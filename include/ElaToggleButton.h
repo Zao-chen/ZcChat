@@ -3,7 +3,7 @@
 
 #include <QPushButton>
 
-#include "stdafx.h"
+#include "ElaProperty.h"
 class ElaToggleButtonPrivate;
 class ELA_EXPORT ElaToggleButton : public QWidget
 {

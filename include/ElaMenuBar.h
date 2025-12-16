@@ -3,8 +3,8 @@
 
 #include <QMenuBar>
 
-#include "Def.h"
-#include "stdafx.h"
+#include "ElaDef.h"
+#include "ElaProperty.h"
 
 class ElaMenu;
 class ELA_EXPORT ElaMenuBar : public QMenuBar

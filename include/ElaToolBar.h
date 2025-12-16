@@ -3,7 +3,7 @@
 
 #include <QToolBar>
 
-#include "Def.h"
+#include "ElaDef.h"
 class ElaToolBarPrivate;
 class ELA_EXPORT ElaToolBar : public QToolBar
 {
