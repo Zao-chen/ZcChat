@@ -43,7 +43,7 @@ void tachie::init_from_main(bool pin)
 
 
     QPixmap pixmap;
-    pixmap.load(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/"+settings_characters_config->value("/tachie/default").toString()+".png");
+    pixmap.load(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/"+settings_characters_config->value("tachie/default").toString()+".png");
     //缩放新图片并设置到 label
     QPixmap scaledPixmap = pixmap.scaled(
         pixmap.width() * (settings_actor->value("tachie/size").toInt() / 100.0),
@@ -65,7 +65,8 @@ void tachie::changetachie_from_galdialog(QString name)
     /*配置文件*/
     QSettings *settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/Setting.ini", QSettings::IniFormat);
     QSettings *settings_actor = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
-    QSettings *settings_characters_config = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
+    QSettings *settings_characters_config = new QSettings(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/config.ini", QSettings::IniFormat);
+    qDebug()<<QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters_config/" + settings->value("actor/name").toString() + "/config.ini";
 
     if(name == "正常") name = settings_characters_config->value("/tachie/default").toString();
 
@@ -73,7 +74,7 @@ void tachie::changetachie_from_galdialog(QString name)
     QPixmap pixmap;
     if (!pixmap.load(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/" + name.replace(" ", "") + ".png"))
     {
-        qWarning() << "未找到立绘，使用默认立绘";
+        qWarning() << "未找到立绘，使用默认立绘"<<QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/"+settings_characters_config->value("/tachie/default").toString()+".png";
         pixmap.load(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat/characters/" + settings->value("actor/name").toString() + "/"+settings_characters_config->value("/tachie/default").toString()+".png");
     }
     /*图片切换*/
