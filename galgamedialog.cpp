@@ -124,8 +124,9 @@ galgamedialog::galgamedialog(QWidget *parent)
                             /*结束词检查*/
                             bool containsAny = false;
                             //遍历 list，检查 msg 是否包含任意一个子字符串
-                            for (const QString &str : settings_actor->value("/speechInput/end_word").toString().split("|"))
+                            for (const QString &str : settings_characters_config->value("/speechInput/end_word").toString().split("|"))
                             {
+                                qDebug()<<"!"<<str;
                                 if (msg.contains(str))
                                 {
                                     containsAny = true; //如果包含，设置标志为 true
@@ -140,7 +141,7 @@ galgamedialog::galgamedialog(QWidget *parent)
                             /*唤醒词检查*/
                             containsAny = false; //初始化标志为 false
                             //遍历 list，检查 msg 是否包含任意一个子字符串
-                            for (const QString &str : settings_actor->value("/speechInput/wake_word").toString().split("|"))
+                            for (const QString &str : settings_characters_config->value("/speechInput/wake_word").toString().split("|"))
                             {
                                 if (msg.contains(str))
                                 {
@@ -317,7 +318,7 @@ QString galgamedialog::UrlpostLLM()
 /*语言识别post请求*/
 QString galgamedialog::UrlpostWithFile()
 {
-    QFile *file = new QFile( QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "ZcChat/output.m4a");
+    QFile *file = new QFile( QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/ZcChat/output.m4a");
     if(file->size()<=settings->value("/speechInput/size").toInt())
     {
         qInfo()<<file->size()<<" 文件太小，认定为噪音";
@@ -413,7 +414,7 @@ QString galgamedialog::UrlpostWithFile()
         /*发送识别*/
         QNetworkAccessManager manager_api;
         //读取本地音频文件为二进制数据
-        QString audioFilePath =  QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ZcChat" + "/output.m4a"; //音频文件路径
+        QString audioFilePath =  QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"/ZcChat" + "/output.m4a"; //音频文件路径
         QFile file(audioFilePath);
         if (!file.open(QIODevice::ReadOnly)) qCritical()<<tr("语音识别-百度-识别-打开文件失败") << audioFilePath;
         QByteArray audioData = file.readAll();
@@ -621,7 +622,7 @@ void galgamedialog::on_pushButton_input_pressed()
                    << audioRecorder_record->recorderState();
     } else {
         // 确保输出目录存在
-        QString path = QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"ZcChat";
+        QString path = QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"/ZcChat";
 
         if (!QDir().mkpath(path)) {
             qWarning() << "[录音] 创建输出目录失败:" << path;
