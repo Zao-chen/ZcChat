@@ -1,3 +1,7 @@
+> [!NOTE]
+> 本项目已进行重制，请前往新仓库：
+> https://github.com/Zao-chen/ZcChat2
+
 # ZcChat
 
 🌟 **一个有长期记忆、表情动作立绘显示、操控电脑和语音功能，更适合Galgame角色的AI桌宠** 🌟
