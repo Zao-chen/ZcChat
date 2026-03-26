@@ -1,5 +1,5 @@
-> [!NOTE]
-> 本项目已进行重制，请前往新仓库：
+> [!IMPORTANT]
+> 本项目已进行重制，请前往新仓库：  
 > https://github.com/Zao-chen/ZcChat2
 
 # ZcChat
